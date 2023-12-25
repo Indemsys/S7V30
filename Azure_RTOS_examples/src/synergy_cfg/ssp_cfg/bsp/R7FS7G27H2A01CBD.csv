@@ -1,0 +1,719 @@
+"Name","Pin","Function","Symbolic Name","Drive Capacity","IRQ","Mode","Output type","Pull up","Port Capabilities","Comment"
+"AVCC0","P8","ADC_AVCC0","","","","","","","",""
+"AVCCUSBHS","H13","USBHS0_AVCCUSBHS","","","","","","","",""
+"AVSS0","N9","ADC_AVSS0","","","","","","","",""
+"AVSSUSBHS","G14","USBHS0_AVSSUSBHS","","","","","","","",""
+"P000","R12","GPIO","BT2","","None","Input mode","","","ADC0: AN00
+CMP0: IVCMP2
+IRQ0: IRQ06",""
+"P001","P11","GPIO","BT1","","None","Input mode","","","ADC0: AN01
+CMP0: IVCMP2
+IRQ0: IRQ07",""
+"P002","N12","GPIO","RTC_IRQ","","IRQ8-DS","Input mode","","","ADC0: AN02
+CMP0: IVCMP2
+IRQ0: IRQ08",""
+"P003","L10","","","","","Disabled","","","ADC0: PGAVSS0",""
+"P004","M11","ADC1_AN00","","","","Analog mode","","","ADC1: AN00
+CMP0: IVCMP2
+IRQ0: IRQ09",""
+"P005","R11","ADC1_AN01","","","","Analog mode","","","ADC1: AN01
+CMP0: IVCMP2
+IRQ0: IRQ10",""
+"P006","P10","IRQ0_IRQ11","","","IRQ11-DS","IRQ mode","","","ADC1: AN02
+CMP0: IVCMP2
+IRQ0: IRQ11",""
+"P007","L9","","","","","Disabled","","","ADC1: PGAVSS0",""
+"P008","N11","IRQ0_IRQ12","","","IRQ12-DS","IRQ mode","","","ADC0: AN03
+IRQ0: IRQ12",""
+"P009","R10","IRQ0_IRQ13","","","IRQ13-DS","IRQ mode","","","ADC0: AN04
+IRQ0: IRQ13",""
+"P010","M10","IRQ0_IRQ14","","","IRQ14-DS","IRQ mode","","","ADC1: AN03
+IRQ0: IRQ14",""
+"P011","N10","IRQ0_IRQ15","","","IRQ15-DS","IRQ mode","","","ADC1: AN04
+IRQ0: IRQ15",""
+"P014","M9","ADC0_AN05","","","","Analog mode","","","ADC0: AN05
+ADC1: AN05
+CMP0: IVREF3
+DAC120: DA",""
+"P015","M8","","","","","Disabled","","","ADC0: AN06
+ADC1: AN06
+CMP0: IVCMP1
+DAC121: DA
+IRQ0: IRQ13",""
+"P100","R1","","","","","Disabled","","","AGT0: AGTIO
+BUS0: D0_DQ0
+GLCDC0: LCD_EXTCLK
+IIC1: SCL
+IRQ0: IRQ02
+KINT0: KRM0
+POEG0: GTETRG
+SCI0: RXD_MISO
+SCI0: SCL
+SCI1: SCK
+SPI0: MISO",""
+"P101","P1","","","","","Disabled","","","AGT0: AGTEE
+BUS0: D1_DQ1
+GLCDC0: LCD_CLK
+IIC1: SDA
+IRQ0: IRQ01
+KINT0: KRM1
+POEG1: GTETRG
+SCI0: SDA
+SCI0: TXD_MOSI
+SCI1: CTS_RTS_SS
+SPI0: MOSI",""
+"P102","N1","","","","","Disabled","","","ADC0: ADTRG
+AGT0: AGTO
+BUS0: D2_DQ2
+GLCDC0: LCD_TCON0
+GPT2: GTIOCB
+KINT0: KRM2
+OPS0: GTOWLO
+SCI0: SCK
+SPI0: RSPCK",""
+"P103","N2","","","","","Disabled","","","BUS0: D3_DQ3
+GLCDC0: LCD_TCON1
+GPT2: GTIOCA
+KINT0: KRM3
+OPS0: GTOWUP
+SCI0: CTS_RTS_SS
+SPI0: SSL0",""
+"P104","N3","","","","","Disabled","","","BUS0: D4_DQ4
+GLCDC0: LCD_TCON2
+IRQ0: IRQ01
+KINT0: KRM4
+POEG1: GTETRG
+SCI8: RXD_MISO
+SCI8: SCL
+SPI0: SSL1",""
+"P105","M3","","","","","Disabled","","","BUS0: D5_DQ5
+GLCDC0: LCD_TCON3
+IRQ0: IRQ00
+KINT0: KRM5
+POEG0: GTETRG
+SCI8: SDA
+SCI8: TXD_MOSI
+SPI0: SSL2",""
+"P106","L4","","","","","Disabled","","","BUS0: D6_DQ6
+GLCDC0: LCD_DATA00
+GPT8: GTIOCB
+KINT0: KRM6
+SCI8: SCK
+SPI0: SSL3",""
+"P107","K4","","","","","Disabled","","","BUS0: D7_DQ7
+GLCDC0: LCD_DATA01
+GPT8: GTIOCA
+KINT0: KRM7
+SCI8: CTS_RTS_SS",""
+"P108","B2","DEBUG0_SWDIO","","Low","","Peripheral mode","CMOS","None","DEBUG0: SWDIO
+DEBUG0: TMS
+GPT0: GTIOCB
+SCI9: CTS_RTS_SS
+SPI1: SSL0",""
+"P109","B1","DEBUG0_SWO","","Low","","Peripheral mode","CMOS","None","CAN1: CTX
+CGC0: CLKOUT
+DEBUG0: SWO
+DEBUG0: TDO
+GPT1: GTIOCA
+OPS0: GTOVUP
+SCI9: SDA
+SCI9: TXD_MOSI
+SPI1: MOSI",""
+"P110","C2","","","","","Disabled","","","CAN1: CRX
+CMP0: VCOUT
+DEBUG0: TDI
+GPT1: GTIOCB
+IRQ0: IRQ03
+OPS0: GTOVLO
+SCI2: CTS_RTS_SS
+SCI9: RXD_MISO
+SCI9: SCL
+SPI1: MISO",""
+"P111","C1","","","","","Disabled","","","BUS0: A05
+GLCDC0: LCD_DATA12
+GPT3: GTIOCA
+IRQ0: IRQ04
+SCI2: SCK
+SCI9: SCK
+SPI1: RSPCK",""
+"P112","C3","","","","","Disabled","","","BUS0: A04
+GLCDC0: LCD_DATA11
+GPT3: GTIOCB
+SCI2: SDA
+SCI2: TXD_MOSI
+SSI0: SSISCK",""
+"P113","D3","","","","","Disabled","","","BUS0: A03
+GLCDC0: LCD_DATA10
+SCI2: RXD_MISO
+SCI2: SCL
+SSI0: SSIWS",""
+"P114","E4","","","","","Disabled","","","BUS0: A02
+GLCDC0: LCD_DATA09
+SSI0: SSIRXD",""
+"P115","E3","","","","","Disabled","","","BUS0: A01
+GLCDC0: LCD_DATA08
+SSI0: SSITXD",""
+"P200","B8","","","","","Disabled","","","IRQ0: NMI",""
+"P201","C8","","","","","Disabled","","","",""
+"P202","A12","","","","","Disabled","","","BUS0: WR1_BC1
+CAN0: CRX
+ETHERC0: ERXD2
+GLCDC0: LCD_TCON3
+GPT5: GTIOCB
+IRQ0: IRQ03
+SCI2: SCK
+SCI9: RXD_MISO
+SCI9: SCL
+SDHI0: DAT6
+SPI1: MISO",""
+"P203","B12","","","","","Disabled","","","BUS0: A19
+CAN0: CTX
+CTSU0: TSCAP
+ETHERC0: COL
+GPT5: GTIOCA
+IRQ0: IRQ02
+SCI2: CTS_RTS_SS
+SCI9: SDA
+SCI9: TXD_MOSI
+SDHI0: DAT5
+SPI1: MOSI",""
+"P204","D11","","","","","Disabled","","","AGT1: AGTIO
+BUS0: A18
+CAC0: CACREF
+CTSU0: TS00
+ETHERC0: RX_DV
+GPT4: GTIOCB
+IIC0: SCL
+OPS0: GTIW
+SCI4: SCK
+SCI9: SCK
+SDHI0: DAT4
+SPI1: RSPCK
+SSI1: SSISCK
+USBFS0: OVRCURB",""
+"P205","C12","SDHI0_DAT3","","High","None","Peripheral mode","CMOS","input pull-up","AGT1: AGTO
+BUS0: A16
+CGC0: CLKOUT
+CTSU0: TSCAP
+ETHERC0: WOL
+ETHERC0: WOL
+GPT4: GTIOCA
+IIC1: SCL
+IRQ0: IRQ01
+OPS0: GTIV
+SCI4: SDA
+SCI4: TXD_MOSI
+SCI9: CTS_RTS_SS
+SDHI0: DAT3
+SPI1: SSL0
+SSI1: SSIWS
+USBFS0: OVRCURA",""
+"P206","G9","SDHI0_DAT2","","High","None","Peripheral mode","CMOS","input pull-up","BUS0: WAIT
+CTSU0: TS01
+ETHERC0: LINKSTA
+ETHERC0: LINKSTA
+IIC1: SDA
+IRQ0: IRQ00
+OPS0: GTIU
+SCI4: RXD_MISO
+SCI4: SCL
+SDHI0: DAT2
+SPI1: SSL1
+SSI1: SSIDATA
+USBFS0: VBUSEN",""
+"P207","C13","","","","","Disabled","","","BUS0: A17
+CTSU0: TS02
+SPI1: SSL2",""
+"P212","H15","","","","","Disabled","","","AGT1: AGTEE
+CGC0: EXTAL
+IRQ0: IRQ03
+POEG3: GTETRG
+SCI1: RXD_MISO
+SCI1: SCL",""
+"P213","H14","","","","","Disabled","","","ADC1: ADTRG
+CGC0: XTAL
+IRQ0: IRQ02
+POEG2: GTETRG
+SCI1: SDA
+SCI1: TXD_MOSI",""
+"P300","F5","DEBUG0_SWCLK","","Low","","Peripheral mode","CMOS","None","DEBUG0: SWCLK
+DEBUG0: TCK
+GPT0: GTIOCA
+SPI1: SSL1",""
+"P301","B3","","","","","Disabled","","","BUS0: A06
+GLCDC0: LCD_DATA13
+GPT4: GTIOCB
+IRQ0: IRQ06
+OPS0: GTOULO
+SCI2: RXD_MISO
+SCI2: SCL
+SPI1: SSL2",""
+"P302","A2","","","","","Disabled","","","BUS0: A07
+GLCDC0: LCD_DATA14
+GPT4: GTIOCA
+IRQ0: IRQ05
+OPS0: GTOUUP
+SCI2: SDA
+SCI2: TXD_MOSI
+SPI1: SSL3",""
+"P303","A3","","","","","Disabled","","","BUS0: A08
+GLCDC0: LCD_DATA15
+GPT7: GTIOCB",""
+"P304","C4","","","","","Disabled","","","BUS0: A09
+GLCDC0: LCD_DATA16
+GPT7: GTIOCA
+IRQ0: IRQ09
+SCI6: RXD_MISO
+SCI6: SCL",""
+"P305","D4","","","","","Disabled","","","BUS0: A10
+GLCDC0: LCD_DATA17
+IRQ0: IRQ08
+SCI6: SDA
+SCI6: TXD_MOSI",""
+"P306","D5","","","","","Disabled","","","BUS0: A11
+GLCDC0: LCD_DATA18
+SCI6: SCK",""
+"P307","D6","","","","","Disabled","","","BUS0: A12
+GLCDC0: LCD_DATA19
+SCI6: CTS_RTS_SS",""
+"P308","D7","","","","","Disabled","","","BUS0: A13
+GLCDC0: LCD_DATA20",""
+"P309","C5","","","","","Disabled","","","BUS0: A14
+GLCDC0: LCD_DATA21",""
+"P310","C6","","","","","Disabled","","","BUS0: A15
+GLCDC0: LCD_DATA22",""
+"P311","C7","","","","","Disabled","","","BUS0: CS2_RAS
+GLCDC0: LCD_DATA23",""
+"P312","B6","","","","","Disabled","","","BUS0: CS3_CAS",""
+"P313","E10","","","","","Disabled","","","BUS0: A20
+ETHERC0: ERXD3
+GLCDC0: LCD_TCON2
+SDHI0: DAT7",""
+"P314","F9","","","","","Disabled","","","BUS0: A21
+GLCDC0: LCD_TCON1",""
+"P315","C11","","","","","Disabled","","","BUS0: A22
+GLCDC0: LCD_TCON0",""
+"P400","N13","","","","","Disabled","","","ADC1: ADTRG
+ETHERC1: TX_CLK
+GPT6: GTIOCA
+IIC0: SCL
+IRQ0: IRQ00
+SCI4: SCK
+SCI7: SCK
+SSI: AUDIO_CLK",""
+"P401","P15","SCI7_TXD_MOSI","IMU_SDI","","None","Peripheral mode","CMOS","None","CAN0: CTX
+ETHERC0: MDC
+ETHERC0: MDC
+GPT6: GTIOCB
+IIC0: SDA
+IRQ0: IRQ05
+POEG0: GTETRG
+SCI4: CTS_RTS_SS
+SCI7: SDA
+SCI7: TXD_MOSI",""
+"P402","N14","SCI7_RXD_MISO","IMU_SDO","Low","None","Peripheral mode","CMOS","None","AGT0: AGTIO
+AGT1: AGTIO
+CAN0: CRX
+ETHERC0: MDIO
+ETHERC0: MDIO
+IRQ0: IRQ04
+RTC0: RTCIC0
+SCI7: RXD_MISO
+SCI7: SCL",""
+"P403","N15","SSI0_SSISCK","SSISCK0","Low","","Peripheral mode","CMOS","None","AGT0: AGTIO
+AGT1: AGTIO
+ETHERC1: MDC
+ETHERC1: MDC
+GPT3: GTIOCA
+PDC0: PIXD7
+RTC0: RTCIC1
+SCI7: CTS_RTS_SS
+SSI0: SSISCK",""
+"P404","K10","SSI0_SSIWS","SSIWS0","Low","","Peripheral mode","CMOS","None","ETHERC1: MDIO
+ETHERC1: MDIO
+GPT3: GTIOCB
+PDC0: PIXD6
+RTC0: RTCIC2
+SSI0: SSIWS",""
+"P405","M13","SSI0_SSITXD","SSITXD0","Low","","Peripheral mode","CMOS","None","ETHERC1: TX_EN
+ETHERC1: TXD_EN
+GPT1: GTIOCA
+PDC0: PIXD5
+SSI0: SSITXD",""
+"P406","J9","SSI0_SSIRXD","SSIRXD0","Low","","Peripheral mode","CMOS","None","ETHERC1: RX_ER
+ETHERC1: TXD1
+GPT1: GTIOCB
+PDC0: PIXD4
+SSI0: SSIRXD",""
+"P407","A15","","","","","Disabled","","","ADC0: ADTRG
+CTSU0: TS03
+ETHERC0: EXOUT
+ETHERC0: EXOUT
+IIC0: SDA
+RTC0: RTCOUT
+SCI4: CTS_RTS_SS
+SPI1: SSL3
+USBFS0: VBUS",""
+"P408","B15","","","","","Disabled","","","CTSU0: TS04
+ETHERC0: CRS
+ETHERC0: CRS_DV
+GPT10: GTIOCB
+IRQ0: IRQ07
+OPS0: GTOWLO
+SCI3: RXD_MISO
+SCI3: SCL
+USBFS0: ID
+USBHS0: ID",""
+"P409","C14","GPIO","B_ALRT","","IRQ6","Input mode","","None","CTSU0: TS05
+ETHERC0: RX_CLK
+ETHERC0: RX_ER
+GPT10: GTIOCA
+IRQ0: IRQ06
+OPS0: GTOWUP
+SCI3: SDA
+SCI3: TXD_MOSI
+USBFS0: EXICEN
+USBHS0: EXICEN","Signal from Fuel Gauge MAX17055 "
+"P410","C15","SDHI0_DAT1","SD0DAT1","High","None","Peripheral mode","CMOS","input pull-up","AGT1: AGTOB
+CTSU0: TS06
+ETHERC0: ERXD0
+ETHERC0: RXD1
+GPT9: GTIOCB
+IRQ0: IRQ05
+OPS0: GTOVLO
+SCI0: RXD_MISO
+SCI0: SCL
+SCI3: SCK
+SDHI0: DAT1
+SPI0: MISO",""
+"P411","D14","SDHI0_DAT0","SD0DAT0","High","None","Peripheral mode","CMOS","input pull-up","AGT1: AGTOA
+CTSU0: TS07
+ETHERC0: ERXD1
+ETHERC0: RXD0
+GPT9: GTIOCA
+IRQ0: IRQ04
+OPS0: GTOVUP
+SCI0: SDA
+SCI0: TXD_MOSI
+SCI3: CTS_RTS_SS
+SDHI0: DAT0
+SPI0: MOSI",""
+"P412","D13","SDHI0_CMD","SD0SMD","High","","Peripheral mode","CMOS","input pull-up","CTSU0: TS08
+ETHERC0: ETXD0
+ETHERC0: REF50CK
+OPS0: GTOULO
+SCI0: SCK
+SDHI0: CMD
+SPI0: RSPCK",""
+"P413","D12","SDHI0_CLK","SD0CLK","High","","Peripheral mode","CMOS","input pull-up","CTSU0: TS09
+ETHERC0: ETXD1
+ETHERC0: TXD0
+OPS0: GTOUUP
+SCI0: CTS_RTS_SS
+SDHI0: CLK
+SPI0: SSL0",""
+"P414","E11","GPIO","PWR_STATE","","","Input mode","","input pull-up","CTSU0: TS10
+ETHERC0: RX_ER
+ETHERC0: TXD1
+SDHI0: WP
+SPI0: SSL1","Signal fro Ideal Diode LTC4413EDD"
+"P415","E14","GPIO","WDT_RESET","Low","","Output mode (Initial Low)","CMOS","None","CTSU0: TS11
+ETHERC0: TX_EN
+ETHERC0: TXD_EN
+SPI0: SSL2","Signal to reset WDT in RTC AB1805"
+"P500","R4","SDHI1_CLK","","High","","Peripheral mode","CMOS","input pull-up","ADC0: AN16
+AGT0: AGTOA
+CMP0: IVREF0
+GPT11: GTIOCA
+OPS0: GTIU
+QSPI0: QSPCLK
+SDHI1: CLK
+USBFS0: VBUSEN",""
+"P501","N4","SDHI1_CMD","","High","None","Peripheral mode","CMOS","input pull-up","ADC1: AN16
+AGT0: AGTOB
+CMP0: IVREF1
+GPT11: GTIOCB
+IRQ0: IRQ11
+OPS0: GTIV
+QSPI0: QSSL
+SCI5: SDA
+SCI5: TXD_MOSI
+SDHI1: CMD
+USBFS0: OVRCURA",""
+"P502","N5","SDHI1_DAT0","","High","None","Peripheral mode","CMOS","input pull-up","ADC0: AN17
+CMP0: IVCMP0
+GPT12: GTIOCA
+IRQ0: IRQ12
+OPS0: GTIW
+QSPI0: QIO0
+SCI5: RXD_MISO
+SCI5: SCL
+SDHI1: DAT0
+USBFS0: OVRCURB",""
+"P503","P5","SDHI1_DAT1","","High","","Peripheral mode","CMOS","input pull-up","ADC1: AN17
+GPT12: GTIOCB
+POEG2: GTETRG
+QSPI0: QIO1
+SCI5: SCK
+SCI6: CTS_RTS_SS
+SDHI1: DAT1
+USBFS0: EXICEN",""
+"P504","R5","SDHI1_DAT2","","High","","Peripheral mode","CMOS","input pull-up","ADC0: AN18
+GPT13: GTIOCA
+POEG3: GTETRG
+QSPI0: QIO2
+SCI5: CTS_RTS_SS
+SCI6: SCK
+SDHI1: DAT2
+USBFS0: ID",""
+"P505","M5","SDHI1_DAT3","","High","None","Peripheral mode","CMOS","input pull-up","ADC1: AN18
+GPT13: GTIOCB
+IRQ0: IRQ14
+QSPI0: QIO3
+SCI6: RXD_MISO
+SCI6: SCL
+SDHI1: DAT3",""
+"P506","M6","","","","","Disabled","","","ADC0: AN19
+IRQ0: IRQ15
+SCI6: SDA
+SCI6: TXD_MOSI
+SDHI1: CD",""
+"P507","N6","GPIO","","Medium","","Output mode (Initial High)","CMOS","None","ADC1: AN19
+SCI5: CTS_RTS_SS
+SDHI1: WP",""
+"P508","M7","SCI5_SCK","","Low","","Peripheral mode","CMOS","None","ADC0: AN20
+SCI5: SCK",""
+"P509","P6","SCI5_TXD_MOSI","","Low","","Peripheral mode","CMOS","None","ADC1: AN20
+SCI5: SDA
+SCI5: TXD_MOSI",""
+"P510","N7","SCI5_RXD_MISO","","Low","","Peripheral mode","CMOS","None","ADC0: AN21
+SCI5: RXD_MISO
+SCI5: SCL",""
+"P511","R15","IIC2_SDA","","","None","Peripheral mode","CMOS","None","CAN1: CRX
+ETHERC1: TX_ER
+GPT0: GTIOCB
+IIC2: SDA
+IRQ0: IRQ15
+PDC0: PCKO
+SCI4: RXD_MISO
+SCI4: SCL",""
+"P512","R14","IIC2_SCL","","","None","Peripheral mode","CMOS","None","CAN1: CTX
+ETHERC1: ETXD2
+GPT0: GTIOCA
+IIC2: SCL
+IRQ0: IRQ14
+PDC0: VSYNC
+SCI4: SDA
+SCI4: TXD_MOSI",""
+"P513","P13","","LED_R","","","Disabled","","","ETHERC1: ETXD3
+GLCDC0: LCD_DATA16","Red LED. Switch On by lo level "
+"P514","P14","","LED_G","","","Disabled","","","POEG1: GTETRG","Green LED. Switch On by lo level "
+"P515","K9","","LED_B","","","Disabled","","","","Blue LED. Switch On by lo level "
+"P600","L3","","","","","Disabled","","","BUS0: RD
+GLCDC0: LCD_DATA02",""
+"P601","L2","","","","","Disabled","","","BUS0: WR_WR0_DQM0
+GLCDC0: LCD_DATA03",""
+"P602","L1","","","","","Disabled","","","BUS0: BCLK_SDCLK
+GLCDC0: LCD_DATA04",""
+"P603","K3","","","","","Disabled","","","BUS0: D13_DQ13",""
+"P604","K2","","","","","Disabled","","","BUS0: D12_DQ12",""
+"P605","K1","","","","","Disabled","","","BUS0: D11_DQ11",""
+"P606","K6","","","","","Disabled","","","GLCDC0: LCD_DATA03",""
+"P607","K5","","","","","Disabled","","","GLCDC0: LCD_DATA04",""
+"P608","F4","","","","","Disabled","","","BUS0: A00_BC0_DQM1
+GLCDC0: LCD_DATA07",""
+"P609","G4","","","","","Disabled","","","BUS0: CS1_CKE
+GLCDC0: LCD_DATA06",""
+"P610","E1","","","","","Disabled","","","BUS0: CS0_WE
+GLCDC0: LCD_DATA05",""
+"P611","E2","","","","","Disabled","","","BUS0: SDCS",""
+"P612","F2","","","","","Disabled","","","BUS0: D8_DQ8",""
+"P613","F3","","","","","Disabled","","","BUS0: D9_DQ9",""
+"P614","F1","","","","","Disabled","","","BUS0: D10_DQ10",""
+"P615","G8","","","","","Disabled","","","GLCDC0: LCD_DATA10",""
+"P700","M14","","","","","Disabled","","","ETHERC1: ETXD1
+ETHERC1: TXD0
+GPT5: GTIOCA
+PDC0: PIXD3",""
+"P701","M15","","","","","Disabled","","","ETHERC1: ETXD0
+ETHERC1: REF50CK
+GPT5: GTIOCB
+PDC0: PIXD2",""
+"P702","K11","","","","","Disabled","","","ETHERC1: ERXD1
+ETHERC1: RXD0
+GPT6: GTIOCA
+PDC0: PIXD1",""
+"P703","J8","","","","","Disabled","","","ETHERC1: ERXD0
+ETHERC1: RXD1
+GPT6: GTIOCB
+PDC0: PIXD0",""
+"P704","J10","","","","","Disabled","","","ETHERC1: RX_CLK
+ETHERC1: RX_ER
+PDC0: HSYNC",""
+"P705","L13","","BT_REG_ON","","","Disabled","","","ETHERC1: CRS
+ETHERC1: CRS_DV
+PDC0: PIXCLK","BT_REG_ON"
+"P706","L14","","","","","Disabled","","","IRQ0: IRQ07
+SCI3: RXD_MISO
+SCI3: SCL
+USBHS0: OVRCURB",""
+"P707","L15","","","","","Disabled","","","IRQ0: IRQ08
+SCI3: SDA
+SCI3: TXD_MOSI
+USBHS0: OVRCURA",""
+"P708","D15","SCI1_RXD_MISO","BT_UART_TXD","Low","None","Peripheral mode","CMOS","None","CAC0: CACREF
+CTSU0: TS12
+ETHERC0: ETXD3
+IRQ0: IRQ11
+SCI1: RXD_MISO
+SCI1: SCL
+SPI0: SSL3",""
+"P709","E13","SCI1_TXD_MOSI","BT_UART_RXD","Low","None","Peripheral mode","CMOS","None","CTSU0: TS13
+ETHERC0: ETXD2
+IRQ0: IRQ10
+SCI1: SDA
+SCI1: TXD_MOSI",""
+"P710","F10","GPIO","BT_UART_CTS","Low","","Output mode (Initial Low)","CMOS","None","CTSU0: TS14
+ETHERC0: TX_ER
+SCI1: SCK","BT_UART_CTS"
+"P711","E12","GPIO","BT_UART_RTS","","","Input mode","","None","CTSU0: TS15
+ETHERC0: TX_CLK
+SCI1: CTS_RTS_SS","BT_UART_RTS"
+"P712","F11","GPIO","BT_HOST_WAKE","","","Input mode","","None","CTSU0: TS16
+GPT2: GTIOCB","BT_HOST_WAKE"
+"P713","G10","","","","","Disabled","","","CTSU0: TS17
+ETHERC1: EXOUT
+ETHERC1: EXOUT
+GPT2: GTIOCA",""
+"P800","P2","","","","","Disabled","","","BUS0: D14_DQ14",""
+"P801","R2","","","","","Disabled","","","BUS0: D15_DQ15
+SDHI1: DAT4",""
+"P802","R3","","","","","Disabled","","","GLCDC0: LCD_DATA02
+SDHI1: DAT5",""
+"P803","P4","","","","","Disabled","","","GLCDC0: LCD_DATA01
+SDHI1: DAT6",""
+"P804","M4","","","","","Disabled","","","GLCDC0: LCD_DATA00
+SDHI1: DAT7",""
+"P805","R13","","WIFI_REG_ON","","","Disabled","","","GLCDC0: LCD_DATA17","WIFI_REG_ON"
+"P806","M12","","","","","Disabled","","","GLCDC0: LCD_EXTCLK",""
+"P807","P12","","PWR_SEL","","","Disabled","","","","Power source selection input. High indicates a USB host source and Low indicates an adapter source"
+"P808","K7","","","","","Disabled","","","",""
+"P809","K8","","","","","Disabled","","","",""
+"P810","P3","","","","","Disabled","","","",""
+"P811","L5","","","","","Disabled","","","CAN0: CTX",""
+"P812","L6","","","","","Disabled","","","CAN0: CRX",""
+"P813","G1","","","","","Disabled","","","GPT9: GTIOCB
+TRACE0: TDATA3",""
+"P900","E9","","","","","Disabled","","","BUS0: A23
+GLCDC0: LCD_CLK",""
+"P901","B11","","","","","Disabled","","","GLCDC0: LCD_DATA15",""
+"P902","A11","","","","","Disabled","","","GLCDC0: LCD_DATA23",""
+"P903","D9","","","","","Disabled","","","GPT7: GTIOCA
+SDHI0: CD",""
+"P904","C9","","","","","Disabled","","","GPT7: GTIOCB",""
+"P905","A6","","","","","Disabled","","","BUS0: CS4
+GLCDC0: LCD_DATA11",""
+"P906","F6","","","","","Disabled","","","BUS0: CS5
+GLCDC0: LCD_DATA12",""
+"P907","F7","","","","","Disabled","","","BUS0: CS6
+GLCDC0: LCD_DATA13",""
+"P908","E7","","","","","Disabled","","","BUS0: CS7
+GLCDC0: LCD_DATA14",""
+"P909","E8","","RF_RST","","","Disabled","","","GLCDC0: LCD_DATA21","Reset to LoRa chip"
+"P910","D8","","RF_ANT_SW","","","Disabled","","","GLCDC0: LCD_DATA22","RF_ANT_SW to LoRa chip"
+"P911","A7","","","","","Disabled","","","GPT8: GTIOCB",""
+"P912","B7","","","","","Disabled","","","GPT8: GTIOCA",""
+"P913","H8","","","","","Disabled","","","",""
+"P914","E5","","","","","Disabled","","","GLCDC0: LCD_DATA19",""
+"P915","E6","","CODEC_PWR","","","Disabled","","","GLCDC0: LCD_DATA20","Enable power to CODEC"
+"PA00","J7","","","","","Disabled","","","GLCDC0: LCD_DATA05",""
+"PA01","J6","","","","","Disabled","","","GLCDC0: LCD_DATA06",""
+"PA02","H6","","","","","Disabled","","","IRQ0: IRQ10
+SCI7: SDA
+SCI7: TXD_MOSI",""
+"PA03","J5","IRQ0_IRQ09","CHARGER_INT","","IRQ9","IRQ mode","","","IRQ0: IRQ09
+SCI7: RXD_MISO
+SCI7: SCL",""
+"PA04","J4","SCI7_SCK","IMU_CLK","Low","","Peripheral mode","CMOS","None","GPT11: GTIOCB
+SCI7: SCK",""
+"PA05","J3","GPIO","","Medium","","Output mode (Initial High)","CMOS","None","GPT11: GTIOCA
+SCI7: CTS_RTS_SS",""
+"PA06","J2","","","","","Disabled","","","GPT10: GTIOCB",""
+"PA07","J1","","","","","Disabled","","","GPT10: GTIOCA",""
+"PA08","G7","","","","","Disabled","","","GLCDC0: LCD_DATA09",""
+"PA09","H4","","","","","Disabled","","","GLCDC0: LCD_DATA08",""
+"PA10","H5","","","","","Disabled","","","GLCDC0: LCD_DATA07",""
+"PA11","G6","","","","","Disabled","","","GLCDC0: LCD_DATA18",""
+"PA12","G5","","","","","Disabled","","","TRACE0: TCLK",""
+"PA13","H7","","","","","Disabled","","","TRACE0: TDATA0",""
+"PA14","G3","","","","","Disabled","","","TRACE0: TDATA1",""
+"PA15","G2","","","","","Disabled","","","GPT9: GTIOCA
+TRACE0: TDATA2",""
+"PB00","H9","","","","","Disabled","","","SCI3: SCK
+USBHS0: VBUSEN",""
+"PB01","K13","USBHS0_VBUS","","Low","","Peripheral mode","CMOS","None","SCI3: CTS_RTS_SS
+USBHS0: VBUS",""
+"PB02","J11","","","","","Disabled","","","ETHERC1: RX_DV
+SCI8: CTS_RTS_SS",""
+"PB03","K12","","","","","Disabled","","","ETHERC1: COL
+SCI8: SCK",""
+"PB04","H10","","","","","Disabled","","","ETHERC1: ERXD2
+IRQ0: IRQ12
+SCI8: SDA
+SCI8: TXD_MOSI",""
+"PB05","J12","","","","","Disabled","","","ETHERC1: ERXD3
+IRQ0: IRQ13
+SCI8: RXD_MISO
+SCI8: SCL",""
+"PB06","H11","","","","","Disabled","","","ETHERC1: WOL
+ETHERC1: WOL",""
+"PB07","G11","","","","","Disabled","","","ETHERC1: LINKSTA
+ETHERC1: LINKSTA",""
+"PVSSUSBHS","G15","USBHS0_PVSSUSBHS","","","","","","","",""
+"RES","F8","","","","","","","","",""
+"USBDM","B14","USBFS0_USBDM","","","","","","","",""
+"USBDP","A14","USBFS0_USBDP","","","","","","","",""
+"USBHSDM","F15","USBHS0_USBHSDM","","","","","","","",""
+"USBHSDP","F14","USBHS0_USBHSDP","","","","","","","",""
+"USBHSRREF","G13","USBHS0_USBHSRREF","","","","","","","",""
+"VBAT","K14","","","","","","","","",""
+"VCC","B4","","","","","","","","",""
+"VCC","D10","","","","","","","","",""
+"VCC","B5","","","","","","","","",""
+"VCC","M2","","","","","","","","",""
+"VCC","A8","","","","","","","","",""
+"VCC","P7","","","","","","","","",""
+"VCC","H12","","","","","","","","",""
+"VCC","H3","","","","","","","","",""
+"VCC","L7","","","","","","","","",""
+"VCC","L12","","","","","","","","",""
+"VCC","D1","","","","","","","","",""
+"VCCUSB","A13","USBFS0_VCCUSB","","","","","","","",""
+"VCCUSBHS","F13","USBHS0_VCCUSBHS","","","","","","","",""
+"VCL","K15","","","","","","","","",""
+"VCL1","A10","","","","","","","","",""
+"VCL1","H1","","","","","","","","",""
+"VCL2","R6","","","","","","","","",""
+"VLO","B9","","","","","","","","",""
+"VLO","A9","","","","","","","","",""
+"VREFH","R8","ADC_VREFH","","","","","","","",""
+"VREFH0","R9","ADC_VREFH0","","","","","","","",""
+"VREFL","N8","ADC_VREFL","","","","","","","",""
+"VREFL0","P9","ADC_VREFL0","","","","","","","",""
+"VSS","B10","","","","","","","","",""
+"VSS","A4","","","","","","","","",""
+"VSS","C10","","","","","","","","",""
+"VSS","A5","","","","","","","","",""
+"VSS","M1","","","","","","","","",""
+"VSS","R7","","","","","","","","",""
+"VSS","E15","","","","","","","","",""
+"VSS","H2","","","","","","","","",""
+"VSS","L8","","","","","","","","",""
+"VSS","L11","","","","","","","","",""
+"VSS","J13","","","","","","","","",""
+"VSS","D2","","","","","","","","",""
+"VSS1USBHS","F12","USBHS0_VSS1USBHS","","","","","","","",""
+"VSS2USBHS","G12","USBHS0_VSS2USBHS","","","","","","","",""
+"VSSUSB","B13","USBFS0_VSSUSB","","","","","","","",""
+"XCIN","J15","CGC0_XCIN","","","","","","","",""
+"XCOUT","J14","CGC0_XCOUT","","","","","","","",""
