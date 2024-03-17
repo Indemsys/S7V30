@@ -1,0 +1,130 @@
+﻿/* Область весторов смещена на 1024 KB от начала. 1 МБ в начале Flash отведен для начального загрузчика*/
+define symbol region_VECT_start         = 0x00000000;
+define symbol region_VECT_end           = 0x000003FF;
+
+define symbol region_ROMREG_start       = 0x00000400;
+define symbol region_ROMREG_end         = 0x000004FF;
+
+/*  1 МБ в начале Flash отведен для начального загрузчика*/
+define symbol region_FLASH_start        = 0x00000500; 
+define symbol region_FLASH_end          = 0x000FFFFF;
+
+/* Место хранения контрольной суммы для проверки целостности программы*/ 
+define symbol region_CRC_start          = 0x002FFFFC; 
+define symbol region_CRC_end            = 0x002FFFFF;
+
+define symbol region_SRAMHS_start       = 0x1FFE0000;
+define symbol region_SRAMHS_end         = 0x1FFFFFFF;
+
+define symbol region_SRAM_start         = 0x20000000;
+define symbol region_SRAM_end           = 0x2007FFFF;
+
+
+define symbol region_STB_RAM_start      = 0x200FE000;
+define symbol region_STB_RAM_end        = 0x200FFFFF;
+
+define symbol region_DF_start           = 0x40100000;
+define symbol region_DF_end             = 0x4010FFFF;
+
+define symbol region_SDRAM_start        = 0x90000000;
+define symbol region_SDRAM_end          = 0x91FFFFFF;
+
+define symbol region_QSPI_start         = 0x60000000;
+define symbol region_QSPI_end           = 0x63FFFFFF;
+
+define symbol region_ID_CODES_start     = 0x40120050;
+define symbol region_ID_CODES_end       = 0x4012005F;
+
+/* Stack and heap sizes are defined in bsp_cfg.h */
+
+define memory mem with size     = 4G;
+define region VECT_region       = mem:[from region_VECT_start    to region_VECT_end];
+define region ROMREG_region     = mem:[from region_ROMREG_start  to region_ROMREG_end];
+define region FLASH_region      = mem:[from region_FLASH_start   to region_FLASH_end];
+
+define region SRAMHS_region     = mem:[from region_SRAMHS_start  to region_SRAMHS_end];
+define region SRAM_region       = mem:[from region_SRAM_start    to region_SRAM_end];
+
+define region STB_RAM_region    = mem:[from region_STB_RAM_start to region_STB_RAM_end];
+define region DF_region         = mem:[from region_DF_start      to region_DF_end];
+define region SDRAM_region      = mem:[from region_SDRAM_start   to region_SDRAM_end];
+define region QSPI_region       = mem:[from region_QSPI_start    to region_QSPI_end];
+define region CHEKSUM_region    = mem:[from region_CRC_start     to region_CRC_end];
+
+define region ID_CODE_region    = mem:[from region_ID_CODES_start   to region_ID_CODES_end];
+
+initialize manually                        { readwrite                           };
+initialize manually                        { section     .qspi_non_retentive     };
+do not initialize                          { section     .qspi_flash             };
+do not initialize                          { section     .sdram                  };
+do not initialize                          { zeroinit                            };
+initialize manually                        { section     .code_in_ram            };
+
+/* Main thread local storage */                                                
+initialize manually                        { section     __DLIB_PERTHREAD        };
+                                                                                 
+define block RAM_INIT_CODE                 { section    .code_in_ram_init        };
+
+define block QSPI_NON_RETENTIVE_INIT_BLOCK { section    .qspi_non_retentive_init };
+define block QSPI_NON_RETENTIVE_BLOCK      { section    .qspi_non_retentive      };
+define block VECT_INFO                     { ro section .vector_info.*           };
+keep                                       { section    .vector*                 };
+define block LOCK_LOOKUP                   { ro section .hw_lock_lookup.*        };
+keep                                       { section    .hw_lock_lookup*         };
+define block HW_LOCK with alignment=1      { rw section .hw_lock.*               };
+keep                                       { section    .hw_lock.*               };
+
+define block USB_DEV_DESC_BLK with fixed order, alignment = 1
+                                           { ro data section .usb_device_desc_fs,
+                                             ro data section .usb_config_desc_fs,
+                                             ro data section .usb_interface_desc_fs,
+                                             ro data section .usb_device_desc_hs,
+                                             ro data section .usb_config_desc_hs,
+                                             ro data section .usb_interface_desc_hs,
+                                             ro data section .usb_dev_descriptor_start_fs,
+                                             ro data section .usb_descriptor_end_fs };
+keep                                       { section .usb_*};
+
+define block SDRAM                         { rw section .sdram                    };
+
+place in CHEKSUM_region                    { ro section .checksum                 };
+                                                                                  
+place at start of VECT_region              { ro section .vectors                  };
+place in VECT_region                       { ro section .vector.*                 };
+place in ROMREG_region                     { ro section .rom_registers            };
+place at start of FLASH_region             { block VECT_INFO                      };
+place in FLASH_region                      { block LOCK_LOOKUP, ro, ro section .rodata, block QSPI_NON_RETENTIVE_INIT_BLOCK, block RAM_INIT_CODE, block USB_DEV_DESC_BLK };
+
+// Переносим все к чему процесор должен иметь быстрый доступ в регион SRAMHS_region 
+// Следить за тем чтобы переменные в секциях были очищены .usb_cbls, .fs_mem .... поскольку они не очищаются в стартапном коде
+// Секция .data - Holds static and global initialized variables. In object files, this includes the initial values. 
+// When the linker directive initialize is used, a corresponding .data_init section is created for each .data section, holding the possibly compressed initial values.
+
+define block SRAMHS_DATA with fixed order  { section .code_in_ram, rw section .data , rw, rw section .noinit, rw section .fs_mem, rw section .stack* };
+
+place in SRAMHS_region                     { block SRAMHS_DATA };
+
+// Регион SRAM_region некэшируемый 
+// Секция .bss  - Holds zero-initialized static and global variables
+
+define block SRAM_DATA with fixed order    { rw section .ssp_dtc_vector_table,  rw section .net_packets_pool, rw section .usb_cbls , rw section .bss, rw section .usb_nocache_mem  , rw section HEAP};
+
+place in SRAM_region                       { block SRAM_DATA, block HW_LOCK,  last section FREE_MEM };
+                                           
+place in DF_region                         { ro section .data_flash                                };
+place in SDRAM_region                      { block SDRAM                                           };                          
+place in QSPI_region                       { section .qspi_flash                                   };
+place in QSPI_region                       { block QSPI_NON_RETENTIVE_BLOCK                        };
+place in SDRAM_region                      { last section FREE_SDRAM_MEM                           };
+place in ID_CODE_region                    { ro section .id_code_1, ro section .id_code_2, ro section .id_code_3, ro section .id_code_4 };
+                                           
+place in STB_RAM_region                    {rw section  .stanby_ram                                };
+do not initialize                          {rw section  .stanby_ram                                };
+
+
+define exported symbol __qspi_region_max_size__      = size(QSPI_region);
+define exported symbol __qspi_region_start_address__ = region_QSPI_start;
+define exported symbol __qspi_region_end_address__   = region_QSPI_end;
+
+define exported symbol __VECT_start__                = region_VECT_start;
+define exported symbol __vector_table                = region_VECT_start;

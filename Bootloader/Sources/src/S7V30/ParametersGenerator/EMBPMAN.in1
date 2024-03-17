@@ -1,0 +1,19 @@
+[TfrmCSorceGen]
+FormVersion=0
+Flags=0
+ShowCmd=1
+PixelsPerInch=96
+MinMaxPos(1920x1200)=-1,-1,-1,-1
+MinMaxPos=-1,-1,-1,-1
+NormPos(1920x1200)=143,302,888,729
+NormPos=143,302,888,729
+Visible=0
+deCSourcePath_DialogText=
+deCSourcePath_Text=d:\Embedded\Projects\Barduva\PLC_S7\FW\BootLoader\src\S7V30\Parameters
+edGenFileName_Text=S7V30_params.c
+edFreeMasterFileName_Text=S7V30_FreeMaster_tbl.c
+cb_GenFreeMaster_Checked=False
+cb_GenTypes_Checked=False
+[TfrmCSorceGen.memoIncludedInfo_Lines]
+Count=1
+Item0=#include "S7V30.h"
