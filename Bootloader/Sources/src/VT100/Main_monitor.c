@@ -11,6 +11,9 @@ static void     Do_date_time_set(uint8_t keycode);
 static void     Do_show_event_log(uint8_t keycode);
 static void     Do_MOD_Params_editor(uint8_t keycode);
 static void     Do_Copy_Module_Settings_to_File(uint8_t keycode);
+static void     Do_return_defaul_bootloader_settings(uint8_t keycode);
+static void     Do_erase_application_firmware(uint8_t keycode);
+static void     Do_erase_application_NV_settings(uint8_t keycode);
 
 extern const T_VT100_Menu MENU_MAIN;
 extern const T_VT100_Menu MENU_PARAMETERS;
@@ -43,6 +46,10 @@ const T_VT100_Menu_item MENU_SPEC_ITEMS[] =
 {
   { '1', 0,                                 (void *)&MENU_S7V30 },
   { '2', Do_Flash_Protection_control,          0                },
+  { '3', Do_SD_card_control,                   0                },
+  { '4', Do_return_defaul_bootloader_settings, 0                },
+  { '5', Do_erase_application_firmware,        0                },
+  { '6', Do_erase_application_NV_settings,     0                },
   { 'R', 0,                                    0                },
   { 'M', 0,                                 (void *)&MENU_MAIN  },
   { 0 }
@@ -54,6 +61,10 @@ const T_VT100_Menu      MENU_ENGINEERING  =
   "\033[5C ENGINEERING MENU \r\n"
   "\033[5C <1> - S7V30 internal control and diagnostic\r\n"
   "\033[5C <2> - Flash protection control\r\n"
+  "\033[5C <3> - SD card control\r\n"
+  "\033[5C <4> - Returm default bootloader settings\r\n"
+  "\033[5C <5> - Erase application firmware\r\n"
+  "\033[5C <6> - Erase application NV settings\r\n"
   "\033[5C <R> - Display previous menu\r\n"
   "\033[5C <M> - Display main menu\r\n",
   MENU_SPEC_ITEMS,
@@ -333,13 +344,13 @@ static uint32_t Access_control(void)
   uint32_t       indx;
   uint8_t        b;
   GET_MCBL;
-  char           pass_buf[PASS_STR_MAX_LEN+1];
-  char           pass_orig[PASS_STR_MAX_LEN+1];
+  char           pass_buf[PASS_STR_MAX_LEN + 1];
+  char           pass_orig[PASS_STR_MAX_LEN + 1];
   uint32_t       sz;
 
   do
   {
-    if (Is_flash_protection_type_3()==0)
+    if (Is_flash_protection_type_3() == 0)
     {
       sz = strlen(DEF_MON_PASSWORD);
       strcpy(pass_orig, DEF_MON_PASSWORD);
@@ -1064,6 +1075,143 @@ static void Do_Copy_Module_Settings_to_File(uint8_t keycode)
   }
   Wait_ms(2000);
 }
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param keycode
+-----------------------------------------------------------------------------------------------------*/
+static void Do_return_defaul_bootloader_settings(uint8_t keycode)
+{
+  uint8_t   b;
+  GET_MCBL;
+
+  MPRINTF(VT100_CLEAR_AND_HOME);
+  MPRINTF("Press Y if you want to return default settings\r\n");
+
+  do
+  {
+    if (WAIT_CHAR(&b,  ms_to_ticks(10000)) != RES_OK)
+    {
+      return;
+    }
+
+    if ((b == 'Y') || (b == 'y'))
+    {
+      Return_def_params(&ivar_inst);
+      if (Save_settings_to(&ivar_inst, MEDIA_TYPE_DATAFLASH, 0, BOOTL_PARAMS) == RES_OK)
+      {
+        MPRINTF("\r\n Settings restored successfully!");
+        Wait_ms(2000);
+        return;
+      }
+      else
+      {
+        MPRINTF("\r\n Settings restoring fault!");
+        Wait_ms(2000);
+        return;
+      }
+    }
+  }while (1);
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param keycode
+-----------------------------------------------------------------------------------------------------*/
+static void     Do_erase_application_firmware(uint8_t keycode)
+{
+  uint32_t  res;
+  uint8_t   b;
+  GET_MCBL;
+
+  MPRINTF(VT100_CLEAR_AND_HOME);
+  MPRINTF("Press Y if you want to erase application firmware\r\n");
+
+  do
+  {
+    if (WAIT_CHAR(&b,  ms_to_ticks(10000)) != RES_OK)
+    {
+      return;
+    }
+
+    if ((b == 'Y') || (b == 'y'))
+    {
+      VT100_set_cursor_pos(5, 0);
+      MPRINTF(VT100_CLL_FM_CRSR);
+      MPRINTF(" Wait...");
+      Wait_ms(10);
+
+      res = Erase_firmware_area();
+      VT100_set_cursor_pos(5, 0);
+      MPRINTF(VT100_CLL_FM_CRSR);
+
+      if (res== RES_OK)
+      {
+        MPRINTF("Erasing done successfully!");
+        Wait_ms(2000);
+        return;
+      }
+      else
+      {
+        MPRINTF("Erasing fail!");
+        Wait_ms(2000);
+        return;
+      }
+    }
+  }while (1);
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param keycode
+-----------------------------------------------------------------------------------------------------*/
+static void     Do_erase_application_NV_settings(uint8_t keycode)
+{
+  uint32_t  res;
+  uint8_t   b;
+  GET_MCBL;
+
+  MPRINTF(VT100_CLEAR_AND_HOME);
+  MPRINTF("Press Y if you want to erase application NV settings\r\n");
+
+  do
+  {
+    if (WAIT_CHAR(&b,  ms_to_ticks(10000)) != RES_OK)
+    {
+      return;
+    }
+
+    if ((b == 'Y') || (b == 'y'))
+    {
+      VT100_set_cursor_pos(5, 0);
+      MPRINTF(VT100_CLL_FM_CRSR);
+      MPRINTF(" Wait...");
+      Wait_ms(10);
+
+      res = Clear_app_DataFlash();
+      VT100_set_cursor_pos(5, 0);
+      MPRINTF(VT100_CLL_FM_CRSR);
+
+      if (res== RES_OK)
+      {
+        MPRINTF("Erasing done successfully!");
+        Wait_ms(2000);
+        return;
+      }
+      else
+      {
+        MPRINTF("Erasing fail!");
+        Wait_ms(2000);
+        return;
+      }
+    }
+  }while (1);
+
+}
+
 
 /*------------------------------------------------------------------------------
  Сброс системы

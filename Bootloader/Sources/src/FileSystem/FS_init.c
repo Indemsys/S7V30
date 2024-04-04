@@ -29,36 +29,36 @@ sdmmc_cfg_t sd_card_cfg =
   },
   .p_callback       = NULL,
   .p_extend         = (void *)&sd_card_ext_cfg,
-  .p_lower_lvl_transfer   =&DMA_CH2_transfer_instance,
-  .access_ipl       =(12),
+  .p_lower_lvl_transfer   = &DMA_CH2_transfer_instance,
+  .access_ipl       = (12),
   .sdio_ipl         = BSP_IRQ_DISABLED,
-  .card_ipl         =(BSP_IRQ_DISABLED),
-  .dma_req_ipl      =(BSP_IRQ_DISABLED),
+  .card_ipl         = (BSP_IRQ_DISABLED),
+  .dma_req_ipl      = (BSP_IRQ_DISABLED),
 };
 
 const sdmmc_instance_t sd_card_cbl =
 {
-  .p_ctrl           =&sd_card_ctrl,
-  .p_cfg            =&sd_card_cfg,
-  .p_api            =&g_sdmmc_on_sdmmc , // &g_s7_sdmmc, //  &g_sdmmc_on_sdmmc
+  .p_ctrl           = &sd_card_ctrl,
+  .p_cfg            = &sd_card_cfg,
+  .p_api            = &g_s7_sdmmc , // &g_s7_sdmmc, //  &g_sdmmc_on_sdmmc
 };
 
 static const sf_block_media_on_sdmmc_cfg_t sd_card_media_ext_cfg =
 {
-  .p_lower_lvl_sdmmc  =&sd_card_cbl,
+  .p_lower_lvl_sdmmc  = &sd_card_cbl,
 };
 
 static sf_block_media_cfg_t sd_card_media_cfg =
 {
   .block_size          = 512,
-  .p_extend            =&sd_card_media_ext_cfg
+  .p_extend            = &sd_card_media_ext_cfg
 };
 
 sf_block_media_instance_t sd_card_media_cbl =
 {
-  .p_ctrl =&sd_card_media_ctrl,
-  .p_cfg =&sd_card_media_cfg,
-  .p_api =&g_sf_block_media_on_sdmmc
+  .p_ctrl = &sd_card_media_ctrl,
+  .p_cfg = &sd_card_media_cfg,
+  .p_api = &g_sf_block_media_on_sdmmc
 };
 
 
@@ -68,34 +68,35 @@ sf_block_media_instance_t sd_card_media_cbl =
 sf_el_fx_media_partition_data_info_t g_sf_el_fx0_partition_data_info[g_sf_el_fx0_total_partition];
 #endif
 
-sf_el_fx_instance_ctrl_t g_sf_el_fx0_ctrl __attribute__ ((section(".fs_mem")));;
+sf_el_fx_instance_ctrl_t g_sf_el_fx0_ctrl __attribute__((section(".fs_mem")));
+;
 
 extern sf_el_fx_t fat_fs_media_cfg;
 
 /** SF_EL_FX interface configuration */
 const sf_el_fx_config_t g_sf_el_fx0_config =
 {
-#if (g_sf_el_fx0_total_partition > 1U)
+  #if (g_sf_el_fx0_total_partition > 1U)
   .p_partition_data         = (sf_el_fx_media_partition_data_info_t *)g_sf_el_fx0_partition_data_info,
-#else
+  #else
   .p_partition_data        = NULL,
-#endif
-  .p_lower_lvl_block_media =&sd_card_media_cbl,
-  .p_context               =&fat_fs_media_cfg,
+  #endif
+  .p_lower_lvl_block_media = &sd_card_media_cbl,
+  .p_context               = &fat_fs_media_cfg,
   .p_extend                = NULL,
   .total_partitions        = g_sf_el_fx0_total_partition,
-#if (g_sf_el_fx0_total_partition > 1U)
+  #if (g_sf_el_fx0_total_partition > 1U)
   .p_callback              = NULL,
-#else
+  #else
   .p_callback              = NULL,
-#endif
+  #endif
 };
 
 
 sf_el_fx_t fat_fs_media_cfg =
 {
-  .p_ctrl =&g_sf_el_fx0_ctrl,
-  .p_config =&g_sf_el_fx0_config,
+  .p_ctrl = &g_sf_el_fx0_ctrl,
+  .p_config = &g_sf_el_fx0_config,
 };
 
 static T_file_system_init_results   fs_res;
@@ -138,6 +139,11 @@ uint32_t Init_SD_card_file_system(void)
   rtc_time_t   rt_time = {0};
 
 
+  // Выключаем питание SD карты на 100 мс
+  SD_CARD_PWR = 0;
+  Wait_ms(50);
+  SD_CARD_PWR = 1;
+  Wait_ms(50);
 
   g_file_system_ready = 0;
   fx_system_initialize();
@@ -145,7 +151,7 @@ uint32_t Init_SD_card_file_system(void)
   rtc_cbl.p_api->calendarTimeGet(rtc_cbl.p_ctrl,&rt_time);
   rt_time.tm_mon++; // Renesas SSP счет месяцев начинается с 0
 
-  fx_system_date_set(rt_time.tm_year+1900 , rt_time.tm_mon , rt_time.tm_mday);
+  fx_system_date_set(rt_time.tm_year + 1900 , rt_time.tm_mon , rt_time.tm_mday);
   fx_system_time_set(rt_time.tm_hour, rt_time.tm_min, rt_time.tm_sec);
 
 
@@ -156,24 +162,24 @@ uint32_t Init_SD_card_file_system(void)
     return RES_ERROR;
   }
 
-//  // Чем меньше размер Allocation Unit (AU) при форматировнаии карты тем больше кластеров на ней будет и больше требуется памяти для контроля целостности файловой системы
-//  // Для карты размером 32 Гб и с размером AU в 32 Кбайта размер буфера для проверки достигает 120 Кбайт
-//  uint32_t err_corr_buf_sz =(fat_fs_media.fx_media_total_clusters>>3)+ 2048; // Размер увеличен для храннения внутренних структур функции fx_media_check
-//
-//  UCHAR  *err_corr_buf = App_malloc_pending(err_corr_buf_sz, 10); // Выделеям память для функции исправления ошибок FAT
-//  if  (err_corr_buf != NULL)
-//  {
-//    fs_res.fs_check_error_code = fx_media_check(&fat_fs_media, err_corr_buf, err_corr_buf_sz, FX_FAT_CHAIN_ERROR | FX_DIRECTORY_ERROR | FX_LOST_CLUSTER_ERROR, (ULONG *)&(fs_res.fs_detected_errors));
-//    App_free(err_corr_buf);
-//    if (fs_res.fs_check_error_code != FX_SUCCESS)
-//    {
-//      return RES_ERROR;
-//    }
-//  }
-//  else
-//  {
-//    fs_res.fx_corr_buff_alloc_res = RES_ERROR;
-//  }
+  //  // Чем меньше размер Allocation Unit (AU) при форматировнаии карты тем больше кластеров на ней будет и больше требуется памяти для контроля целостности файловой системы
+  //  // Для карты размером 32 Гб и с размером AU в 32 Кбайта размер буфера для проверки достигает 120 Кбайт
+  //  uint32_t err_corr_buf_sz =(fat_fs_media.fx_media_total_clusters>>3)+ 2048; // Размер увеличен для храннения внутренних структур функции fx_media_check
+  //
+  //  UCHAR  *err_corr_buf = App_malloc_pending(err_corr_buf_sz, 10); // Выделеям память для функции исправления ошибок FAT
+  //  if  (err_corr_buf != NULL)
+  //  {
+  //    fs_res.fs_check_error_code = fx_media_check(&fat_fs_media, err_corr_buf, err_corr_buf_sz, FX_FAT_CHAIN_ERROR | FX_DIRECTORY_ERROR | FX_LOST_CLUSTER_ERROR, (ULONG *)&(fs_res.fs_detected_errors));
+  //    App_free(err_corr_buf);
+  //    if (fs_res.fs_check_error_code != FX_SUCCESS)
+  //    {
+  //      return RES_ERROR;
+  //    }
+  //  }
+  //  else
+  //  {
+  //    fs_res.fx_corr_buff_alloc_res = RES_ERROR;
+  //  }
 
   // Получаем строку пути по умолчанию
   fx_directory_default_set(&fat_fs_media, "/");
@@ -196,4 +202,53 @@ uint32_t Init_SD_card_file_system(void)
   return RES_OK;
 }
 
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Set_SD_card_password(uint8_t operation, char *password, uint32_t password_len, sdmmc_priv_card_status_t  *p_response)
+{
+  UINT            prev_threshold;
+  uint32_t        res1;
+  uint32_t        res;
+
+  // Запрещаем вытеснение этой функции другими задачами
+  tx_thread_preemption_change(tx_thread_identify(), 0, &prev_threshold);
+
+  res1 = fx_media_close(&fat_fs_media);
+  if ((res1 == FX_SUCCESS) || (res1 == FX_MEDIA_NOT_OPEN))
+  {
+    res = SD_card_open();
+    T_sd_unlock_status *ust = s7_Get_sd_status();
+    if ((res == RES_OK) || ((ust->lock_detected==1) && (ust->unlock_executed == 0)))
+    {
+      res = SD_password_operations(operation, password, password_len, p_response);
+      if (res == RES_OK)
+      {
+        APPLOG("SD card operation %s done successfully", Get_sd_password_op_str(operation));
+      }
+      else
+      {
+        APPLOG("SD card operation %s error",  Get_sd_password_op_str(operation));
+      }
+    }
+    SD_card_close();
+    if (res1 != FX_MEDIA_NOT_OPEN)
+    {
+      res |= fx_media_open(&fat_fs_media, (CHAR *)"C:", SF_EL_FX_BlockDriver,&fat_fs_media_cfg, fs_memory, sizeof(fs_memory));
+    }
+  }
+  else
+  {
+    res = res1;
+  }
+
+  // Восстанавливаем вытеснение этой функции другими задачами
+  tx_thread_preemption_change(tx_thread_identify(), prev_threshold, &prev_threshold);
+
+  return res;
+}
 

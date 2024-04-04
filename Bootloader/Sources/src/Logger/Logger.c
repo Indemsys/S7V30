@@ -5,6 +5,10 @@
 #include   "S7V30.h"
 #include <stdarg.h>
 
+FX_FILE                        log_file;
+TX_EVENT_FLAGS_GROUP           file_logger_flags;
+
+
 #ifdef LOG_TO_ONBOARD_SDRAM
 __no_init T_app_log_record     app_log[EVENT_LOG_SIZE] @ ".sdram";
 #else
@@ -25,18 +29,15 @@ extern uint32_t                       g_ssp_log_inited;
   #endif
 #endif
 
-#define TIME_DELAY_BEFORE_SAVE        100 // Время в мс перед тем как будут сохранены оставшиеся записи
-#define LOG_RECS_BEFORE_SAVE_TO_FILE  10  // Количество записей вызывающее немедленное сохранение
+#define TIME_DELAY_BEFORE_SAVE        100  // Время в мс перед тем как будут сохранены оставшиеся записи
+#define LOG_RECS_BEFORE_SAVE_TO_FILE  100  // Количество записей вызывающее немедленное сохранение
 #define LOG_FILE_NAME                 "log.txt"
 char                                  file_log_str[LOG_STR_MAX_SZ];
 static TX_THREAD                      log_thread;
 
-uint8_t                               request_to_reset_log;
-
 static TX_MUTEX                       logger_mutex;
 static char                           rtt_log_str[RTT_LOG_STR_SZ];
 
-TX_EVENT_FLAGS_GROUP   file_logger_flags;
 /*-----------------------------------------------------------------------------------------------------
 
 
@@ -44,7 +45,7 @@ TX_EVENT_FLAGS_GROUP   file_logger_flags;
 -----------------------------------------------------------------------------------------------------*/
 void Req_to_reset_log_file(void)
 {
-  request_to_reset_log  = 1;
+  Set_file_logger_event(EVT_FILE_LOG_RESET_LOG);
 }
 
 
@@ -131,6 +132,11 @@ uint32_t  Init_app_logger(void)
   app_log_cbl.logger_ready = 1;
   return RES_OK;
 }
+
+
+
+
+
 
 /*------------------------------------------------------------------------------
   Запись сообщения в таблицу лога и в другие места назначения
@@ -485,7 +491,7 @@ void Show_log_header(void)
   GET_MCBL;
 
   MPRINTF(VT100_CLEAR_AND_HOME);
-  MPRINTF("LOG. <D>- print all records, <L>- print last records, <C>- clear, <R>- exit\n\r");
+  MPRINTF("LOG. <D>- print all records, <L>- print last records, <C>- clear, <E> - Erase log file, <R>- exit\n\r");
   MPRINTF("............................................\n\r");
   MPRINTF("Log overflows=%d, File log overflows=%d, Log miss count=%d\r\n",app_log_cbl.log_overfl_err, app_log_cbl.file_log_overfl_err,app_log_cbl.log_miss_err);
   MPRINTF("********************************************\n\r");
@@ -529,9 +535,39 @@ void AppLogg_monitor_output(void)
         app_log_cbl.event_log_head = 0;
         app_log_cbl.event_log_tail = 0;
         break;
+      case 'E':
+      case 'e':
+        Set_file_logger_event(EVT_FILE_LOG_RESET_LOG);
+        app_log_cbl.event_log_head = 0;
+        app_log_cbl.event_log_tail = 0;
+        break;
       }
     }
   }while (1);
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param eventmask
+-----------------------------------------------------------------------------------------------------*/
+void Set_file_logger_event(uint32_t events_mask)
+{
+  tx_event_flags_set(&file_logger_flags, events_mask, TX_OR);
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param events_mask
+  \param opt
+  \param wait
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Wait_file_logger_event(uint32_t events_mask, ULONG *actual_flags, uint32_t opt, uint32_t wait)
+{
+  return tx_event_flags_get(&file_logger_flags, events_mask, opt, actual_flags, wait);
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -541,18 +577,18 @@ void AppLogg_monitor_output(void)
 -----------------------------------------------------------------------------------------------------*/
 static void Task_File_Logger(ULONG arg)
 {
-  FX_FILE              f;
   uint32_t             res;
   int32_t              tail;
   int32_t              head;
   int32_t              n;
   uint32_t             t, t2;
+  ULONG                flags;
 
   // Открыть файл для записи лога
   res = fx_file_create(&fat_fs_media,LOG_FILE_NAME);
   if ((res == FX_SUCCESS) ||  (res == FX_ALREADY_CREATED))
   {
-    res = fx_file_open(&fat_fs_media,&f, LOG_FILE_NAME,  FX_OPEN_FOR_WRITE);
+    res = fx_file_open(&fat_fs_media,&log_file, LOG_FILE_NAME,  FX_OPEN_FOR_WRITE);
   }
   if (res != FX_SUCCESS)
   {
@@ -567,6 +603,35 @@ static void Task_File_Logger(ULONG arg)
   {
     // Записываем если число записей превысило некторое количество или после истечения контрольного времени остались несохраненные записи
 
+    if (tx_event_flags_get(&file_logger_flags, 0xFFFFFFFF, TX_OR_CLEAR,&flags, MS_TO_TICKS(10)) == TX_SUCCESS)
+    {
+      if (flags & EVT_FILE_LOG_RESET_LOG)
+      {
+        uint8_t flag = 0;
+        if (fx_file_close(&log_file) == FX_SUCCESS)
+        {
+          if (fx_file_delete(&fat_fs_media, LOG_FILE_NAME) == FX_SUCCESS)
+          {
+            if (fx_file_create(&fat_fs_media,LOG_FILE_NAME) == FX_SUCCESS)
+            {
+              if (fx_file_open(&fat_fs_media,&log_file, LOG_FILE_NAME,  FX_OPEN_FOR_WRITE) == FX_SUCCESS)
+              {
+                flag = 1;
+                Set_file_logger_event(EVT_FILE_LOG_CMD_OK);
+                APPLOG("The log file was successfully reinitialized.")
+              }
+            }
+          }
+        }
+        if (flag == 0)
+        {
+          Set_file_logger_event(EVT_FILE_LOG_CMD_FAIL);
+          APPLOG("The log file reinitialization error. Logging to a file task terminated.")
+          tx_thread_terminate(tx_thread_identify());
+          return;
+        }
+      }
+    }
 
     // Вычисляем колическтво несохраненных записей в логе
     tail = app_log_cbl.file_log_tail;
@@ -591,20 +656,20 @@ static void Task_File_Logger(ULONG arg)
         {
           app_log_cbl.file_log_overfl_f = 0;
           res = snprintf(file_log_str, LOG_STR_MAX_SZ, "... Overflow ...\r\n");
-          fx_file_write(&f, file_log_str, res);
+          fx_file_write(&log_file, file_log_str, res);
         }
         if (app_log_cbl.log_miss_f != 0)
         {
           app_log_cbl.log_miss_f = 0;
           res = snprintf(file_log_str, LOG_STR_MAX_SZ, "... Missed records ....\r\n");
-          fx_file_write(&f, file_log_str, res);
+          fx_file_write(&log_file, file_log_str, res);
         }
 
         if (rtc_init_res.RTC_valid)
         {
           rtc_time_t *pt =&app_log[tail].date_time;
           res = snprintf(file_log_str, LOG_STR_MAX_SZ, "%04d.%02d.%02d %02d:%02d:%02d |",pt->tm_year,pt->tm_mon,pt->tm_mday,pt->tm_hour, pt->tm_min, pt->tm_sec);
-          if (res > 0) fx_file_write(&f, file_log_str, res);
+          if (res > 0) fx_file_write(&log_file, file_log_str, res);
         }
 
         uint64_t t64 = app_log[tail].delta_time;
@@ -618,11 +683,11 @@ static void Task_File_Logger(ULONG arg)
 
         //res = snprintf(tstr, LOG_STR_MAX_SZ, "%04d.%02d.%02d %02d:%02d:%02d.%03d |",app_log[head].time);
         res = snprintf(file_log_str, LOG_STR_MAX_SZ, "%03d d %02d h %02d m %02d s %06d us |",time_day, time_hour, time_min, time_sec, time_msec);
-        if (res > 0) fx_file_write(&f, file_log_str, res);
+        if (res > 0) fx_file_write(&log_file, file_log_str, res);
         res = snprintf(file_log_str, LOG_STR_MAX_SZ, "%02d | %-36s | %5d |", app_log[tail].severity, app_log[tail].func_name, app_log[tail].line_num);
-        if (res > 0) fx_file_write(&f, file_log_str, res);
+        if (res > 0) fx_file_write(&log_file, file_log_str, res);
         res = snprintf(file_log_str, LOG_STR_MAX_SZ, " %s\r\n", app_log[tail].msg);
-        if (res > 0) fx_file_write(&f, file_log_str, res);
+        if (res > 0) fx_file_write(&log_file, file_log_str, res);
 
         // Проходим по всем не сохраненным записям
         if (tx_mutex_get(&logger_mutex, TX_WAIT_FOREVER) == TX_SUCCESS)
@@ -641,7 +706,7 @@ static void Task_File_Logger(ULONG arg)
       fx_media_flush(&fat_fs_media); //  Очищаем кэш записи
       t = t2; // Запоминаем время последней записи
     }
-    Wait_ms(10);
+
 
 
   } while (1);
@@ -664,10 +729,10 @@ uint32_t Create_File_Logger_task(void)
   if ((g_file_system_ready == 0)
       || (ivar.en_log_to_file == 0)
       || (app_log_cbl.logger_ready == 0)
-      || (ivar.usb_mode == USB1_INTF_MASS_STORAGE_DEVICE)   // Логированние в файл конфликтует с режимом Mass Storage. Поэтому его запрещаем
+      || (ivar.usb_mode == USB1_INTF_MASS_STORAGE_DEVICE)  // Логированние в файл конфликтует с режимом Mass Storage. Поэтому его запрещаем
       || (ivar.usb_mode == USB_MODE_VCOM_AND_MASS_STORAGE))
   {
-    APPLOG("Logging to a file task disabled.");
+    APPLOG("Logging to file is disabled");
     return RES_ERROR;
   }
 

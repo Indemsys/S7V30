@@ -473,6 +473,7 @@
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\..\Keys</state>
                     <state>$PROJ_DIR$\src</state>
+                    <state>$PROJ_DIR$\src\WEB</state>
                     <state>$PROJ_DIR$\src\Compressors</state>
                     <state>$PROJ_DIR$\src\FileSystem</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX</state>
@@ -905,7 +906,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>160</hasPrio>
+                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -12444,6 +12445,27 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\VT100\System_info_monitor.h</name>
+                </file>
+            </group>
+            <group>
+                <name>WEB</name>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\Net_Web_File_upload.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\Net_Web_File_upload.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\Net_Web_server.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\Net_Web_server.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server_certificate.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server_certificate.h</name>
                 </file>
             </group>
             <group>

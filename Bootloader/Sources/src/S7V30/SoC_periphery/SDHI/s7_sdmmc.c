@@ -29,6 +29,8 @@
 /***********************************************************************************************************************
  * Includes
  **********************************************************************************************************************/
+#include <stdio.h>
+#include <string.h>
 #include "r_sdmmc.h"
 
 #include "hw_sdmmc.h"
@@ -42,7 +44,7 @@ extern void Delay_m7(int cnt); // Задержка на (cnt+1)*7 тактов .
 #define  DELAY_ms(x)     Delay_m7(34285*x-1)    // 1000.008*N  мкс при частоте 240 МГц
 extern uint8_t  SD_fill_lock_struct_with_password(T_Lock_Card_Data_Structure *p_lcds);
 
-static T_sd_unlock_status    sd_unlock_status;
+static T_sd_unlock_status    sd_status;
 static sdmmc_priv_csd_reg_t  csd_reg;
 /***********************************************************************************************************************
  * Macro definitions
@@ -370,8 +372,13 @@ ssp_err_t S7_sdmmc_Open(sdmmc_ctrl_t *const p_api_ctrl, sdmmc_cfg_t const *const
 
   if (SSP_SUCCESS == ret_val)
   {
+    sd_status.not_identified = 0;
     /** Configure bus clock, block size, and bus width. */
     ret_val = s7_sdmmc_bus_cfg(p_ctrl);
+  }
+  else
+  {
+    sd_status.not_identified = 1;
   }
 
   if (SSP_SUCCESS == ret_val)
@@ -1607,8 +1614,10 @@ static ssp_err_t s7_sdmmc_bus_cfg(sdmmc_instance_ctrl_t *const p_ctrl)
 {
   sdmmc_priv_card_status_t response = {0U};
 
-  /** Set clock rate to highest supported by both host and device.  Move card to transfer state during this
-   * process. */
+  /** Set clock rate to highest supported by both host and device.  Move card to transfer state during this  process. */
+
+  sd_status.unlock_executed = 0;
+
   if (p_ctrl->status.sdio == true)
   {
     /* Switch to data transfer mode (CMD7). */
@@ -1662,8 +1671,17 @@ static ssp_err_t s7_sdmmc_bus_cfg(sdmmc_instance_ctrl_t *const p_ctrl)
     {
       T_Lock_Card_Data_Structure  lcds;
       uint8_t                     len;
+
+      memset(&lcds, 0, sizeof(lcds));
+
+      sd_status.pass_exist        = 1;
+      sd_status.lock_detected   = 1;
+      sd_status.unlock_executed = 0;
       // Карта защищена паролем. Нужно ввести пароль
       len = SD_fill_lock_struct_with_password(&lcds);
+
+      if ((len & 1) != 0) len++; // Длина блока всегда должна быть четной. Это требуется по спецификации в режиме DDR50
+                                 // На принимаемую длину пароля это не влияет
 
       if (s7_sdmmc_command_send(p_ctrl, SDMMC_CMD_SET_BLOCKLEN,len) == true)
       {
@@ -1673,9 +1691,17 @@ static ssp_err_t s7_sdmmc_bus_cfg(sdmmc_instance_ctrl_t *const p_ctrl)
         {
           return SSP_ERR_CARD_INIT_FAILED;
         }
-        //HW_SDMMC_BusWidthSet(p_ctrl->p_reg, 1); // Возвращаемся к 1 бит шине
-        sd_unlock_status.sd_unlock_executed = 1;
         DELAY_ms(1); // Задержка  после снятия пароля, иначе дальнейшая инициализация будет с ошибкой
+        if (!(s7_sdmmc_command_send(p_ctrl, SDMMC_CMD_SEND_STATUS, p_ctrl->status.sdhi_rca << 16)))
+        {
+          return SSP_ERR_CARD_INIT_FAILED;
+        }
+        HW_SDMMC_ResponseGet(p_ctrl->p_reg,&response);
+        if (response.r1.card_is_locked == 0)
+        {
+          sd_status.unlock_executed = 1;
+        }
+
       }
       else
       {
@@ -1684,9 +1710,14 @@ static ssp_err_t s7_sdmmc_bus_cfg(sdmmc_instance_ctrl_t *const p_ctrl)
     }
     else
     {
-      sd_unlock_status.sd_unlock_no_need = 1;
+      sd_status.lock_detected = 0;
     }
 
+    if ((sd_status.lock_detected == 1) && (sd_status.unlock_executed == 0))
+    {
+      return SSP_SUCCESS;
+    }
+    // Если карта заблокирован то последующие команды не выполняем и остаемся в текущем состоянии
 
 
     /* Set clock to highest supported frequency. */
@@ -1701,7 +1732,6 @@ static ssp_err_t s7_sdmmc_bus_cfg(sdmmc_instance_ctrl_t *const p_ctrl)
       return SSP_ERR_CARD_INIT_FAILED;
     }
 
-    /* Set bus width. */
     if (!s7_sdmmc_bus_width_set(p_ctrl))
     {
       return SSP_ERR_CARD_INIT_FAILED;
@@ -2943,16 +2973,6 @@ ssp_err_t S7_sdmmc_command_w_transfer(sdmmc_ctrl_t *const p_api_ctrl, uint16_t c
 
   ssp_err_t ret_val = SSP_SUCCESS;
 
-#if SDMMC_CFG_PARAM_CHECKING_ENABLE
-  /* Check pointers for NULL values */
-  SSP_ASSERT(NULL != p_source);
-#endif
-
-
-  //ret_val = s7_sdmmc_common_error_check(p_ctrl, true);
-  //SDMMC_ERROR_RETURN(SSP_SUCCESS == ret_val, ret_val);
-
-
   ret_val = s7_sdmmc_transfer_write(p_ctrl, 1, bl_size, p_source);
   SDMMC_ERROR_RETURN(SSP_SUCCESS == ret_val, SSP_ERR_WRITE_FAILED);
 
@@ -2970,9 +2990,29 @@ ssp_err_t S7_sdmmc_command_w_transfer(sdmmc_ctrl_t *const p_api_ctrl, uint16_t c
 
   \return T_sd_unlock_status*
 -----------------------------------------------------------------------------------------------------*/
-T_sd_unlock_status *s7_Get_sd_unlock_status(void)
+T_sd_unlock_status *s7_Get_sd_status(void)
 {
-  return &sd_unlock_status;
+  return &sd_status;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+-----------------------------------------------------------------------------------------------------*/
+void s7_Set_pass_exist(void)
+{
+  sd_status.pass_exist = 1;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+-----------------------------------------------------------------------------------------------------*/
+void s7_Set_pass_clear(void)
+{
+  sd_status.pass_exist = 0;
 }
 
 /*-----------------------------------------------------------------------------------------------------

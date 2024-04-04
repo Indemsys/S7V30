@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IoT Logger</title>
+<link href="jquery-mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link href="jquery-mobile/jquery.mobile.structure-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link href="jquery-mobile/jquery.mobile.icons-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link href="jquery-mobile/jquery.mobile.inline-svg-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link href="jquery-mobile/jquery.mobile.external-png-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link href="jquery-mobile/S7V30_theme.min.css" rel="stylesheet" type="text/css">
+<script src="jquery-mobile/jquery.js">
+    </script>
+<script src="jquery-mobile/jquery.mobile-1.4.5.js">
+    </script>
+<style>
+@media only screen and(device - width: 300px), only screen and(max - width:300px) {
+.css - element {
+yourcsscode:;
+}
+}
+.dl {
+  text-align: right;
+  align: left;
+  color: gray;
+  font-size: 12px;
+  padding-right: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  min-height: 25px;
+}
+</style>
+</head>
+<body>
+<div data-role="page" id="main">
+  <div data-role="header" data-position="fixed" align="center">
+    <h3 id="hw_ver" class="ui-bar ui-bar-a ui-corner-all">Divice</h3>
+    <p class="ui-bar ui-bar-a ui-corner-all">
+      <span style="color: grey; padding-right: 5px ">Chip ID:</span>
+      <span id="cpu_id" style="color: darkblue; padding-right: 20px ">?</span>
+      <span style="color: grey; padding-right: 5px ">Ver:</span>
+      <span id="ver_date_time" style="color: darkblue">? </span>
+    </p>
+  </div>
+  <div data-role="content" align="center">
+    <div class="ui-bar-a ui-corner-all" style="width:300px; padding: 10px 10px 10px 10px ">
+      <a href="#log" data-role="button" class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-bars">View device log</a>
+      <a href="#Firmware_upload" data-role="button" class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-lock">Firmware upload</a>
+      <a href="#SD_card_control" data-role="button" class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-lock">SD card control</a>
+      <button class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-clock" onclick="Upload_time()">Upload local time</button>
+      <button class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-refresh" onclick="Reset_device()">Reset device</button>
+    </div>
+  </div>
+  <div data-role="popup" id="Main_page_Popup" class="ui-content" style="max-width:280px" data-dismissible="false">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+    <p id="Main_page_status_msg">      -    </p>
+  </div>
+  <div data-role="footer" data-position="fixed" align="center">
+    <div class="ui-grid-a">
+      <div class="ui-block-a dl">        CPU usage:             </div>
+      <div id="cpu_usage" class="ui-block-b" align="left">   -   </div>
+      <div class="ui-block-a dl">        Up time:               </div>
+      <div id="up_time" class="ui-block-b" align="left">     -   </div>
+      <div class="ui-block-a dl">        Local time:            </div>
+      <div id="local_time" class="ui-block-b" align="left">  -   </div>
+      <div class="ui-block-a dl">        IP address:            </div>
+      <div id="ip_address" class="ui-block-b" align="left">  -   </div>
+      <div class="ui-block-a dl">        MAC address:           </div>
+      <div id="mac_address" class="ui-block-b" align="left"> -   </div>
+      <div class="ui-block-a dl">        SSID:                  </div>
+      <div id="ssid" class="ui-block-b" align="left">        -  </div>
+      <div class="ui-block-a dl">        Status:                </div>
+      <div id="dev_status_result" class="ui-block-b" align="left">-</div>
+    </div>
+  </div>
+</div>
+<div data-role="page" id="log">
+  <div data-role="header" data-position="fixed" align="center">
+    <div>
+      <h3 id="log_header" class="ui-bar ui-bar-a ui-corner-all">Module Log</h3>
+    </div>
+    <div class="ui-bar-a ui-corner-all">
+      <a href="#main" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-home">Home</a>
+      <button class="ui-btn   ui-corner-all ui-shadow ui-btn-icon-left ui-icon-refresh" onclick="Load_log()">Refresh log</button>
+      <button class="ui-btn   ui-corner-all ui-shadow ui-btn-icon-left ui-icon-delete" id="reset_log" onclick="Reset_device_log()">Reset log file</button>
+    </div>
+    <div>
+      <a href="#id_bot" data-ajax="false" data-role="button" data-inline="true" data-mini="true" data-icon="arrow-d">Bot</a>
+    </div>
+  </div>
+  <div id="id_top">
+  </div>
+  <div id="log_div" data-role="content">
+    <div id="log_area" style="text-align:left; overflow:auto;">
+      ----
+    </div>
+  </div>
+  <div id="id_bot">
+  </div>
+  <div data-role="popup" id="Log_page_Popup" class="ui-content" style="max-width:280px" data-dismissible="false">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+    <p id="Log_page_status_msg">-</p>
+  </div>
+  <div data-role="footer" data-position="fixed" align="center">
+    <p style="font-weight:normal" hidden="true"> </p>
+    <a href="#id_top" data-ajax="false" data-role="button" data-inline="true" data-mini="true" data-icon="arrow-u">Top</a>
+  </div>
+</div>
+<div data-role="page" id="SD_card_control">
+  <div data-role="header" data-position="fixed" align="center">
+    <h3 id="log_header2" class="ui-bar ui-bar-a ui-corner-all">SD card control</h3>
+    <div class="ui-bar-a ui-corner-all">
+      <a href="#main" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-home">Home</a>
+      <button class="ui-btn ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-refresh" onclick="Rquest_SD_card_CSD()">Get SD card CSD</button>
+    </div>
+  </div>
+  <div id="sd_content" data-role="content" align="center">
+    <div id="sd_state" class="ui-bar ui-corner-all ui-bar-a ui-shadow-inset"> ---
+    </div>
+    <form id="sd_card_form" align="center" method="post" style="width: 250px" action="post_sd_card_control">
+      <label for="password">Password</label>
+      <input type="text" name="password" id="password" value="" data-custom-regex="[a-zA-Z0-9@\*#\$&]" maxlength="16">
+      <p id="error-message" style="color: red;"></p>
+    </form>
+    <div>
+      <button id="set_password" onclick="Set_password()" class="ui-btn ui-btn-inline ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-check ">Set password      </button>
+      <button id="clear_password" onclick="Clear_password()" class="ui-btn ui-btn-inline ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-delete ">Clear password</button>
+    </div>
+    <div id="sd_csd_content" style="text-align:left; overflow:auto;"> ----</div>
+  </div>
+  <div data-role="popup" id="SD_control_page_Popup" class="ui-content" style="max-width:280px" data-dismissible="false">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+    <p id="SD_control_page_status_msg">-</p>
+  </div>
+  <div data-role="footer" data-position="fixed" align="center">
+    <p style="font-size: 10px">Valid password symbols:</p>
+    <p style="font-size: 10px; word-break: break-all;">@*#$&amp;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+  </div>
+</div>
+<div data-role="page" id="Firmware_upload">
+  <div data-role="header" data-position="fixed" align="center">
+    <h3 id="log_header2" class="ui-bar ui-bar-a ui-corner-all">Firmware upload</h3>
+    <div class="ui-bar-a ui-corner-all">
+      <a href="#main" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-home">Home</a>
+    </div>
+  </div>
+  <div data-role="content" align="center">
+    <form align="center" method="post" action="post_firmware_upload">
+      <input type="file" id="firmware_file" data-clear-btn="true" name="firmware_file" value="">
+    </form>
+    <div>
+      <button id="send_firmware" onclick="Send_firmware()" class="ui-btn ui-btn-inline ui-btn-a ui-corner-all ui-shadow ui-btn-icon-left ui-icon-check ">
+        Send
+      </button>
+    </div>
+    <div  align="left"><div align="center" id="progressBar" style="height: 20px; background-color: red; width:0%" data-role="none"> </div>  </div>
+  </div>
+  <div data-role="popup" id="Firmware_upload_page_Popup" class="ui-content" style="max-width:280px" data-dismissible="false">
+    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">Close</a>
+    <p id="Firmware_upload_page_status_msg">-</p>
+  </div>
+  
+  <div data-role="footer">
+  </div>
+</div>
+</body>
+<script>
+    var params;
+    var dev;
+    var apl;
+    var wrl;
+    var dev_status_err_cnt = 0;
+    var dev_status;
+    var myInterval;
+
+    function Main_cmd_status(data, status)
+    {
+      $("#Main_page_Popup").popup("open");
+      $("#Main_page_status_msg").text("Data sending status: " + status);
+    }
+
+    function Log_cmd_status(data, status)
+    {
+      $("#Log_page_Popup").popup("open");
+      $("#Log_page_status_msg").text("Data sending status: " + status);
+    }
+
+
+    function Data_accept(data, status)
+    {
+      params = data;
+      var v = params.find(function(item, i) { if (item["Device"] != undefined) return true; });
+      dev = v["Device"];
+      if (dev["HW_Ver"] != undefined)
+      {
+        $("#hw_ver").html(dev["HW_Ver"]);
+        $("#cpu_id").html(dev["CPU_ID"]);
+        $("#ver_date_time").html(dev["CompDate"] + " " + dev["CompTime"]);
+      }
+    }
+
+    function Log_accept(data, status)
+    {
+      $("#log_area").html("<pre>" + data + "</pre>");
+      Log_cmd_status(0, status);
+    }
+
+    function Load_log()
+    {
+      $.get("log.txt", Log_accept);
+    }
+
+    function Reset_device_log()
+    {
+      $.post("reset_log", "", Log_cmd_status);
+      $("#log_area").html("");
+    }
+
+    function Load_data()
+    {
+      $.get("data.json", Data_accept);
+    }
+
+    function Reset_device()
+    {
+      $.post("reset", "", Main_cmd_status);
+    }
+
+    // Функция обработки ошибок возникших после запроса блока данных с информацией о текущем состоянии
+    function Device_status_err(xhr, status, error)
+    {
+      $("#dev_status_result").text(status  + " (" + dev_status_err_cnt + ")");
+      dev_status_err_cnt++;
+    }
+
+    // Обработка данных полученых после запроса блока данных с информацией о текущем состоянии
+    function Device_status_ok(data)
+    {
+      dev_status = data;
+      var v;
+
+      v = dev_status["cpu_usage"];
+      if (v != undefined)
+      {
+        $("#cpu_usage").text(v / 10 + " %");
+      }
+      else
+      {
+        $("#cpu_usage").text("");
+      }
+      v = dev_status["up_time"];
+      if (v != undefined)
+      {
+        $("#up_time").text(v + " sec");
+      }
+      else
+      {
+        $("#up_time").text("");
+      }
+      v = dev_status["local_time"];
+      if (v != undefined)
+      {
+        $("#local_time").text(v);
+      }
+      else
+      {
+        $("#local_time").text("");
+      }
+      v = dev_status["ip_address"];
+      if (v != undefined)
+      {
+        $("#ip_address").text(v);
+      }
+      else
+      {
+        $("#ip_address").text("");
+      }
+      v = dev_status["mac_address"];
+      if (v != undefined)
+      {
+        $("#mac_address").text(v);
+      }
+      else
+      {
+        $("#mac_address").text("");
+      }
+      v = dev_status["ssid"];
+      if (v != undefined)
+      {
+        $("#ssid").text(v);
+      }
+      else
+      {
+        $("#ssid").text("");
+      }
+      $("#dev_status_result").text("Ok");
+    }
+
+    // Запрос на получение блока данных с информацией о текущем состоянии
+    function Update_device_status()
+    {
+      $.post("post_status", "").done(Device_status_ok).fail(Device_status_err);
+    }
+
+
+    function Card_CSD_received_ok(data)
+    {
+      $("#sd_csd_content").html("<pre>" + data + "</pre>");
+      $("#SD_control_page_Popup").popup("open");
+      $("#SD_control_page_status_msg").text("CSD received");
+    }
+
+    function Card_receive_err(xhr, status, error)
+    {
+      $("#SD_control_page_Popup").popup("open");
+      $("#SD_control_page_status_msg").text("Data sending status: " + status);
+    }
+
+    function Rquest_SD_card_CSD()
+    {
+      $.post("post_sd_csd", "").done(Card_CSD_received_ok).fail(Card_receive_err);
+    }
+
+    function Card_state_received_ok(data)
+    {
+      $("#sd_state").html(data);
+    }
+
+    function Rquest_SD_card_state()
+    {
+      $.post("post_sd_state", "").done(Card_state_received_ok).fail(Card_receive_err);
+    }
+
+    function Card_command_accepted(response)
+    {
+      $("#SD_control_page_Popup").popup("open");
+      $("#SD_control_page_status_msg").text("Card command accepted: " + response);
+    }
+
+    function Set_password()
+    {
+      var json_data = { };
+      var form_data = $("#sd_card_form").serializeArray();
+      form_data.push({ name: "action", value: "set_pass" });
+      $.each(form_data, function() {json_data[this.name] = this.value;});
+      $.post("post_sd_card_control", JSON.stringify(json_data), function(data) {$("#sd_state").html(data);}).done(Card_command_accepted()).fail(Card_receive_err);
+    }
+
+    function Clear_password()
+    {
+      var json_data = { };
+      var form_data = $("#sd_card_form").serializeArray();
+      form_data.push({ name: "action", value: "clear_pass" });
+      $.each(form_data, function() {json_data[this.name] = this.value;});
+      $.post("post_sd_card_control", JSON.stringify(json_data), function(data) {$("#sd_state").html(data);}).done(Card_command_accepted()).fail(Card_receive_err);
+    }
+
+
+
+    // Передача текущего времени на устройство в формате JSON
+    function Upload_time()
+    {
+      var json_data = { };
+      var currentDate = new Date();
+      json_data.year = currentDate.getFullYear();
+      json_data.month = currentDate.getMonth();
+      json_data.day = currentDate.getDay();
+      json_data.hours = currentDate.getHours();
+      json_data.mins = currentDate.getMinutes();
+      json_data.secs = currentDate.getSeconds();
+      $.ajax({ type: "POST",
+               url: "upload_time",
+               dataType: "json",
+               contentType: "application/json",
+               data: JSON.stringify(json_data),
+               success: function(response) { $("#Main_page_Popup").popup("open");
+                 $("#Main_page_status_msg").text("Date Time sended"); },
+               error: function(xhr, status, error) { $("#Main_page_Popup").popup("open");
+                 $("#Main_page_status_msg").text(status + " Error: " + error); },
+
+             });
+    }
+
+    // Пересылка файла на устройство
+    function Send_firmware()
+    {
+    
+      var frm_data = new FormData();
+      var file = $('#firmware_file')[0].files[0];
+      frm_data.append('file_size', file.size);
+      frm_data.append('file', file);
+      $.ajax({
+               url: 'firmware_upload',
+               type: 'POST',
+               data: frm_data,
+               processData: false,
+               contentType: false,
+               xhr: function() 
+               {
+                 var xhr = new window.XMLHttpRequest();
+                 xhr.upload.addEventListener("progress", function(evt) 
+                 {
+                   if (evt.lengthComputable) 
+                   {
+                     var percentComplete = evt.loaded / evt.total * 100;
+                     $("#progressBar").css("width", percentComplete + "%");
+                   }
+                 }, false);
+                 return xhr;
+               },       
+               success: function(response)
+               {
+                  $("#progressBar").css("width", "0%");                 
+                  $("#Firmware_upload_page_Popup").popup("open");
+                  $("#Firmware_upload_page_status_msg").text("File sended successfully");
+               },
+               error: function(xhr, status, error)
+               {
+                 $("#progressBar").css("width", "0%");                 
+                 $("#Firmware_upload_page_Popup").popup("open");
+                 $("#Firmware_upload_page_status_msg").text("File sending fault");
+               }
+             });
+    }
+
+
+    function StopTimer()
+    {
+      clearInterval(myInterval);
+    }
+
+    function StartTimer()
+    {
+      myInterval  = setInterval(Update_device_status, 1000);
+    }
+
+    // функция ready выполняется после того как будет загружена вся DOM модель
+    // Чтоб переход на страныцы вызвал выполнение скриптов надо запретить использование Ajax в линках и кнопках
+    // установкой аттрибута data-ajax="false"
+    $.ready(Load_data());
+    StartTimer();
+
+
+    $(document).on("pagecreate", function() { $("#password").on("input", function()
+                                                                { var regex = new RegExp($(this).data("custom-regex")); var value = $(this).val(); if (!regex.test(value))
+                                                                  {
+                                                                    $("#error-message").text("Only valid symbols accepted!"); $(this).val(value.replace(new RegExp("[^" + $(this).data("custom-regex") + "]", "g"), ""));
+                                                                  }
+                                                                  else
+                                                                  {
+                                                                    $("#error-message").text("");
+                                                                  }
+                                                                });
+                   });
+
+    $(document).on("pagecontainershow", function(event, ui)
+                   {
+                     var currentPage = $(':mobile-pagecontainer').pagecontainer('getActivePage');
+                     var pageId = currentPage.prop('id');
+
+                     if (pageId === 'main')
+                     {
+                       StartTimer();
+                     }
+                     else
+                     {
+                       StopTimer();
+                       if (pageId === 'SD_card_control')
+                       {
+                         Rquest_SD_card_state();
+                       }
+                     }
+                   });
+
+  </script>
+</html>

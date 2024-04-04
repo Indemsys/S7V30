@@ -4,9 +4,8 @@
 #if (!1)
             #define NX_HTTP_NO_FILEX
             #endif
-#if (0)
-            #define NX_HTTP_MULTIPART_ENABLE
-            #endif
+
+#define NX_HTTP_MULTIPART_ENABLE
 #define NX_HTTP_SERVER_PRIORITY                     16
 #define NX_HTTP_SERVER_WINDOW_SIZE                  2048
 #define NX_HTTP_SERVER_TIMEOUT                      (10 * NX_IP_PERIODIC_RATE)

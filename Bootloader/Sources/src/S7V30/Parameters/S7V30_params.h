@@ -18,6 +18,7 @@
 #define  S7V30BOOT_WIFI_STA_CFG2        14
 #define  S7V30BOOT_FreeMaster           15
 #define  S7V30BOOT_Audio                16
+#define  S7V30BOOT_WEB                  17
 
 typedef struct
 {
@@ -43,10 +44,13 @@ typedef struct
   uint8_t        en_sntp_time_receiving;        // Allow to receive time from time servers | def.val.= 1
   uint8_t        en_telnet;                     // Enable Telnet (1-yes, 0-no) | def.val.= 1
   uint8_t        en_wifi_ap;                    // Enable Accces Point mode (1-yes, 0-no) | def.val.= 0
-  uint8_t        enable_ftp_server;             // Enable FTP server | def.val.= 0
+  uint8_t        enable_ftp_server;             // Enable FTP server | def.val.= 1
+  uint8_t        enable_HTTP_server;            // Enable HTTP server (1-yes, 0-no) | def.val.= 0
+  uint8_t        enable_HTTPS;                  // Enable TLS (1-yes, 0-no) | def.val.= 1
   uint8_t        ftp_serv_login[16+1];          // Login | def.val.= ftp_login
   uint8_t        ftp_serv_password[64+1];       // Password  | def.val.= ftp_pass
   uint8_t        hardware_version[64+1];        // Hardware version | def.val.= S7V30 
+  uint8_t        HTTP_server_password[32+1];    // HTTP server password | def.val.= 123456789
   uint8_t        manuf_date[64+1];              // Manufacturing date | def.val.= 2023 04 25
   uint8_t        mqtt_client_id[16+1];          // Client ID | def.val.= Client1
   uint8_t        mqtt_enable;                   // Enable MQTT client  | def.val.= 0
@@ -56,13 +60,14 @@ typedef struct
   uint8_t        mqtt_user_name[16+1];          // User name | def.val.= user
   uint8_t        name[64+1];                    // Product  name | def.val.= S7V30
   uint8_t        rndis_ip_addr_assign_method;   // RNDIS IP address assignment method (0-Win home net, 1 - DHCP server) | def.val.= 0
+  uint8_t        sd_card_password[17+1];        // SD card password | def.val.= 1234
   uint32_t       sntp_poll_interval;            // Poll interval (s) | def.val.= 120
   uint8_t        software_version[64+1];        // Software version | def.val.= S7V30
   uint8_t        this_host_name[16+1];          // This device host name | def.val.= S7V30
   uint8_t        time_server_1[64+1];           // Time server 1 URL | def.val.= pool.ntp.org
   uint8_t        time_server_2[64+1];           // Time server 2 URL | def.val.= 129.6.15.28
   uint8_t        time_server_3[64+1];           // Time serber 3 URL | def.val.= time.nist.gov
-  uint32_t       usb_mode;                      // USB mode(1-VCOM, 2-MSD, 3-VCOM&MSD, 4-VCOM&FMST, 5-RNDIS, 6-Host ECM) | def.val.= 4
+  uint32_t       usb_mode;                      // USB mode(1-VCOM, 2-MSD, 3-VCOM&MSD, 4-VCOM&FMST, 5-RNDIS, 6-Host ECM) | def.val.= 5
   uint8_t        usd_dev_interface;             // USB device interface (0- HS, 1- FS) | def.val.= 0
   float          utc_offset;                    // UTC offset (difference in hours +-) | def.val.= 3
   uint8_t        wifi_ap_addr_assign_method;    // IP address assignment method  (0-Win home net, 1 - DHCP server) | def.val.= 1

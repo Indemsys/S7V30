@@ -67,7 +67,7 @@ static void Fill_and_check_by_const(uint32_t raw, uint32_t constv)
     if (v1 != constv)
     {
       err_cnt++;
-      MPRINTF(VT100_CLR_LINE"Memory error by address: %08X  - readed %08X but must be %08X (errors count=%d)", (uint32_t)addr, v1, constv, err_cnt);
+      MPRINTF(VT100_CLR_LINE"\r\n Memory error by address: %08X  - readed %08X but must be %08X (errors count=%d)", (uint32_t)addr, v1, constv, err_cnt);
       if (WAIT_CHAR(&b,  ms_to_ticks(100000)) == RES_OK)
       {
         switch (b)
@@ -81,22 +81,22 @@ static void Fill_and_check_by_const(uint32_t raw, uint32_t constv)
     if (cnt > 1024 * 64)
     {
       VT100_set_cursor_pos(raw,1);
-      MPRINTF(VT100_CLR_LINE"Read from address: %08X", (uint32_t)addr);
+      MPRINTF(VT100_CLR_LINE" Read from address: %08X", (uint32_t)addr);
       cnt = 0;
     }
   }
 
   VT100_set_cursor_pos(raw,1);
-  MPRINTF(VT100_CLR_LINE"Last address: %08X", (uint32_t)addr);
+  MPRINTF(VT100_CLR_LINE"\r\n Last address: %08X", (uint32_t)addr);
 
   VT100_set_cursor_pos(raw+1,1);
   if (err_cnt == 0)
   {
-    MPRINTF(VT100_CLR_LINE"Filling by %08X SDRAM test done. All Ok!  (filling time = %lld, filling speed = %d MB/s )", constv, td,(SDRAM_END - SDRAM_BEGIN + 1) / td);
+    MPRINTF(VT100_CLR_LINE"\r\n Filling by %08X SDRAM test done. All Ok!  (filling time = %lld, filling speed = %d MB/s )", constv, td,(SDRAM_END - SDRAM_BEGIN + 1) / td);
   }
   else
   {
-    MPRINTF(VT100_CLR_LINE"SDRAM test error! Errors count= %d ", err_cnt);
+    MPRINTF(VT100_CLR_LINE"\r\n SDRAM test error! Errors count= %d ", err_cnt);
   }
   WAIT_CHAR(&b,  ms_to_ticks(10000));
   VT100_set_cursor_pos(raw,1);
@@ -196,11 +196,11 @@ static void Test_SDRAM_fill_runing_counter(uint32_t raw)
 
   if (err_cnt == 0)
   {
-    MPRINTF(VT100_CLR_LINE"SDRAM test done. All Ok!");
+    MPRINTF(VT100_CLR_LINE"\r\n SDRAM test done. All Ok!");
   }
   else
   {
-    MPRINTF(VT100_CLR_LINE"SDRAM test error! Errors count= %d ", err_cnt);
+    MPRINTF(VT100_CLR_LINE"\r\n SDRAM test error! Errors count= %d ", err_cnt);
   }
 }
 /*-----------------------------------------------------------------------------------------------------

@@ -297,6 +297,9 @@ void Do_S7V30_System_info(uint8_t keycode)
     case SETT_WRONG_CHECK:
       MPRINTF("Boot loader settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
       break;
+    case SETT_IS_BLANK:
+      MPRINTF("Boot loader settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
+      break;
     }
   }
 
@@ -317,6 +320,9 @@ void Do_S7V30_System_info(uint8_t keycode)
     case SETT_WRONG_CHECK:
       MPRINTF("Module main settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
       break;
+    case SETT_IS_BLANK:
+      MPRINTF("Module main settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
+      break;
     }
   }
 
@@ -336,6 +342,9 @@ void Do_S7V30_System_info(uint8_t keycode)
       break;
     case SETT_WRONG_CHECK:
       MPRINTF("Application settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
+      break;
+    case SETT_IS_BLANK:
+      MPRINTF("Application settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
       break;
     }
   }

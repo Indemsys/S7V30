@@ -22,6 +22,10 @@
   #define    LOGGER_WR_TIMEOUT_MS      100
 
 
+  #define    EVT_FILE_LOG_RESET_LOG    BIT(0)
+  #define    EVT_FILE_LOG_CMD_OK       BIT(1)
+  #define    EVT_FILE_LOG_CMD_FAIL     BIT(2)
+
 // Структура хранения записи лога
 typedef struct
 {
@@ -60,7 +64,7 @@ typedef struct
     unsigned int      file_log_overfl_f;    // Флаг ошибоки переполнения файлового лога
 
 
-    uint32_t          logger_ready; // Флаг готовности к записи в лог
+    uint32_t          logger_ready;         // Флаг готовности к записи в лог
 
 } T_app_log_cbl;
 
@@ -80,7 +84,10 @@ void      AppLogg_monitor_output(void);
 uint32_t  Create_File_Logger_task(void);
 int32_t   AppLog_get_tail_record(T_app_log_record *rec);
 void      Req_to_reset_log_file(void);
-#endif // APP_DEBUG_LOGGS_H
+void      Set_file_logger_event(uint32_t events_mask);
+uint32_t  Wait_file_logger_event(uint32_t events_mask, ULONG *actual_flags, uint32_t opt, uint32_t wait);
+
+#endif
 
 
 

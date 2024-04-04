@@ -15,6 +15,8 @@ void System_start_report(void)
 
   fmi_unique_id_t uid;
   APPLOG("##############################################################");
+  APPLOG("S7V30 Bootloader");
+  APPLOG("##############################################################");
 
 
   err = g_fmi.p_api->uniqueIdGet(&uid);
@@ -103,6 +105,28 @@ void System_start_report(void)
   {
     APPLOG("Cold start");
   }
+
+  {
+    T_sd_unlock_status *p_st;
+    p_st = s7_Get_sd_status();
+
+    if (p_st->lock_detected == 0)
+    {
+      APPLOG("SD card is not locked");
+    }
+    else
+    {
+      if (p_st->unlock_executed != 0)
+      {
+        APPLOG("SD card is locked. Unlocked successfully");
+      }
+      else
+      {
+        APPLOG("SD card is locked. Unlock failed");
+      }
+    }
+  }
+
 
   if (g_file_system_ready == 0)
   {

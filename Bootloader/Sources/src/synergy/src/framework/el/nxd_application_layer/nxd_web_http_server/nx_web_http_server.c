@@ -38,7 +38,7 @@
 
 #include    "stdio.h"
 #include    "string.h"
-#ifdef NX_WEB_HTTP_DIGEST_ENABLE    
+#ifdef NX_WEB_HTTP_DIGEST_ENABLE
 #include   "nx_md5.h"
 #endif
 
@@ -63,8 +63,11 @@ static NX_WEB_HTTP_SERVER_MIME_MAP _nx_web_http_server_mime_maps[] =
     {"html",     "text/html"},
     {"htm",      "text/html"},
     {"txt",      "text/plain"},
+    {"css",      "text/css"},
+    {"js",       "application/javascript"},
     {"gif",      "image/gif"},
     {"jpg",      "image/jpeg"},
+    {"png",      "image/png"},
     {"ico",      "image/x-icon"},
 };
 
@@ -411,7 +414,7 @@ ULONG       temp_offset;
 #endif
 
             /* Allocate a new packet to store content.  */
-            status = nx_packet_allocate(server_ptr -> nx_web_http_server_packet_pool_ptr, 
+            status = nx_packet_allocate(server_ptr -> nx_web_http_server_packet_pool_ptr,
                                         &new_packet_ptr, 0, NX_WAIT_FOREVER);
             if(status)
             {
@@ -594,7 +597,7 @@ UINT  _nxe_web_http_server_packet_get(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET 
 UINT _nx_web_http_server_packet_get(NX_WEB_HTTP_SERVER *server_ptr, NX_PACKET **packet_ptr)
 {
 NX_PACKET *new_packet_ptr;
-UINT       status; 
+UINT       status;
 
     if (server_ptr -> nx_web_http_server_request_chunked)
     {
@@ -627,7 +630,7 @@ UINT       status;
         /* Error, return to caller.  */
         return(NX_WEB_HTTP_TIMEOUT);
     }
-    
+
     *packet_ptr = new_packet_ptr;
 
     return(NX_SUCCESS);
@@ -1499,7 +1502,7 @@ NX_TCPSERVER *tcpserver_ptr = &(http_server_ptr -> nx_web_http_server_tcpserver)
 
 #ifdef NX_WEB_HTTPS_ENABLE
 UINT i;
-    
+
     /* Stop TLS session if using HTTPS. */
     if(http_server_ptr -> nx_web_http_is_https_server)
     {
@@ -2289,7 +2292,7 @@ UINT    status;
                                     trusted_certificates, trusted_certs_num,
                                     remote_certificates, remote_certs_num,
                                     remote_certificate_buffer,remote_cert_buffer_size);
-    
+
     /* Return result of TLS setup. */
     return(status);
 }
@@ -2402,7 +2405,7 @@ UINT _nx_web_http_server_secure_ecc_configure(NX_WEB_HTTP_SERVER *http_server_pt
 UINT status;
 
     /* Configure TLS ECC for the socket server. */
-    status = nx_tcpserver_tls_ecc_setup(&http_server_ptr -> nx_web_http_server_tcpserver, 
+    status = nx_tcpserver_tls_ecc_setup(&http_server_ptr -> nx_web_http_server_tcpserver,
                                         supported_groups, supported_group_count, curves);
     return(status);
 }
@@ -3032,7 +3035,7 @@ UINT temp_additional_info_length = 0;
 /*                                                                        */
 /*  CALLED BY                                                             */
 /*                                                                        */
-/*    NetX Duo                                                            */ 
+/*    NetX Duo                                                            */
 /*                                                                        */
 /*  RELEASE HISTORY                                                       */
 /*                                                                        */
@@ -3088,7 +3091,7 @@ NX_WEB_HTTP_SERVER *server_ptr;
 /*                                                                        */
 /*  CALLED BY                                                             */
 /*                                                                        */
-/*    NetX Duo                                                            */ 
+/*    NetX Duo                                                            */
 /*                                                                        */
 /*  RELEASE HISTORY                                                       */
 /*                                                                        */
@@ -3259,7 +3262,7 @@ NX_PACKET               *response_pkt;
     }
 
     /* Check for a DELETE request.  */
-    else if ((buffer_ptr[0] == 'D') && (buffer_ptr[1] == 'E') && (buffer_ptr[2] == 'L') && (buffer_ptr[3] == 'E') && 
+    else if ((buffer_ptr[0] == 'D') && (buffer_ptr[1] == 'E') && (buffer_ptr[2] == 'L') && (buffer_ptr[3] == 'E') &&
              (buffer_ptr[4] == 'T') && (buffer_ptr[5] == 'E') && (buffer_ptr[6] == ' '))
     {
 
@@ -3274,7 +3277,7 @@ NX_PACKET               *response_pkt;
     }
 
     /* Check for a POST request.  */
-    else if ((buffer_ptr[0] == 'P') && (buffer_ptr[1] == 'O') && (buffer_ptr[2] == 'S') && 
+    else if ((buffer_ptr[0] == 'P') && (buffer_ptr[1] == 'O') && (buffer_ptr[2] == 'S') &&
              (buffer_ptr[3] == 'T') && (buffer_ptr[4] == ' '))
     {
 
@@ -3303,7 +3306,7 @@ NX_PACKET               *response_pkt;
     }
 
     /* Check for a HEAD request.  */
-    else if ((buffer_ptr[0] == 'H') && (buffer_ptr[1] == 'E') && (buffer_ptr[2] == 'A') && 
+    else if ((buffer_ptr[0] == 'H') && (buffer_ptr[1] == 'E') && (buffer_ptr[2] == 'A') &&
              (buffer_ptr[3] == 'D') && (buffer_ptr[4] == ' '))
     {
 
@@ -3404,7 +3407,7 @@ NX_PACKET               *response_pkt;
 /*                                                                        */
 /*  DESCRIPTION                                                           */
 /*                                                                        */
-/*    This function retrieves the complete HTTP client request in a single*/ 
+/*    This function retrieves the complete HTTP client request in a single*/
 /*    packet.  Doing this makes the other parsing and searching           */
 /*    routines simple.                                                    */
 /*                                                                        */
@@ -3486,13 +3489,13 @@ NX_PACKET   *tmp_ptr;
 
     crlf_found = 0;
     work_ptr = head_packet_ptr;
-    
+
     /* Build a pointer to the buffer area.  */
-    buffer_ptr =  (CHAR *) work_ptr -> nx_packet_prepend_ptr; 
-    
+    buffer_ptr =  (CHAR *) work_ptr -> nx_packet_prepend_ptr;
+
     do
     {
-    
+
         /* See if there is a blank line present in the buffer.  */
         /* Search the buffer for a cr/lf pair.  */
         while (buffer_ptr < (CHAR *) work_ptr -> nx_packet_append_ptr)
@@ -3518,16 +3521,16 @@ NX_PACKET   *tmp_ptr;
 
             if (crlf_found == 4)
             {
-    
+
                 /* Yes, we have found the end of the HTTP request header.  */
-    
+
                 /* Set the return packet pointer.  */
                 *packet_ptr =  head_packet_ptr;
-    
+
                 /* Return a successful completion.  */
                 return(NX_SUCCESS);
             }
-    
+
             /* Move the buffer pointer up.  */
             buffer_ptr++;
         }
@@ -3540,33 +3543,33 @@ NX_PACKET   *tmp_ptr;
         {
             /* Get the next packet in the chain. */
             work_ptr  = work_ptr -> nx_packet_next;
-            buffer_ptr =  (CHAR *) work_ptr -> nx_packet_prepend_ptr; 
+            buffer_ptr =  (CHAR *) work_ptr -> nx_packet_prepend_ptr;
         }
         else
-           
-#endif         
+
+#endif
         {
-            /* Receive another packet from the HTTP server port.  */            
+            /* Receive another packet from the HTTP server port.  */
             status = _nx_web_http_server_receive(server_ptr, &new_packet_ptr, NX_WEB_HTTP_SERVER_TIMEOUT_RECEIVE);
-            
+
             /* Check the return status.  */
             if (status != NX_SUCCESS)
             {
-    
+
                 /* Release the current head packet.  */
                 nx_packet_release(head_packet_ptr);
-            
+
                 /* Return an error condition.  */
                 return(status);
-            }      
-    
+            }
+
             /* Successfully received another packet.  Its contents now need to be placed in the head packet.  */
             tmp_ptr = new_packet_ptr;
 #ifndef NX_DISABLE_PACKET_CHAIN
             while (tmp_ptr)
             {
 #endif /* NX_DISABLE_PACKET_CHAIN */
-    
+
                 /* Copy the contents of the current packet into the head packet.  */
                 status =  nx_packet_data_append(head_packet_ptr, (VOID *) tmp_ptr -> nx_packet_prepend_ptr,
                                                 (ULONG)(tmp_ptr -> nx_packet_append_ptr - tmp_ptr -> nx_packet_prepend_ptr),
@@ -3575,13 +3578,13 @@ NX_PACKET   *tmp_ptr;
                 /* Determine if an error occurred.  */
                 if (status != NX_SUCCESS)
                 {
-        
+
                     /* Yes, an error is present.  */
-        
+
                     /* Release both packets.  */
                     nx_packet_release(head_packet_ptr);
                     nx_packet_release(new_packet_ptr);
-        
+
                     /* Return an error condition.  */
                     return(status);
                 }
@@ -3742,7 +3745,7 @@ UINT        temp_realm_length = 0;
             /* Send response back to HTTP Client.  */
             _nx_web_http_server_response_send(server_ptr, NX_WEB_HTTP_STATUS_BAD_REQUEST,
                                               sizeof(NX_WEB_HTTP_STATUS_BAD_REQUEST) - 1,
-                                              "NetX HTTP Invalid Content Offset", 
+                                              "NetX HTTP Invalid Content Offset",
                                               sizeof("NetX HTTP Invalid Content Offset") - 1, NX_NULL, 0);
 
             /* Error, return to caller.  */
@@ -3811,6 +3814,11 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
+        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
+        {
+          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
+          return;
+        }
 
         /* Determine if the authentication failed.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
@@ -3873,17 +3881,17 @@ UINT        temp_realm_length = 0;
     }
 
     /* Setup the server socket with a specific packet transmit retry logic.  */
-    nx_tcp_socket_transmit_configure(socket_ptr, 
+    nx_tcp_socket_transmit_configure(socket_ptr,
                                     NX_WEB_HTTP_SERVER_TRANSMIT_QUEUE_DEPTH,
                                     NX_WEB_HTTP_SERVER_RETRY_SECONDS*NX_IP_PERIODIC_RATE,
-                                    NX_WEB_HTTP_SERVER_RETRY_MAX, 
+                                    NX_WEB_HTTP_SERVER_RETRY_MAX,
                                     NX_WEB_HTTP_SERVER_RETRY_SHIFT);
 
     /* At this point, either there isn't any required authentication for this resource or the authentication is
        complete.  */
 
     /* If the HTTP server receives an empty POST request (no message body, content length = 0, it is the
-       responsibility of the request notify callback to send a response (if any) to the HTTP Client. 
+       responsibility of the request notify callback to send a response (if any) to the HTTP Client.
        The HTTP server will process the request no further. */
 
     /* Determine if a user supplied get function has been specified.  */
@@ -3991,7 +3999,7 @@ UINT        temp_realm_length = 0;
 
 
     /* Get the length of request resource.  */
-    if (_nx_utility_string_length_check(server_ptr -> nx_web_http_server_request_resource,  &resource_length, 
+    if (_nx_utility_string_length_check(server_ptr -> nx_web_http_server_request_resource,  &resource_length,
                                         sizeof(server_ptr -> nx_web_http_server_request_resource) - 1))
     {
         return;
@@ -4054,23 +4062,23 @@ UINT        temp_realm_length = 0;
 
         /* Yes, only a response is required... send it!  */
         status = _nx_web_http_server_send(server_ptr, new_packet_ptr, NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
-        
+
         /* Determine if this is successful.  */
         if (status != NX_SUCCESS)
         {
-    
+
             /* Release the packet.  */
             nx_packet_release(new_packet_ptr);
-            
+
             /* Force zero length.  */
             length = 0;
         }
     }
-    
+
     /* Get length of packet */
     temp = new_packet_ptr -> nx_packet_length;
 
-    /* Now, loop to send the data contents.  If the request type is "HEAD", skip this loop to output the 
+    /* Now, loop to send the data contents.  If the request type is "HEAD", skip this loop to output the
        file contents.  */
     while ((length) && (request_type != NX_WEB_HTTP_SERVER_HEAD_REQUEST))
     {
@@ -4108,7 +4116,7 @@ UINT        temp_realm_length = 0;
         /* Read data from the file.  */
         status =  fx_file_read(&(server_ptr -> nx_web_http_server_file), new_packet_ptr -> nx_packet_append_ptr,
                                         temp, &temp);
-        
+
         /* Check for an error.  */
         if (status != NX_SUCCESS)
         {
@@ -4143,7 +4151,7 @@ UINT        temp_realm_length = 0;
 
         /* Adjust the file length based on what we have sent.  */
         length =  length - temp;
-        
+
         /* Indicate new packet needed */
         temp = 0;
     }
@@ -4344,7 +4352,11 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
-
+        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
+        {
+          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
+          return;
+        }
         /* Determine if the authentication is currently in progress.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
         {
@@ -4372,7 +4384,7 @@ UINT        temp_realm_length = 0;
     /* At this point, either there isn't any required authentication for this resource or the authentication is
        complete.  */
 
-    /* If the request is empty (content-length = 0) the request notify callback is where a response is generated 
+    /* If the request is empty (content-length = 0) the request notify callback is where a response is generated
        to return to the Client.  NetX HTTP Server will not process an empty request further. */
 
     /* Determine if a user supplied get function has been specified.  */
@@ -4803,6 +4815,11 @@ UINT        temp_realm_length = 0;
             status =  _nx_web_http_server_digest_authenticate(server_ptr, packet_ptr, name_ptr, password_ptr, realm_ptr, &auth_request_present);
         }
 #endif
+        if (status == NX_WEB_HTTP_BASIC_AUTHENTICATE)
+        {
+          _nx_web_http_server_connection_reset(server_ptr,server_ptr -> nx_web_http_server_current_session_ptr , NX_WEB_HTTP_SERVER_TIMEOUT_SEND);
+          return;
+        }
 
         /* Determine if the authentication is currently in progress.  */
         if ((status != NX_WEB_HTTP_DONT_AUTHENTICATE) && (status != NX_SUCCESS))
@@ -4940,7 +4957,7 @@ UINT        temp_realm_length = 0;
 /*                                                                        */
 /**************************************************************************/
 UINT _nxe_web_http_server_invalid_userpassword_notify_set(NX_WEB_HTTP_SERVER *http_server_ptr,
-                                                    UINT (*invalid_username_password_callback)(CHAR *resource, NXD_ADDRESS *client_nxd_address, UINT request_type)) 
+                                                    UINT (*invalid_username_password_callback)(CHAR *resource, NXD_ADDRESS *client_nxd_address, UINT request_type))
 {
 
 UINT status;
@@ -5001,7 +5018,7 @@ UINT status;
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_web_http_server_invalid_userpassword_notify_set(NX_WEB_HTTP_SERVER *http_server_ptr,
-                                                         UINT (*invalid_username_password_callback)(CHAR *resource, NXD_ADDRESS *client_nxd_address, UINT request_type)) 
+                                                         UINT (*invalid_username_password_callback)(CHAR *resource, NXD_ADDRESS *client_nxd_address, UINT request_type))
 {
 
     http_server_ptr -> nx_web_http_server_invalid_username_password_callback = invalid_username_password_callback;
@@ -6151,7 +6168,7 @@ UINT    temp_name_length;
         return(NX_WEB_HTTP_ERROR);
     }
 
-    /* First find the end of the string.  */    
+    /* First find the end of the string.  */
     ch = name + name_length;
 
     /* Now look backwards to find the last period that signals the
@@ -6169,7 +6186,7 @@ UINT    temp_name_length;
         /* No extension is found. Return the default mime type. */
         if(http_type_string_max_size < (sizeof(NX_WEB_HTTP_SERVER_DEFAULT_MIME)))
         {
-            /* NX_HTTP_SERVER_DEFAULT_MIME does not fit into 
+            /* NX_HTTP_SERVER_DEFAULT_MIME does not fit into
                the caller-supplied http_type_string. */
             return (NX_WEB_HTTP_ERROR);
         }
@@ -6244,7 +6261,7 @@ UINT    temp_name_length;
 
     if(http_type_string_max_size < (sizeof(NX_WEB_HTTP_SERVER_DEFAULT_MIME)))
     {
-        /* NX_HTTP_SERVER_DEFAULT_MIME does not fit into 
+        /* NX_HTTP_SERVER_DEFAULT_MIME does not fit into
            the caller-supplied http_type_string. */
         return (NX_WEB_HTTP_ERROR);
     }
@@ -6389,7 +6406,7 @@ UINT        realm_length;
             /* Otherwise, look at next character.  */
             i++;
         }
-        /* If digest authenticate callback function returns non-success value, the request is 
+        /* If digest authenticate callback function returns non-success value, the request is
            considered unauthenticated. */
         if(callback_status != NX_SUCCESS)
             status = NX_WEB_HTTP_DIGEST_AUTHENTICATE;
@@ -7128,41 +7145,41 @@ CHAR    digit;
 #endif
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_get_entity_header              PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for getting the entity header.           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
-/*    entity_header_buffer                  Buffer to get entity header   */ 
-/*    buffer_size                           Size of buffer                */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for getting the entity header.           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
+/*    entity_header_buffer                  Buffer to get entity header   */
+/*    buffer_size                           Size of buffer                */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_header                               */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7194,33 +7211,33 @@ UINT  _nxe_web_http_server_get_entity_header(NX_WEB_HTTP_SERVER *server_ptr, NX_
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_header               PORTABLE C      */
 /*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function gets the entity header and skip header.               */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
-/*    entity_header_buffer                  Buffer to get entity header   */ 
-/*    buffer_size                           Size of buffer                */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function gets the entity header and skip header.               */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
+/*    entity_header_buffer                  Buffer to get entity header   */
+/*    buffer_size                           Size of buffer                */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_field_value_get                                 */
 /*    _nx_web_http_server_memicmp                                         */
 /*    _nx_web_http_server_boundary_find                                   */
@@ -7228,13 +7245,13 @@ UINT  _nxe_web_http_server_get_entity_header(NX_WEB_HTTP_SERVER *server_ptr, NX_
 /*    nx_tcp_socket_receive                                               */
 /*    _nx_utility_string_length_check                                     */
 /*    memmove                                                             */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7287,7 +7304,7 @@ UINT                        index;
 
         /* Check the data. */
         if(_nx_web_http_server_memicmp(multipart_ptr -> nx_web_http_server_multipart_boundary, 10,
-                                   (UCHAR *)"multipart/", 10) != NX_SUCCESS) 
+                                   (UCHAR *)"multipart/", 10) != NX_SUCCESS)
             return NX_WEB_HTTP_NOT_FOUND;
 
         /* Find the boundary. The length of "boundary=" is 9. */
@@ -7571,41 +7588,41 @@ UINT                        index;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_get_entity_content             PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for getting the entity content.          */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
-/*    available_offset                      Return the offset             */ 
-/*    available_length                      Return the length             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for getting the entity content.          */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
+/*    available_offset                      Return the offset             */
+/*    available_length                      Return the length             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_content                              */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7638,41 +7655,41 @@ UINT  _nxe_web_http_server_get_entity_content(NX_WEB_HTTP_SERVER *server_ptr, NX
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_content              PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function gets the entity content.                              */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
-/*    available_offset                      Return the offset             */ 
-/*    available_length                      Return the length             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function gets the entity content.                              */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
+/*    available_offset                      Return the offset             */
+/*    available_length                      Return the length             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_boundary_find                                   */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7711,43 +7728,43 @@ UINT    status;
 
 
 #ifdef  NX_WEB_HTTP_MULTIPART_ENABLE
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_boundary_find                   PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function finds boundary in packet even if it is chained.       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function finds boundary in packet even if it is chained.       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    nx_packet_release                                                   */
 /*    nx_tcp_socket_receive                                               */
 /*    _nx_web_http_server_match_string                                    */
 /*    _nx_utility_string_length_check                                     */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_header                               */
 /*    _nx_web_http_server_get_entity_content                              */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7967,43 +7984,43 @@ UINT                        boundary_length;
 #endif /* NX_WEB_HTTP_MULTIPART_ENABLE */
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_match_string                    PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function compares a target string in specified memory area.    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    src_start                             Pointer to start of source    */ 
-/*    src_end                               Pointer to end of source      */ 
-/*    target                                Pointer to target             */ 
-/*    target_length                         Length to target              */ 
-/*    match_count                           Return the match count        */ 
-/*    match_end_ptr                         Return the end match position */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function compares a target string in specified memory area.    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    src_start                             Pointer to start of source    */
+/*    src_end                               Pointer to end of source      */
+/*    target                                Pointer to target             */
+/*    target_length                         Length to target              */
+/*    match_count                           Return the match count        */
+/*    match_end_ptr                         Return the end match position */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    memcmp                                Compare memory data           */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_boundary_find                                   */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8095,43 +8112,43 @@ ULONG   remain_match;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_field_value_get                 PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function gets field value by field name from HTTP header.      */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    packet_ptr                            Pointer to packet             */ 
-/*    field_name                            Name of field in header       */ 
-/*    name_length                           Length of name field          */ 
-/*    field_value                           Return of field value         */ 
-/*    field_value_size                      Size of field value           */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function gets field value by field name from HTTP header.      */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    packet_ptr                            Pointer to packet             */
+/*    field_name                            Name of field in header       */
+/*    name_length                           Length of name field          */
+/*    field_value                           Return of field value         */
+/*    field_value_size                      Size of field value           */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_memicmp           Compare ignore case           */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_get_process                                     */
 /*    _nx_web_http_server_get_entity_header                               */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8189,7 +8206,7 @@ UINT    index;
         if(ch + 2 > packet_ptr -> nx_packet_append_ptr)
             return NX_WEB_HTTP_NOT_FOUND;
 
-        /* Compare CRLF. */ 
+        /* Compare CRLF. */
         if((*ch == 13) && (*(ch + 1) == 10))
             break;
 
@@ -8213,41 +8230,41 @@ UINT    index;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_memicmp                         PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function compares two pieces of memory case insensitive.       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    src                                   Pointer to source             */ 
-/*    src_length                            Length of source              */ 
-/*    dest                                  Pointer to destination        */ 
-/*    dest_length                           Length of destination         */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function compares two pieces of memory case insensitive.       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    src                                   Pointer to source             */
+/*    src_length                            Length of source              */
+/*    dest                                  Pointer to destination        */
+/*    dest_length                           Length of destination         */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_get_entity_header                               */
 /*    _nx_web_http_server_field_value_get                                 */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8290,38 +8307,38 @@ UCHAR   ch;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_generate_response_header        PORTABLE C      */
 /*                                                           6.1.8        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function generates HTTP response header.                       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function generates HTTP response header.                       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
 /*    status_code                           Status-code and reason-phrase */
 /*    status_code_length                    Length of status-code         */
-/*    content_length                        Length of content             */ 
-/*    content_type                          Type of content               */ 
-/*    content_type_length                   Length of content type        */ 
-/*    additional_header                     Other HTTP headers            */ 
-/*    additional_header_length              Length of other HTTP headers  */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*    content_length                        Length of content             */
+/*    content_type                          Type of content               */
+/*    content_type_length                   Length of content type        */
+/*    additional_header                     Other HTTP headers            */
+/*    additional_header_length              Length of other HTTP headers  */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_response_packet_allocate                        */
 /*                                          Allocate response packet      */
 /*    nx_packet_data_append                 Append packet data            */
@@ -8329,17 +8346,17 @@ UCHAR   ch;
 /*    _nx_utility_uint_to_string            Convert number to ASCII       */
 /*    _nx_web_http_server_date_to_string    Convert data to string        */
 /*    nx_packet_release                     Release packet                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_get_process                                     */
 /*    _nx_web_http_server_put_process                                     */
 /*    _nx_web_http_server_delete_process                                  */
 /*    _nx_web_http_server_response_send                                   */
 /*    _nx_web_http_server_callback_generate_response_header               */
 /*                                                                        */
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8597,7 +8614,7 @@ CHAR        status_code_not_modified;
 /*                                                                        */
 /*  CALLED BY                                                             */
 /*                                                                        */
-/*    _nx_web_http_server_request_byte_expect                             */ 
+/*    _nx_web_http_server_request_byte_expect                             */
 /*                                          Checks next byte is  expected */
 /*    _nx_web_http_server_chunked_size_get  Gets chunk size of request    */
 /*                                          packet chunk                  */
@@ -8611,7 +8628,7 @@ CHAR        status_code_not_modified;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_web_http_server_request_read(NX_WEB_HTTP_SERVER *server_ptr, UCHAR *data, ULONG wait_option, 
+UINT _nx_web_http_server_request_read(NX_WEB_HTTP_SERVER *server_ptr, UCHAR *data, ULONG wait_option,
                                       NX_PACKET **current_packet_pptr, UCHAR **current_data_pptr)
 {
 UINT status;
@@ -8721,7 +8738,7 @@ UINT status;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_web_http_server_request_byte_expect(NX_WEB_HTTP_SERVER *server_ptr, UCHAR data, ULONG wait_option, 
+UINT _nx_web_http_server_request_byte_expect(NX_WEB_HTTP_SERVER *server_ptr, UCHAR data, ULONG wait_option,
                                              NX_PACKET **current_packet_pptr, UCHAR **current_data_pptr)
 {
 UINT status;
@@ -8794,7 +8811,7 @@ UCHAR tmp;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_web_http_server_chunked_size_get(NX_WEB_HTTP_SERVER *server_ptr, UINT *chunk_size, ULONG wait_option, 
+UINT _nx_web_http_server_chunked_size_get(NX_WEB_HTTP_SERVER *server_ptr, UINT *chunk_size, ULONG wait_option,
                                           NX_PACKET **current_packet_pptr, UCHAR **current_data_pptr)
 {
 UINT status;
@@ -8927,7 +8944,7 @@ UINT  chunk_extension = 0;
 /*  CALLED BY                                                             */
 /*                                                                        */
 /*    _nx_web_http_server_packet_get        Get next packet from HTTP     */
-/*                                          server socket                 */ 
+/*                                          server socket                 */
 /*                                                                        */
 /*  RELEASE HISTORY                                                       */
 /*                                                                        */
@@ -9050,8 +9067,8 @@ UCHAR     *current_data_ptr = NX_NULL;
 
                 /* Copy the remaining data to a new packet.  */
                 /* Allocate a packet.  */
-                status = nx_packet_allocate(server_ptr -> nx_web_http_server_packet_pool_ptr, 
-                                            &(server_ptr -> nx_web_http_server_request_packet), 
+                status = nx_packet_allocate(server_ptr -> nx_web_http_server_packet_pool_ptr,
+                                            &(server_ptr -> nx_web_http_server_request_packet),
                                             0, wait_option);
                 if (status)
                 {
@@ -9060,10 +9077,10 @@ UCHAR     *current_data_ptr = NX_NULL;
 
                 /* Copy the remaining data in current packet to the new packet.   */
                 temp_size = (UINT)(current_packet_ptr -> nx_packet_append_ptr - current_data_ptr);
-                status = nx_packet_data_append(server_ptr -> nx_web_http_server_request_packet, 
-                                               current_data_ptr, 
-                                               temp_size, 
-                                               server_ptr -> nx_web_http_server_packet_pool_ptr, 
+                status = nx_packet_data_append(server_ptr -> nx_web_http_server_request_packet,
+                                               current_data_ptr,
+                                               temp_size,
+                                               server_ptr -> nx_web_http_server_packet_pool_ptr,
                                                wait_option);
                 if (status)
                 {
@@ -9111,7 +9128,7 @@ UCHAR     *current_data_ptr = NX_NULL;
     (*packet_pptr) -> nx_packet_length = length;
 
     /* Find the last packet.  */
-    while (packet_ptr -> nx_packet_next && 
+    while (packet_ptr -> nx_packet_next &&
            (length > (UINT)(packet_ptr -> nx_packet_append_ptr - packet_ptr -> nx_packet_prepend_ptr)))
     {
         length -= (UINT)(packet_ptr -> nx_packet_append_ptr - packet_ptr -> nx_packet_prepend_ptr);
@@ -9336,7 +9353,7 @@ CHAR        crlf[2] = {13,10};
 /*                                                                        */
 /*    _nx_web_http_server_packet_content_find                             */
 /*                                          Find content length in the    */
-/*                                          HTTP header                   */ 
+/*                                          HTTP header                   */
 /*    _nx_web_http_server_content_get_extended                            */
 /*                                          Get user specified portion of */
 /*                                          HTTP header                   */
@@ -9360,13 +9377,13 @@ UINT temp_string_length;
     /* Check if the packet is chunked.  */
     status = _nx_web_http_server_field_value_get(packet_ptr, (UCHAR *)"Transfer-Encoding", 17, (UCHAR *)temp_string, sizeof(temp_string));
 
-    if ((status == NX_SUCCESS) && 
+    if ((status == NX_SUCCESS) &&
         (_nx_utility_string_length_check(temp_string, &temp_string_length, sizeof(temp_string) - 1) == NX_SUCCESS) &&
         (_nx_web_http_server_memicmp((UCHAR *)temp_string, temp_string_length, (UCHAR *)"chunked", 7) == 0))
     {
         return(NX_TRUE);
     }
-    
+
     return(NX_FALSE);
 }
 
@@ -9503,10 +9520,10 @@ UINT status;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_callback_generate_response_header              */
 /*                                                        PORTABLE C      */
 /*                                                           6.1          */
@@ -9514,33 +9531,33 @@ UINT status;
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for generating HTTP response header.     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for generating HTTP response header.     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
 /*    status_code                           Status-code and reason-phrase */
-/*    content_length                        Length of content             */ 
-/*    content_type                          Type of content               */ 
-/*    additional_header                     Other HTTP headers            */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*    content_length                        Length of content             */
+/*    content_type                          Type of content               */
+/*    additional_header                     Other HTTP headers            */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_callback_generate_response_header               */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9562,10 +9579,10 @@ UINT  _nxe_web_http_server_callback_generate_response_header(NX_WEB_HTTP_SERVER 
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_callback_generate_response_header               */
 /*                                                        PORTABLE C      */
 /*                                                           6.1          */
@@ -9573,36 +9590,36 @@ UINT  _nxe_web_http_server_callback_generate_response_header(NX_WEB_HTTP_SERVER 
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
 /*    This function is used in callback function to generate HTTP         */
-/*    response header.                                                    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
+/*    response header.                                                    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
 /*    status_code                           Status-code and reason-phrase */
-/*    content_length                        Length of content             */ 
-/*    content_type                          Type of content               */ 
-/*    additional_header                     Other HTTP headers            */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*    content_length                        Length of content             */
+/*    content_type                          Type of content               */
+/*    additional_header                     Other HTTP headers            */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_generate_response_header                        */
 /*                                          Generate response header      */
 /*    _nx_utility_string_length_check       Check string length           */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9634,10 +9651,10 @@ UINT additional_header_length = 0;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_callback_generate_response_header_extended     */
 /*                                                        PORTABLE C      */
 /*                                                           6.1          */
@@ -9645,37 +9662,37 @@ UINT additional_header_length = 0;
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for generating HTTP response header.     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for generating HTTP response header.     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
 /*    status_code                           Status-code and reason-phrase */
 /*    status_code_length                    Length of status-code         */
-/*    content_length                        Length of content             */ 
+/*    content_length                        Length of content             */
 /*    content_type                          Type of content               */
-/*    content_type_length                   Length of content type        */ 
+/*    content_type_length                   Length of content type        */
 /*    additional_header                     Other HTTP headers            */
-/*    additional_header_length              Length of other HTTP headers  */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*    additional_header_length              Length of other HTTP headers  */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_callback_generate_response_header_extended      */
 /*                                          Actual generate header        */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9705,10 +9722,10 @@ UINT  _nxe_web_http_server_callback_generate_response_header_extended(NX_WEB_HTT
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_callback_generate_response_header_extended      */
 /*                                                        PORTABLE C      */
 /*                                                           6.1          */
@@ -9716,43 +9733,43 @@ UINT  _nxe_web_http_server_callback_generate_response_header_extended(NX_WEB_HTT
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
 /*    This function is used in callback function to generate HTTP         */
-/*    response header.                                                    */ 
+/*    response header.                                                    */
 /*                                                                        */
 /*    Note: The strings of status_code, content_type and additional_header*/
 /*    must be NULL-terminated and length of each string matches the       */
 /*    length specified in the argument list.                              */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_pptr                           Pointer to packet             */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_pptr                           Pointer to packet             */
 /*    status_code                           Status-code and reason-phrase */
 /*    status_code_length                    Length of status-code         */
-/*    content_length                        Length of content             */ 
+/*    content_length                        Length of content             */
 /*    content_type                          Type of content               */
-/*    content_type_length                   Length of content type        */ 
+/*    content_type_length                   Length of content type        */
 /*    additional_header                     Other HTTP headers            */
-/*    additional_header_length              Length of other HTTP headers  */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*    additional_header_length              Length of other HTTP headers  */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_generate_response_header                        */
 /*                                          Generate response header      */
 /*    _nx_utility_string_length_check       Check string length           */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9794,39 +9811,39 @@ UINT temp_add_header_length = 0;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_callback_packet_send           PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for sending a packet.                    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_ptr                            Pointer to packet             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for sending a packet.                    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_ptr                            Pointer to packet             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_callback_packet_send                            */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9845,40 +9862,40 @@ UINT  _nxe_web_http_server_callback_packet_send(NX_WEB_HTTP_SERVER *server_ptr, 
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_callback_packet_send            PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
 /*    This function is used in callback function to send a packet.        */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_ptr                            Pointer to packet             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_ptr                            Pointer to packet             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_send              Send packet to client         */
 /*    nx_packet_data_append                 Append packet data            */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9901,7 +9918,7 @@ UINT length = packet_ptr -> nx_packet_length;
         {
             return(NX_INVALID_PACKET);
         }
-        
+
         if (server_ptr -> nx_web_http_server_expect_transfer_bytes == (server_ptr -> nx_web_http_server_actual_bytes_transferred + length))
         {
 
@@ -9924,40 +9941,40 @@ UINT length = packet_ptr -> nx_packet_length;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_gmt_callback_set               PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for setting gmt callback function.       */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    gmt_get                               Pointer to application's      */ 
-/*                                            GMT time function           */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for setting gmt callback function.       */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    gmt_get                               Pointer to application's      */
+/*                                            GMT time function           */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_gmt_callback_set                                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9977,39 +9994,39 @@ UINT  _nxe_web_http_server_gmt_callback_set(NX_WEB_HTTP_SERVER *server_ptr, VOID
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_gmt_callback_set                PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function sets gmt callback function.                           */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    gmt_get                               Pointer to application's      */ 
-/*                                            GMT time function           */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function sets gmt callback function.                           */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    gmt_get                               Pointer to application's      */
+/*                                            GMT time function           */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10021,13 +10038,13 @@ UINT  _nx_web_http_server_gmt_callback_set(NX_WEB_HTTP_SERVER *server_ptr, VOID 
 {
 
 TX_INTERRUPT_SAVE_AREA
-    
+
     /* Lockout interrupts.  */
     TX_DISABLE
 
     /* Set the function pointer. */
     server_ptr -> nx_web_http_server_gmt_get = gmt_get;
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
@@ -10035,40 +10052,40 @@ TX_INTERRUPT_SAVE_AREA
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_cache_info_callback_set        PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for setting cache info callback function.*/ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    cache_info_get                        Pointer to application's      */ 
-/*                                            cache information function  */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for setting cache info callback function.*/
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    cache_info_get                        Pointer to application's      */
+/*                                            cache information function  */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_cache_info_callback_set                         */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10088,44 +10105,44 @@ UINT  _nxe_web_http_server_cache_info_callback_set(NX_WEB_HTTP_SERVER *server_pt
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_cache_info_callback_set         PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function sets cache info callback function.                    */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function sets cache info callback function.                    */
 /*                                                                        */
 /*    Note: The string resource in callback functions authentication_check*/
 /*    and request_notify is built by internal logic and always            */
 /*    NULL-terminated.                                                    */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    cache_info_get                        Pointer to application's      */ 
-/*                                            cache information function  */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    cache_info_get                        Pointer to application's      */
+/*                                            cache information function  */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    None                                                                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10137,13 +10154,13 @@ UINT  _nx_web_http_server_cache_info_callback_set(NX_WEB_HTTP_SERVER *server_ptr
 {
 
 TX_INTERRUPT_SAVE_AREA
-    
+
     /* Lockout interrupts.  */
     TX_DISABLE
 
     /* Set the function pointer. */
     server_ptr -> nx_web_http_server_cache_info_get = cache_info_get;
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
@@ -10151,40 +10168,40 @@ TX_INTERRUPT_SAVE_AREA
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_date_to_string                  PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function converts from date to string.                         */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    date                                  Pointer to HTTP date          */ 
-/*    string                                Pointer to output buffer      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function converts from date to string.                         */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    date                                  Pointer to HTTP date          */
+/*    string                                Pointer to output buffer      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_date_convert                                    */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_get_process                                     */
 /*    _nx_web_http_server_generate_response_header                        */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10243,39 +10260,39 @@ UINT index = 0;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_date_convert                    PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function converts a date from number to string.                */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    date                                  The number to convert         */ 
-/*    count                                 Digital count for string      */ 
-/*    string                                Pointer to output buffer      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function converts a date from number to string.                */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    date                                  The number to convert         */
+/*    count                                 Digital count for string      */
+/*    string                                Pointer to output buffer      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_date_to_string                                  */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10309,40 +10326,40 @@ UINT    digit;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nxe_web_http_server_mime_maps_additional_set       PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function checks error for setting additional MIME maps.        */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    mime_maps                             Pointer MIME map array        */ 
-/*    mime_maps_num                         Number of MIME map array      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function checks error for setting additional MIME maps.        */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    mime_maps                             Pointer MIME map array        */
+/*    mime_maps_num                         Number of MIME map array      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_mime_maps_additional_set                        */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10362,39 +10379,39 @@ UINT  _nxe_web_http_server_mime_maps_additional_set(NX_WEB_HTTP_SERVER *server_p
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_mime_maps_additional_set        PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function sets additional MIME maps.                            */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    mime_maps                             Pointer MIME map array        */ 
-/*    mime_maps_num                         Number of MIME map array      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function sets additional MIME maps.                            */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    mime_maps                             Pointer MIME map array        */
+/*    mime_maps_num                         Number of MIME map array      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10406,14 +10423,14 @@ UINT  _nx_web_http_server_mime_maps_additional_set(NX_WEB_HTTP_SERVER *server_pt
 {
 
 TX_INTERRUPT_SAVE_AREA
-    
+
     /* Lockout interrupts.  */
     TX_DISABLE
 
     /* Set the mime maps. */
     server_ptr -> nx_web_http_server_mime_maps_additional = mime_maps;
     server_ptr -> nx_web_http_server_mime_maps_additional_num = mime_maps_num;
-    
+
     /* Restore interrupts.  */
     TX_RESTORE
 
@@ -10421,41 +10438,41 @@ TX_INTERRUPT_SAVE_AREA
 }
 
 #ifndef NX_WEB_HTTP_KEEPALIVE_DISABLE
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
 /*    _nx_web_http_server_get_client_keepalive            PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function indicates whether this connection will keep alive.    */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    server_ptr                            Pointer to HTTP server        */ 
-/*    packet_ptr                            Pointer to packet             */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
-/*    None                                                                */ 
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function indicates whether this connection will keep alive.    */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    server_ptr                            Pointer to HTTP server        */
+/*    packet_ptr                            Pointer to packet             */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
+/*    None                                                                */
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_field_value_get   Get field value               */
 /*    _nx_web_http_server_memicmp           Compare two strings           */
 /*    _nx_utility_string_length_check       Check string length           */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    _nx_web_http_server_receive_data                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10485,7 +10502,7 @@ UINT    connection_value_length;
 
             /* Find the HTTP version. */
             ch += 6;
-            if((*ch >= '0') && 
+            if((*ch >= '0') &&
                (*ch <= '9') &&
                (*(ch + 1) == '.') &&
                (*(ch + 2) >= '0') &&
@@ -10646,7 +10663,7 @@ NX_SECURE_TLS_SESSION *tls_session;
 /*  CALLED BY                                                             */
 /*                                                                        */
 /*    _nx_web_http_server_packet_get       Get next packet from HTTP      */
-/*                                         server socket.                 */  
+/*                                         server socket.                 */
 /*    _nx_web_http_server_get_client_request                              */
 /*                                         Get complete HTTP request      */
 /*    _nx_web_http_server_request_read     Get the next data in byte      */
@@ -10721,7 +10738,7 @@ NX_SECURE_TLS_SESSION *tls_session;
 /*  CALLS                                                                 */
 /*                                                                        */
 /*    _nx_web_http_server_connection_disconnect                           */
-/*                                          End TLS session, and calls    */ 
+/*                                          End TLS session, and calls    */
 /*                                          Disconnect and unaccept on the*/
 /*                                          socket                        */
 /*    _nx_tcp_server_socket_relisten        Reset socket to accept another*/
@@ -10834,42 +10851,42 @@ NX_SECURE_TLS_SESSION *tls_session;
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _nxe_web_http_server_digest_authenticate_notify_set PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _nxe_web_http_server_digest_authenticate_notify_set PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function performs error checking for service to set digest     */ 
-/*    authenticate callback function.                                     */ 
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    http_server_ptr                       Pointer to HTTP server        */ 
-/*    digest_authenticate_callback          Pointer to application's      */ 
-/*                                          digest authenticate callback  */ 
-/*                                          function                      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function performs error checking for service to set digest     */
+/*    authenticate callback function.                                     */
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    http_server_ptr                       Pointer to HTTP server        */
+/*    digest_authenticate_callback          Pointer to application's      */
+/*                                          digest authenticate callback  */
+/*                                          function                      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    _nx_web_http_server_digest_authenticate_notify_set                  */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10881,7 +10898,7 @@ UINT _nxe_web_http_server_digest_authenticate_notify_set(NX_WEB_HTTP_SERVER *htt
                                                          UINT (*digest_authenticate_callback)(NX_WEB_HTTP_SERVER *server_ptr, CHAR *name_ptr,
                                                          CHAR *realm_ptr, CHAR *password_ptr, CHAR *method,
                                                          CHAR *authorization_uri, CHAR *authorization_nc,
-                                                         CHAR *authorization_cnonce)) 
+                                                         CHAR *authorization_cnonce))
 {
 
     /* Check for invalid input pointers.  */
@@ -10894,47 +10911,47 @@ UINT _nxe_web_http_server_digest_authenticate_notify_set(NX_WEB_HTTP_SERVER *htt
 }
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  FUNCTION                                               RELEASE        */ 
-/*                                                                        */ 
-/*    _nx_web_http_server_digest_authenticate_notify_set  PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  FUNCTION                                               RELEASE        */
+/*                                                                        */
+/*    _nx_web_http_server_digest_authenticate_notify_set  PORTABLE C      */
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */ 
-/*                                                                        */ 
-/*    This function sets digest authenticate callback function.           */ 
+/*  DESCRIPTION                                                           */
+/*                                                                        */
+/*    This function sets digest authenticate callback function.           */
 /*                                                                        */
 /*    Note: The strings name_ptr, realm_ptr, password_ptr, method,        */
 /*    authorization_uri, authorization_nc and authorization_cnonce in     */
 /*    callback function digest_authenticate_callback is built by internal */
 /*    logic and always NULL-terminated.                                   */
 /*                                                                        */
-/*                                                                        */ 
-/*  INPUT                                                                 */ 
-/*                                                                        */ 
-/*    http_server_ptr                       Pointer to HTTP server        */ 
-/*    digest_authenticate_callback          Pointer to application's      */ 
-/*                                          digest authenticate callback  */ 
-/*                                          function                      */ 
-/*                                                                        */ 
-/*  OUTPUT                                                                */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  INPUT                                                                 */
+/*                                                                        */
+/*    http_server_ptr                       Pointer to HTTP server        */
+/*    digest_authenticate_callback          Pointer to application's      */
+/*                                          digest authenticate callback  */
+/*                                          function                      */
+/*                                                                        */
+/*  OUTPUT                                                                */
+/*                                                                        */
 /*    status                                Completion status             */
-/*                                                                        */ 
-/*  CALLS                                                                 */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLS                                                                 */
+/*                                                                        */
 /*    None                                                                */
-/*                                                                        */ 
-/*  CALLED BY                                                             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  CALLED BY                                                             */
+/*                                                                        */
 /*    Application Code                                                    */
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10946,7 +10963,7 @@ UINT _nx_web_http_server_digest_authenticate_notify_set(NX_WEB_HTTP_SERVER *http
                                                         UINT (*digest_authenticate_callback)(NX_WEB_HTTP_SERVER *server_ptr, CHAR *name_ptr,
                                                         CHAR *realm_ptr, CHAR *password_ptr, CHAR *method,
                                                         CHAR *authorization_uri, CHAR *authorization_nc,
-                                                        CHAR *authorization_cnonce)) 
+                                                        CHAR *authorization_cnonce))
 {
 
 #ifdef  NX_WEB_HTTP_DIGEST_ENABLE

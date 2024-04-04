@@ -250,9 +250,9 @@ static void Thread_net(ULONG initial_input)
       }
 
       DNS_client_controller();
+      HTTP_server_controller();
       MQTT_client_controller();
-      SNTP_client_controller();  // SNTP клиент создается только один на одном из двух соединений: ECM или RNDIS. При отключении обоих интерфейсов клиент удаляется.
-
+      SNTP_client_controller();
     }
 
   } while (1);

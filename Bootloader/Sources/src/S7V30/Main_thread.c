@@ -102,9 +102,10 @@ void Main_thread(ULONG arg)
   g_sf_crypto.p_api->open (g_sf_crypto.p_ctrl, g_sf_crypto.p_cfg);
   Flash_driver_bgo_init();
 
+  Restore_settings(&ivar_inst, BOOTL_PARAMS);
+
   if  (Init_SD_card_file_system() == RES_OK) g_file_system_ready = 1;
 
-  Restore_settings(&ivar_inst, BOOTL_PARAMS);
   Determine_network_type();
   Generate_CRC32_table();
 

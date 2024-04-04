@@ -41,6 +41,8 @@ void     Set_boot_MassStorage_mode(void);
 uint32_t Load_and_Flash_Image_File(void);
 uint32_t Integrity_check_App_firmware(void);
 void     Restart_to_App_firmware(void);
+uint32_t Erase_firmware_area(void);
+uint32_t Clear_app_DataFlash(void);
 void     Auto_protection(void);
 #endif
 

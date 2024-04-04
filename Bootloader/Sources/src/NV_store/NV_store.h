@@ -67,10 +67,11 @@ typedef struct
 
 } T_settings_restore_results;
 
-#define  SETT_OK          0
-#define  SETT_WRONG_SIZE  1
-#define  SETT_WRONG_CRC   2
-#define  SETT_WRONG_CHECK 3
+#define  SETT_OK           0
+#define  SETT_WRONG_SIZE   1
+#define  SETT_WRONG_CRC    2
+#define  SETT_WRONG_CHECK  3
+#define  SETT_IS_BLANK     4
 
 typedef struct
 {

@@ -40,6 +40,7 @@ uint32_t             Wait_bgo_end(ULONG wait_option);
 uint32_t             DataFlash_bgo_EraseArea(uint32_t start_addr, uint32_t area_size);
 uint32_t             DataFlash_bgo_WriteArea(uint32_t start_addr, uint8_t *buf, uint32_t buf_size);
 uint32_t             DataFlash_bgo_ReadArea(uint32_t start_addr, uint8_t *buf, uint32_t buf_size);
+uint32_t             DataFlash_bgo_BlankCheck(uint32_t start_addr, uint32_t num_bytes);
 flash_id_code_mode_t Get_flash_protection_command(uint8_t protection_byte, uint8_t prot_flag);
 ssp_err_t            Set_Flash_protection(uint8_t const * const p_id_bytes, flash_id_code_mode_t mode);
 uint32_t             Switch_Flash_driver_to_no_bgo(void);

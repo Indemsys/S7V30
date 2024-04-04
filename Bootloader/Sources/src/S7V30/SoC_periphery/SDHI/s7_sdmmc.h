@@ -5,7 +5,7 @@
 
 extern const sdmmc_api_t g_s7_sdmmc;
 
-#define  MAX_SD_PASS_LEN 32
+#define  MAX_SD_PASS_LEN 16
 
 // Стркутура команды управления паролем
 typedef __packed  struct
@@ -19,15 +19,17 @@ typedef __packed  struct
     }
     flags;
     uint8_t  pwds_len;
-    uint8_t  pass_data[MAX_SD_PASS_LEN];
+    uint8_t  pass_data[MAX_SD_PASS_LEN*2]; // Массив должен вмещать старый и новый пароли
 
 } T_Lock_Card_Data_Structure;
 
 
 typedef struct
 {
-  uint8_t      sd_unlock_no_need;
-  uint8_t      sd_unlock_executed;
+  uint8_t      pass_exist;      // Если 1 то на карте установлен пароль
+  uint8_t      lock_detected;   // Если 1 то была обнаружена блокировка карты
+  uint8_t      unlock_executed; // Если 1 то была выполнена разблокировка.
+  uint8_t      not_identified;  // Если 1 то карта не была обнаружена.
 
 } T_sd_unlock_status;
 
@@ -48,8 +50,10 @@ ssp_err_t               S7_sdmmc_Erase(sdmmc_ctrl_t *const p_api_ctrl, uint32_t 
 
 bool                    s7_sdmmc_command_send (sdmmc_instance_ctrl_t * p_ctrl, uint16_t command, uint32_t argument);
 ssp_err_t               S7_sdmmc_command_w_transfer (sdmmc_ctrl_t * const p_api_ctrl, uint16_t command , uint32_t argument, uint8_t const * const p_source, uint32_t const bl_size);
-T_sd_unlock_status     *s7_Get_sd_unlock_status(void);
+T_sd_unlock_status     *s7_Get_sd_status(void);
 sdmmc_priv_csd_reg_t   *s7_Get_csd_reg(void);
+void                    s7_Set_pass_exist(void);
+void                    s7_Set_pass_clear(void);
 #endif
 
 

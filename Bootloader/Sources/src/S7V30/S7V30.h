@@ -5,7 +5,7 @@
   #define     S7V30_HARDWARE_VERSION   "S7V30"
 
 
-
+#define       USE_HARDWARE_CRIPTO_ENGINE
 //#define     LOG_TO_ONBOARD_SDRAM      // Используем SDRAM для хранения лога
 
   #define     CAN_SPEED                      555555ul      // Скорость в системе по умолчанию
@@ -123,6 +123,7 @@
   #define     LORA_PWR_EN        R_PFS->P808PFS_b.PODR
   #define     LORA_RESET         R_PFS->P909PFS_b.PODR
 
+  #define     SD_CARD_PWR        R_PFS->P809PFS_b.PODR
   #define     VBUSCTRL           R_PFS->P615PFS_b.PODR
 
   #define     SD_CARD_OK           0
@@ -265,6 +266,7 @@ extern void Delay_m7(int cnt); // Задержка на (cnt+1)*7 тактов .
   #include "nxd_telnet_server.h"
   #include "nxd_mqtt_client.h"
   #include "nxd_sntp_client.h"
+  #include "nx_web_http_server.h"
   #include "Net_common.h"
   #include "Net_utils.h"
   #include "Net_thread.h"
@@ -282,6 +284,8 @@ extern void Delay_m7(int cnt); // Задержка на (cnt+1)*7 тактов .
   #include "Net_FTP_server_man.h"
   #include "Net_TCP_server.h"
   #include "Net_SNTP_client.h"
+  #include "Net_Web_server.h"
+  #include "Net_Web_File_upload.h"
 
   #include "Keys.h"
   #include "Loader_config.h"
