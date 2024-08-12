@@ -315,9 +315,6 @@ void Do_system_info(uint8_t keycode)
     case SETT_IS_BLANK:
       MPRINTF("Platform main settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
       break;
-    case SETT_IS_BLANK:
-      MPRINTF("Module main settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
-      break;
     }
   }
 

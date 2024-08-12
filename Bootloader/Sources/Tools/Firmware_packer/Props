@@ -1,0 +1,135 @@
+﻿[Main]
+Version=2
+
+[frmMain: TcxPropertiesStoreComponent]
+=
+Height=506
+Left=48
+Position="poDesigned"
+Top=339
+Width=1777
+
+[Panel_Results: TcxPropertiesStoreComponent]
+=
+Height=149
+
+[Grid_R_tbl_view_Compression: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=80
+
+[Grid_R_tbl_view_CompressionRatio: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=77
+
+[Grid_R_tbl_view_DateTime: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=78
+
+[Grid_R_tbl_view_Digest: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=100
+
+[Grid_R_tbl_view_DigestAlg: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=69
+
+[Grid_R_tbl_view_Encryption: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=77
+
+[Grid_R_tbl_view_Image_Size: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=64
+
+[Grid_R_tbl_view_Input_File_Path: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=409
+
+[Grid_R_tbl_view_Main_Start_Address: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=97
+
+[Grid_R_tbl_view_Orig_Image_Size: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=79
+
+[Grid_R_tbl_view_Output_Path: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=447
+
+[Grid_R_tbl_view_Start_Address: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=67
+
+[Grid_R_tbl_view_Version: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=52
+
+[Grid_tbl_view_Compression: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=74
+
+[Grid_tbl_view_DigestAlg: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=67
+
+[Grid_tbl_view_Enable: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=45
+
+[Grid_tbl_view_Enable_Fixed_Size: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=73
+
+[Grid_tbl_view_Encryption: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=82
+
+[Grid_tbl_view_Fixed_Size: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=98
+
+[Grid_tbl_view_Input_File_Path: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=442
+
+[Grid_tbl_view_Input_File_Type: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=36
+
+[Grid_tbl_view_Keys_Path: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=455
+
+[Grid_tbl_view_Output_Path: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=421
+
+[Grid_tbl_view_Version: TcxPropertiesStoreComponent]
+=
+SourceDPI=96
+Width=48
+

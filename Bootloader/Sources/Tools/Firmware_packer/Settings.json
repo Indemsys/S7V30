@@ -1,0 +1,15 @@
+﻿{
+"FDBS":{
+  "Version":16,
+  "Manager":{
+    "TableList":[
+      {"class":"Table",
+        "Name":"table_Settings",
+        "SourceName":"table_Settings",
+        "RowList":[
+          {
+            "RowID":0,
+            "RowPriorState":"Unchanged",
+            "Original":{
+              "legth_minitor_pass":16,
+              "legth_wifi_pass":16}}]}]}}}

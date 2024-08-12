@@ -1,0 +1,19 @@
+[TfrmCSorceGen]
+FormVersion=0
+Flags=0
+ShowCmd=1
+PixelsPerInch=96
+MinMaxPos(1920x1200)=-1,-1,-1,-1
+MinMaxPos=-1,-1,-1,-1
+NormPos(1920x1200)=130,130,875,557
+NormPos=130,130,875,557
+Visible=0
+deCSourcePath_DialogText=
+deCSourcePath_Text=..\..\src\S7V30\Parameters
+edGenFileName_Text=S7V30_params.c
+edFreeMasterFileName_Text=FreeMaster_vars
+cb_GenFreeMaster_Checked=False
+cb_GenTypes_Checked=False
+[TfrmCSorceGen.memoIncludedInfo_Lines]
+Count=1
+Item0=#include "App.h"
