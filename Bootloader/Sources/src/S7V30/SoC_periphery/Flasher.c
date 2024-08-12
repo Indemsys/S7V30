@@ -2,7 +2,7 @@
 // 2020-01-30
 // 10:51:25
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 
@@ -258,6 +258,32 @@ uint32_t DataFlash_bgo_ReadArea(uint32_t start_addr, uint8_t *buf, uint32_t buf_
 
 
 /*-----------------------------------------------------------------------------------------------------
+  Просто сравнивать с 0xFF в Data Flash для определения чистоты нельзя,
+  поскольку чистые ячейки будут возвращать случайные значения
+  Нужно использовать API
+
+  \param start_addr
+  \param num_bytes
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t DataFlash_bgo_BlankCheck(uint32_t start_addr, uint32_t num_bytes)
+{
+  ssp_err_t       res;
+  UINT            os_res;
+  flash_result_t  blank_check_result;
+
+  Set_bgo_status(0);
+  res = flash_bgo_cbl.p_api->blankCheck(flash_bgo_cbl.p_ctrl, start_addr  , num_bytes, &blank_check_result);
+  os_res = Wait_bgo_end(ms_to_ticks(100));
+  if (os_res != TX_SUCCESS) return RES_ERROR;
+  if (res != SSP_SUCCESS)   return RES_ERROR;
+  if ((Get_bgo_status() & BIT_FLASH_EVENT_BLANK) != 0) return RES_OK;
+  return RES_ERROR;
+}
+
+
+/*-----------------------------------------------------------------------------------------------------
 
 
   \param addr
@@ -297,7 +323,10 @@ uint8_t Is_flash_protection_disabled(void)
 -----------------------------------------------------------------------------------------------------*/
 uint8_t Is_flash_protection_type_3(void)
 {
-  if (((*(uint8_t *)(OSIS_ADDRESS + 15)) & 0xC0)== 0x00)
+  uint8_t buf[16];
+  Read_OSIS_to_buf(buf, 16);
+
+  if ((buf[15] & 0xC0)== 0x00)
   {
     return 1;
   }

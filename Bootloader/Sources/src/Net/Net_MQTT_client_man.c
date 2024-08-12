@@ -2,7 +2,8 @@
 // 2019.08.30
 // 11:21:30
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 
 extern const NX_SECURE_TLS_CRYPTO   nx_crypto_tls_ciphers;
 extern const NX_SECURE_TLS_CRYPTO   nx_crypto_tls_ciphers_synergys7;
@@ -88,7 +89,7 @@ uint32_t Get_last_mqtt_connection_time(void)
 -----------------------------------------------------------------------------------------------------*/
 static void _mqtt_disconnect_callback(NXD_MQTT_CLIENT *mqtt_client_ptr)
 {
-  APPLOG("MQTT disconnected");
+  NETLOG("MQTT disconnected");
   mqtt_client_connected = 0;
 }
 
@@ -103,7 +104,7 @@ static void _mqtt_disconnect_callback(NXD_MQTT_CLIENT *mqtt_client_ptr)
 -----------------------------------------------------------------------------------------------------*/
 static void _mqtt_receive_calback(NXD_MQTT_CLIENT *client_ptr, UINT number_of_messages)
 {
-  Send_Net_task_event(EVT_MQTT_MSG);
+  Send_wifi_event(NET_EVT_MQTT_MSG);
 }
 
 
@@ -111,7 +112,7 @@ static void _mqtt_receive_calback(NXD_MQTT_CLIENT *client_ptr, UINT number_of_me
 
 
 -----------------------------------------------------------------------------------------------------*/
-uint32_t Net_mqtt_client_create(NX_IP  *ip)
+uint32_t Net_MQTT_client_create(NX_IP  *ip)
 {
   UINT     res;
   uint32_t mqtt_client_id_len = 0;
@@ -122,7 +123,7 @@ uint32_t Net_mqtt_client_create(NX_IP  *ip)
   res = tx_event_flags_create(&mqtt_app_flag, "mqtt");
   if (res != TX_SUCCESS)
   {
-    APPLOG("Failed to create evenr. Error %d", res);
+    NETLOG("Failed to create evenr. Error %d", res);
     return RES_ERROR;
   }
 
@@ -138,7 +139,7 @@ uint32_t Net_mqtt_client_create(NX_IP  *ip)
 
   if (res != NXD_MQTT_SUCCESS)
   {
-    APPLOG("MQTT client creation error %d", res);
+    NETLOG("MQTT client creation error %d", res);
     return RES_ERROR;
   }
 
@@ -146,7 +147,7 @@ uint32_t Net_mqtt_client_create(NX_IP  *ip)
   if (res != NXD_MQTT_SUCCESS)
   {
     nxd_mqtt_client_delete(&mqtt_client);
-    APPLOG("MQTT client receive callback setting error %d", res);
+    NETLOG("MQTT client receive callback setting error %d", res);
     return RES_ERROR;
   }
 
@@ -155,12 +156,12 @@ uint32_t Net_mqtt_client_create(NX_IP  *ip)
   if (res != NXD_MQTT_SUCCESS)
   {
     nxd_mqtt_client_delete(&mqtt_client);
-    APPLOG("MQTT client disconnect callback setting error %d", res);
+    NETLOG("MQTT client disconnect callback setting error %d", res);
     return RES_ERROR;
   }
 
   mqtt_ip_ptr = ip;
-  APPLOG("MQTT client created successfully");
+  NETLOG("MQTT client created successfully");
   mqtt_client_created = 1;
   return RES_OK;
 }
@@ -233,7 +234,7 @@ uint32_t Net_mqtt_client_connect(void)
   {
     if (mqtt_connection_attempt_cnt < 5)
     {
-      APPLOG("Failed to start MQTT client session. Error %d", res);
+      NETLOG("Failed to start MQTT client session. Error %d", res);
     }
     return RES_ERROR;
   }
@@ -258,7 +259,7 @@ uint32_t Net_mqtt_client_connect(void)
   {
     if (mqtt_connection_attempt_cnt < 5)
     {
-      APPLOG("Wrong MQTT server IP string %s", ivar.mqtt_server_ip);
+      NETLOG("Wrong MQTT server IP string %s", ivar.mqtt_server_ip);
     }
     return RES_ERROR;
   }
@@ -268,7 +269,7 @@ uint32_t Net_mqtt_client_connect(void)
   {
     if (mqtt_connection_attempt_cnt < 5)
     {
-      APPLOG("Failed to set  MQTT user and password. Error %d", res);
+      NETLOG("Failed to set  MQTT user and password. Error %d", res);
     }
     return RES_ERROR;
   }
@@ -280,14 +281,14 @@ uint32_t Net_mqtt_client_connect(void)
   {
     if (mqtt_connection_attempt_cnt < 5)
     {
-      APPLOG("Failed to connect to  MQTT server. Error %d", res);
+      NETLOG("Failed to connect to  MQTT server. Error %d", res);
     }
     return RES_ERROR;
   }
   mqtt_client_connected = 1;
   mqtt_connection_attempt_cnt = 0;
 
-  APPLOG("MQTT client connected to server %03d.%03d.%03d.%03d", IPADDR(ip_addr.nxd_ip_address.v4));
+  NETLOG("MQTT client connected to server %03d.%03d.%03d.%03d", IPADDR(ip_addr.nxd_ip_address.v4));
   return RES_OK;
 }
 
@@ -313,12 +314,12 @@ uint32_t Net_mqtt_disconnect_mqtt_client(NX_IP *ip_ptr)
     if (res == NXD_MQTT_SUCCESS)
     {
       mqtt_client_connected = 0;
-      APPLOG("MQTT client disconnected from server");
+      NETLOG("MQTT client disconnected from server");
       return RES_OK;
     }
     else
     {
-      APPLOG("Failed to disconnect MQTT client from server. Error %d", res);
+      NETLOG("Failed to disconnect MQTT client from server. Error %d", res);
       return RES_ERROR;
     }
   }
@@ -354,7 +355,7 @@ uint32_t Net_MQTT_client_delete(void)
   res = nxd_mqtt_client_delete(&mqtt_client);
   if (res != NXD_MQTT_SUCCESS)
   {
-    APPLOG("Failed to delete MQTT client. Error %d", res);
+    NETLOG("Failed to delete MQTT client. Error %d", res);
     // Если не удалось закрыть сессию MQTT то сбросить устройство.
     Send_flag_to_background(APP_DO_SYSTEM_RESTART);
     return RES_ERROR;
@@ -362,7 +363,7 @@ uint32_t Net_MQTT_client_delete(void)
   else
   {
     mqtt_ip_ptr = 0;
-    APPLOG("MQTT client deleted successfully");
+    NETLOG("MQTT client deleted successfully");
     mqtt_client_created = 0;
     return RES_OK;
 

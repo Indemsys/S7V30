@@ -2,10 +2,10 @@
 // 2019.08.31
 // 15:42:10
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 
-
-
+#define                    FTP_SERVER_NAME           "FTP_srv"
 #define                    FTP_SERVER_STACK_SIZE     (4*1024)
 #pragma data_alignment=8
 uint8_t                    ftp_server_stack_memory[FTP_SERVER_STACK_SIZE] BSP_PLACE_IN_SECTION_V2(".stack.ftp_server")BSP_ALIGN_VARIABLE_V2(BSP_STACK_ALIGNMENT);
@@ -29,17 +29,17 @@ static NX_IP              *ftp_ip_ptr;
 #ifndef NX_DISABLE_IPV6
 static UINT ftp_server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ip_address, UINT client_port, CHAR *name, CHAR *password, CHAR *extra_info)
 {
-  uint32_t ipaddr = client_ip_address->nxd_ip_address.v4;
+
 
   if (strcmp(name, (char const *)ivar.ftp_serv_login) == 0)
   {
     if (strcmp(password, (char const *)ivar.ftp_serv_password) == 0)
     {
-      APPLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is allowed", IPADDR(ipaddr), client_port);
+      NETLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is allowed", IPADDR(client_ip_address->nxd_ip_address.v4), client_port);
       return NX_SUCCESS;
     }
   }
-  APPLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is denied", IPADDR(ipaddr), client_port);
+  NETLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is denied", IPADDR(client_ip_address->nxd_ip_address.v4), client_port);
   return NX_NOT_SUCCESSFUL;
 }
 #else
@@ -49,11 +49,11 @@ static UINT ftp_server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG 
   {
     if (strcmp(password, (char const *)ivar.ftp_serv_password) == 0)
     {
-      APPLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is allowed", IPADDR(client_ip_address), client_port);
+      NETLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is allowed", IPADDR(client_ip_address), client_port);
       return NX_SUCCESS;
     }
   }
-  APPLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is denied", IPADDR(client_ip_address), client_port);
+  NETLOG("FTP server login from: %03d.%03d.%03d.%03d port: %d. Access is denied", IPADDR(client_ip_address), client_port);
   return NX_NOT_SUCCESSFUL;
 }
 #endif
@@ -73,15 +73,14 @@ static UINT ftp_server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG 
 #ifndef NX_DISABLE_IPV6
 static UINT ftp_server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ip_address, UINT client_port, CHAR *name, CHAR *password, CHAR *extra_info)
 {
-  uint32_t ipaddr = client_ip_address->nxd_ip_address.v4;
-  APPLOG("FTP server logout from: %03d.%03d.%03d.%03d port: %d.", IPADDR(ipaddr), client_port);
+  NETLOG("FTP server logout from: %03d.%03d.%03d.%03d port: %d.", IPADDR(client_ip_address->nxd_ip_address.v4), client_port);
   return NX_SUCCESS;
 }
 #else
 static UINT ftp_server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port, CHAR *name, CHAR *password, CHAR *extra_info)
 {
 
-  APPLOG("FTP server logout from: %03d.%03d.%03d.%03d port: %d.", IPADDR(client_ip_address), client_port);
+  NETLOG("FTP server logout from: %03d.%03d.%03d.%03d port: %d.", IPADDR(client_ip_address), client_port);
   return NX_SUCCESS;
 }
 #endif
@@ -94,7 +93,7 @@ static UINT ftp_server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG
 
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-uint32_t Net_FTP_server_create(NX_IP  *ip_ptr, char *name)
+uint32_t Net_FTP_server_create(NX_IP  *ip_ptr)
 {
   UINT res;
 
@@ -104,7 +103,7 @@ uint32_t Net_FTP_server_create(NX_IP  *ip_ptr, char *name)
 
 #ifndef NX_DISABLE_IPV6
   res = nxd_ftp_server_create(&ftp_server,
-       name,
+       FTP_SERVER_NAME,
        ip_ptr,
        &fat_fs_media,
        &ftp_server_stack_memory[0],
@@ -114,7 +113,7 @@ uint32_t Net_FTP_server_create(NX_IP  *ip_ptr, char *name)
        ftp_server_logout);
 #else
   res = nx_ftp_server_create(&ftp_server,
-       name,
+       FTP_SERVER_NAME,
        ip_ptr,
        &fat_fs_media,
        &ftp_server_stack_memory[0],
@@ -125,7 +124,7 @@ uint32_t Net_FTP_server_create(NX_IP  *ip_ptr, char *name)
 #endif
   if (NX_SUCCESS != res)
   {
-    APPLOG("%s. Failed to create server. Error %d", name, res);
+    NETLOG("FTP server: Failed to create server. Error %d", res);
     return RES_ERROR;
   }
 
@@ -133,12 +132,12 @@ uint32_t Net_FTP_server_create(NX_IP  *ip_ptr, char *name)
   if (NX_SUCCESS != res)
   {
     nx_ftp_server_delete(&ftp_server);
-    APPLOG("%s. Failed to start server. Error %d", name, res);
+    NETLOG("FTP server: Failed to start server. Error %d", res);
     return RES_ERROR;
   }
 
   ftp_ip_ptr = ip_ptr;
-  APPLOG("%s. Started successfully", name);
+  NETLOG("FTP server: Started successfully");
   return RES_OK;
 
 }
@@ -161,7 +160,7 @@ uint32_t Net_FTP_server_delete(void)
   res = nx_ftp_server_stop(&ftp_server);
   if (NX_SUCCESS != res)
   {
-    APPLOG("Failed to stop  FTP server. Error %d", res);
+    NETLOG("Failed to stop  FTP server. Error %d", res);
   }
 
 
@@ -169,12 +168,12 @@ uint32_t Net_FTP_server_delete(void)
   if (NX_SUCCESS != res)
   {
     ftp_ip_ptr = 0;
-    APPLOG("Failed to delete  FTP server. Error %d", res);
+    NETLOG("Failed to delete  FTP server. Error %d", res);
     return RES_ERROR;
   }
 
   ftp_ip_ptr = 0;
-  APPLOG("FTP server stopped");
+  NETLOG("FTP server stopped");
   return RES_OK;
 }
 

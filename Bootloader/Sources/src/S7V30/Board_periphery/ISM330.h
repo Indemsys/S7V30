@@ -106,6 +106,7 @@ typedef struct
 {
     uint16_t      reg_addr;
     char  const  *reg_name;
+    uint8_t      *reg_val;    
 
 } T_ISM330_reg_descr;
 

@@ -2,7 +2,7 @@
 // 2019.08.28
 // 17:13:22
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 /*-------------------------------------------------------------------------------------------------------------
   Читать строку str не длинее len из файла file оканчивающуюся на CRLF (\r\n)
@@ -144,7 +144,7 @@ ssp_err_t Get_SD_card_info(sf_block_media_instance_t *media, uint32_t *sector_si
 
   \return ssp_err_t
 -----------------------------------------------------------------------------------------------------*/
-ssp_err_t FS_format(void)
+UINT FS_format(void)
 {
   uint32_t res;
 
@@ -174,7 +174,7 @@ ssp_err_t FS_format(void)
                         fs_memory,                      // Media buffer pointer
                         Get_fs_memory_size(),           // Media buffer size
                         (CHAR *)"Volume 1",             // Volume Name
-                        1,                              // Number of FATs
+                        2,                              // Number of FATs
                         256,                            // Directory Entries
                         0,                              // Hidden sectors
                         sector_count,                   // Total sectors - Hidden Sectors
@@ -183,12 +183,8 @@ ssp_err_t FS_format(void)
                         1,                              // Heads
                         1);                             // Sectors per track
 
-  if (FX_SUCCESS != res)
-  {
-    return SSP_ERR_MEDIA_FORMAT_FAILED;
-  }
-
-  return SSP_SUCCESS;
+  APPLOG("SD card format result: %d", res);
+  return res;
 }
 
 

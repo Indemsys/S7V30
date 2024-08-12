@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Embedded Device Management</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+    <style>
+        /* Стиль для таблицы */
+        table {
+            border-collapse: collapse; /* Убираем двойные границы между ячейками */
+            width: 100%;
+            font-size: 0.7em;
+        }
+        
+        /* Стиль для ячеек таблицы */
+        th, td {
+            padding: 0px 5px 0px 5px;
+            text-align: left;
+        }
+
+        /* Стиль для нижней границы строк */
+        tr {
+            border-bottom: 1px solid #ccc; /* Тонкая серая линия */
+        }
+    </style>    
+  <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+         <button id="StartScan" class="cmd_btn" onclick="StartWiFiScan()">Start scaning</button>  
+      
+        <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+	<div id="tableContainer" style="width: 100%;">
+     <table id="Table">
+       
+     </table>
+  </div>  
+	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+  <script>
+    var scan_timer_Id;
+	  async function StartWiFiScan()
+    {
+        try
+        {
+          const response = await fetch('start_wifi_scan', { method: 'POST' });
+          scan_timer_Id = setInterval(Post_get_scan_results, 1000); 
+          
+        } catch (error)
+        {
+          console.error('Error fetching data:', error);
+        }
+    }
+    async function Post_get_scan_results()
+    {
+      try
+      {
+        const response = await fetch('get_wifi_scan_results', {method: 'POST'});
+        const jsonData = await response.json();
+        
+        clearInterval(scan_timer_Id);
+        
+        const tbl = document.getElementById('Table');
+        if (tbl) {  tbl.remove(); }
+        
+       const newTable = document.createElement('table');
+       newTable.id = 'Table';
+
+       // Создаем заголовок таблицы
+       const header = newTable.createTHead();
+       const headerRow = header.insertRow(0);
+       const headers = ["SSID", "BSID", "Band", "BSS Type", "Security", "Max Data Rate", "Signal Strength", "Channel", "Country Code", "Flags"];
+       headers.forEach((headerText, index) => {
+           const cell = headerRow.insertCell(index);
+           cell.textContent = headerText;
+       });
+
+       // Создаем тело таблицы и заполняем данными из JSON
+       const tbody = newTable.createTBody();
+       jsonData.forEach(item => {
+           const row = tbody.insertRow();
+           Object.values(item).forEach((value, index) => {
+               const cell = row.insertCell(index);
+               cell.textContent = value;
+           });
+       });
+
+       // Вставляем новую таблицу в контейнер
+       document.getElementById('tableContainer').appendChild(newTable);
+      
+
+      } catch (error)
+      {
+        console.error('Error fetching data:', error); 
+      }
+    }
+    
+    
+    
+  </script>
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

@@ -2,7 +2,8 @@
 // 2019.07.01
 // 18:43:12
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 
 #define IP_ADDR_LEN        4
 #define IP6_ADDR_LEN       16
@@ -328,6 +329,73 @@ int32_t Str_to_IP_v6(char *src, uint8_t *dst)
   return (RES_OK);
 
 } /* SCK_Inet_PTON_v6 */
+
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param ip_addr_str
+  \param ip_addr_str_len
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Get_IP_addr_str(NX_INTERFACE *ip_interface, char *ip_addr_str, uint32_t ip_addr_str_len)
+{
+  if (ip_interface == NULL) return RES_ERROR;
+
+  if (ip_interface->nx_interface_link_up)
+  {
+    snprintf(ip_addr_str, ip_addr_str_len, "%03d.%03d.%03d.%03d", IPADDR(ip_interface->nx_interface_ip_address));
+    return RES_OK;
+  }
+  return RES_ERROR;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param ip_addr_str
+  \param ip_addr_str_len
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Get_IP_addr_MAC_str(NX_INTERFACE *ip_interface, char *mac_addr_str, uint32_t mac_addr_str_len)
+{
+  if (ip_interface == NULL) return RES_ERROR;
+
+  if (ip_interface->nx_interface_link_up)
+  {
+    uint8_t mac[6];
+    mac[0] = (uint8_t)((ip_interface->nx_interface_physical_address_msw & 0x0000ff00) >> 8);
+    mac[1] = (uint8_t)((ip_interface->nx_interface_physical_address_msw & 0x000000ff) >> 0);
+    mac[2] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0xff000000) >> 24);
+    mac[3] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x00ff0000) >> 16);
+    mac[4] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x0000ff00) >> 8);
+    mac[5] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x000000ff) >> 0);
+    snprintf(mac_addr_str, mac_addr_str_len, "%02X:%02X:%02X:%02X:%02X:%02X",mac[0],mac[1],mac[2],mac[3],mac[4],mac[5]);
+    return RES_OK;
+  }
+  return RES_ERROR;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+  
+  
+  \param ip_interface  
+  \param mac  
+  
+  \return uint32_t 
+-----------------------------------------------------------------------------------------------------*/
+void Get_IP_MAC(NX_INTERFACE *ip_interface, uint8_t *mac)
+{
+  mac[0] = (uint8_t)((ip_interface->nx_interface_physical_address_msw & 0x0000ff00) >> 8);
+  mac[1] = (uint8_t)((ip_interface->nx_interface_physical_address_msw & 0x000000ff) >> 0);
+  mac[2] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0xff000000) >> 24);
+  mac[3] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x00ff0000) >> 16);
+  mac[4] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x0000ff00) >> 8);
+  mac[5] = (uint8_t)((ip_interface->nx_interface_physical_address_lsw & 0x000000ff) >> 0);
+}
+
 
 /*-----------------------------------------------------------------------------------------------------
 

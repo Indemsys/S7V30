@@ -5,9 +5,12 @@ define symbol region_VECT_end           = 0x000003FF;
 define symbol region_ROMREG_start       = 0x00000400;
 define symbol region_ROMREG_end         = 0x000004FF;
 
+define symbol region_VECTORS_start      = 0x00000500;
+define symbol region_VECTORS_end        = 0x000006FF;
+
 /*  1 МБ в начале Flash отведен для начального загрузчика*/
-define symbol region_FLASH_start        = 0x00000500; 
-define symbol region_FLASH_end          = 0x000FFFFF;
+define symbol region_FLASH_start        = 0x00000700; 
+define symbol region_FLASH_end          = 0x0016FFFF;
 
 /* Место хранения контрольной суммы для проверки целостности программы*/ 
 define symbol region_CRC_start          = 0x002FFFFC; 
@@ -40,6 +43,7 @@ define symbol region_ID_CODES_end       = 0x4012005F;
 define memory mem with size     = 4G;
 define region VECT_region       = mem:[from region_VECT_start    to region_VECT_end];
 define region ROMREG_region     = mem:[from region_ROMREG_start  to region_ROMREG_end];
+define region VECTORS_region    = mem:[from region_VECTORS_start to region_VECTORS_end];
 define region FLASH_region      = mem:[from region_FLASH_start   to region_FLASH_end];
 
 define region SRAMHS_region     = mem:[from region_SRAMHS_start  to region_SRAMHS_end];
@@ -62,7 +66,7 @@ initialize manually                        { section     .code_in_ram           
 
 /* Main thread local storage */                                                
 initialize manually                        { section     __DLIB_PERTHREAD        };
-                                                                                 
+                 
 define block RAM_INIT_CODE                 { section    .code_in_ram_init        };
 
 define block QSPI_NON_RETENTIVE_INIT_BLOCK { section    .qspi_non_retentive_init };
@@ -92,8 +96,9 @@ place in CHEKSUM_region                    { ro section .checksum               
 place at start of VECT_region              { ro section .vectors                  };
 place in VECT_region                       { ro section .vector.*                 };
 place in ROMREG_region                     { ro section .rom_registers            };
-place at start of FLASH_region             { block VECT_INFO                      };
-place in FLASH_region                      { block LOCK_LOOKUP, ro, ro section .rodata, block QSPI_NON_RETENTIVE_INIT_BLOCK, block RAM_INIT_CODE, block USB_DEV_DESC_BLK };
+keep                                       { section .BLOBS                       };
+place at start of VECTORS_region           { block VECT_INFO                      };
+place in FLASH_region                      { first section .BLOBS, block LOCK_LOOKUP ,  ro, ro section .rodata, block QSPI_NON_RETENTIVE_INIT_BLOCK, block RAM_INIT_CODE, block USB_DEV_DESC_BLK };
 
 // Переносим все к чему процесор должен иметь быстрый доступ в регион SRAMHS_region 
 // Следить за тем чтобы переменные в секциях были очищены .usb_cbls, .fs_mem .... поскольку они не очищаются в стартапном коде

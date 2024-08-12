@@ -2,7 +2,7 @@
 // 2019.05.12
 // 16:43:40
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 #define  VECTOR_TABLE_SIZE  (96+16)
@@ -12,8 +12,6 @@ void*   vector_tbl[VECTOR_TABLE_SIZE]  @ "VECTOR_TABLE";
 #define   TRCKCR_REG   0x4001E03F
 
 extern uint32_t __VECT_start__;
-
-extern T_app_log_cbl           app_log_cbl;
 
 // Структура необходимая для инициализации пинов
 // Оставляем пустой поскольку начальную инициализацию не  используем, но инициализация необходима для последующего корректного выполнения драйвера SPI
@@ -32,7 +30,7 @@ T_sys_timestump        g_main_thread_start_timestump;
 uint8_t                trckcr;
 
 
-extern void S7V30_board_pins_init(void);
+extern void Board_pins_init(void);
 
 
 /*-----------------------------------------------------------------------------------------------------
@@ -61,13 +59,13 @@ void R_BSP_WarmStart(bsp_warm_start_event_t event)
     Jump_to_app();  // Пробуем перейти в основное приложение
 
 
-    app_log_cbl.logger_ready = 0;
+    App_log_disable();
 
     // Разрешаем запись в регистры пинов
     R_PMISC->PWPR_b.BOWI  = 0;
     R_PMISC->PWPR_b.PFSWE = 1;
 
-    S7V30_board_pins_init();
+    Board_pins_init();
 
   }
   else if (BSP_WARM_START_POST_C == event)
@@ -137,7 +135,9 @@ void* Set_irq_vector( elc_event_t evt, void* isr)
 -----------------------------------------------------------------------------------------------------*/
 void bsp_init(void *p_args)
 {
+#ifdef ENABLE_SDRAM
   S7V30_sdram_init();
+#endif
 }
 
 /*-----------------------------------------------------------------------------------------------------

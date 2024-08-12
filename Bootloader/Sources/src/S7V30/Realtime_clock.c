@@ -2,7 +2,7 @@
 // 2019.07.11
 // 23:40:58
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 rtc_instance_ctrl_t rtc_ctrl;
@@ -14,22 +14,24 @@ const rtc_cfg_t rtc_cfg =
   .error_adjustment_value = 0,
   .error_adjustment_type  = RTC_ERROR_ADJUSTMENT_NONE,
   .p_callback             = NULL,
-  .p_context              =&rtc_cbl,
-  .alarm_ipl              =(BSP_IRQ_DISABLED),
-  .periodic_ipl           =(BSP_IRQ_DISABLED),
-  .carry_ipl              =(12),
+  .p_context              = &rtc_cbl,
+  .alarm_ipl              = (BSP_IRQ_DISABLED),
+  .periodic_ipl           = (BSP_IRQ_DISABLED),
+  .carry_ipl              = (12),
 };
 
 
 const rtc_instance_t rtc_cbl =
 {
-  .p_ctrl        =&rtc_ctrl,
-  .p_cfg         =&rtc_cfg,
-  .p_api         =&g_rtc_on_rtc
+  .p_ctrl        = &rtc_ctrl,
+  .p_cfg         = &rtc_cfg,
+  .p_api         = &g_rtc_on_rtc
 };
 
 
 T_RTC_init_res  rtc_init_res;
+
+static TX_MUTEX               rtc_mutex;
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -120,6 +122,8 @@ void Init_RTC(void)
     rtc_init_res.RTC_valid = 1;
     rtc_init_res.RTC_status = ACTIVE_INTERNAL_RTC;
   }
+  tx_mutex_create(&rtc_mutex, "RTS", TX_INHERIT);
+
 }
 
 
@@ -170,25 +174,27 @@ void RTC_get_system_DateTime(rtc_time_t   *p_rt_time)
 -----------------------------------------------------------------------------------------------------*/
 void RTC_set_system_DateTime(rtc_time_t   *p_rt_time)
 {
-  p_rt_time->tm_isdst  = 1;
-  mktime(p_rt_time);
-  RTC_set_DateTime(p_rt_time);
-  AB1815_write_date_time(p_rt_time);
+  if (tx_mutex_get(&rtc_mutex, MS_TO_TICKS(1000)) == TX_SUCCESS)
+  {
+    p_rt_time->tm_isdst  = 1;
+    mktime(p_rt_time);
+    RTC_set_DateTime(p_rt_time);
+    AB1815_write_date_time(p_rt_time);
+    tx_mutex_put(&rtc_mutex);
+  }
 }
 
 /*-----------------------------------------------------------------------------------------------------
   Конвертирование количества секунд полученное по NTP (NTP начинается с 1/1/1900-00:00h) в значение времени в формате rtc_time_t (UTC начинается с 1/1/1970-00:00h)
 
-  Время в формате NTP на (70*365+16)*60*60*24 = 2208902400 сек больше чем время в формате UTC
+  Время в формате NTP на (70*365+17)*60*60*24 = 2208988800 сек больше чем время в формате UTC
   либо на 25567 дней
- 
-  Внимание!!! Функция неправильно преобразует даты для високосных годов
- 
+
   \param p_rt_time
 -----------------------------------------------------------------------------------------------------*/
 void Convert_NTP_to_UTC_time(ULONG seconds, rtc_time_t   *p_rt_time, float utc_offset)
 {
-  seconds = seconds  - 2208902400ll;
+  seconds = seconds  - 2208988800ll;
   p_rt_time->tm_sec    = seconds;
   p_rt_time->tm_min    = 0;
   p_rt_time->tm_hour   = (int32_t)utc_offset;
@@ -216,7 +222,7 @@ int WorkDay_from_date(rtc_time_t   *p_rt_time)
   int year  = p_rt_time->tm_year + 1900;
   int month = p_rt_time->tm_mon + 1;
   int day   = p_rt_time->tm_mday;
-  wday =(day +((153 * (month + 12 * ((14 - month) / 12)- 3)+ 2) / 5)+(365 * (year + 4800 -((14 - month) / 12)))+((year + 4800 -((14 - month) / 12)) / 4)-((year + 4800 -((14 - month) / 12)) / 100)+((year + 4800 -((14 - month) / 12)) / 400)- 32044)% 7;
+  wday = (day + ((153 * (month + 12 * ((14 - month) / 12) - 3) + 2) / 5) + (365 * (year + 4800 - ((14 - month) / 12))) + ((year + 4800 - ((14 - month) / 12)) / 4) - ((year + 4800 - ((14 - month) / 12)) / 100) + ((year + 4800 - ((14 - month) / 12)) / 400) - 32044) % 7;
   return wday;
 }
 

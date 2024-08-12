@@ -1,4 +1,4 @@
-#include "S7V30.h"
+#include "App.h"
 
 uint32_t crc_table[256];
 

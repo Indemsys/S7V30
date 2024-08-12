@@ -1,5 +1,5 @@
-﻿#ifndef S7V30_I2C2_H
-  #define S7V30_I2C2_H
+﻿#ifndef SYNERGY_I2C20_H
+  #define SYNERGY_I2C20_H
 
 
 extern const transfer_instance_t   DTC_I2C0_TX_transfer_instance;

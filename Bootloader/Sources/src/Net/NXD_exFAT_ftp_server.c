@@ -1,39 +1,5 @@
-/**************************************************************************/
-/*                                                                        */
-/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
-/*                                                                        */
-/*       This software is licensed under the Microsoft Software License   */
-/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
-/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
-/*       and in the root directory of this software.                      */
-/*                                                                        */
-/**************************************************************************/
-
-
-/**************************************************************************/
-/**************************************************************************/
-/**                                                                       */
-/** NetX Duo Component                                                    */
-/**                                                                       */
-/**   File Transfer Protocol                                              */
-/**                                                                       */
-/**************************************************************************/
-/**************************************************************************/
-
-#define NX_FTP_SOURCE_CODE
-
-
-/* Force error checking to be disabled in this module */
-
-#ifndef NX_DISABLE_ERROR_CHECKING
-#define NX_DISABLE_ERROR_CHECKING
-#endif
-
-
-/* Include necessary system files.  */
-
-#include    "S7V30.h"
-
+#include   "App.h"
+#include   "Net.h"
 
 /* Bring in externs for caller checking code.  */
 

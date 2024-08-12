@@ -5,13 +5,22 @@
   #define     S7V30_HARDWARE_VERSION   "S7V30"
 
 
+  #define       ENABLE_SDRAM
+  #define       USE_HARDWARE_CRIPTO_ENGINE
 
-//#define     LOG_TO_ONBOARD_SDRAM      // Используем SDRAM для хранения лога
+  #ifdef ENABLE_SDRAM
+    #define     LOG_TO_ONBOARD_SDRAM      // Используем SDRAM для хранения лога
+  #endif
+
+  #define DEFAULT_PARAMS_TYPE   BOOTL_PARAMS
+
+//  #define     ENABLE_MATLAB_CONNECTION
 
   #define     CAN_SPEED                      555555ul      // Скорость в системе по умолчанию
   #define     CPU_ID_STR_LEN                 33
   #define     CPU_ID_LEN                     16
 
+//  #define     SDIO1_1BIT_MODE
 
   #define     RAM_END                        (0x2007FFFF)
   #define     OSIS_ADDRESS                    0x40120050  // OCD/Serial Programmer ID Setting Register (OSIS)
@@ -33,35 +42,18 @@
 
   #define     WINDOWS_DIR                    "System Volume Information"
 
-  #define     LOG_FILE_NAME                  "log.txt"
-  #define     LOG_FILE_PATH                   LOG_FILE_NAME
+  #define     APP_LOG_FILE_PATH              "\\log.txt"
+  #define     NET_LOG_FILE_PATH              "\\net_log.txt"
 
-  #define     PARAMS_SCHEMA_FILE_NAME        "PS.jsn"
-  #define     PARAMS_VALUES_FILE_NAME        "PV.jsn"
-  #define     FILES_LIST_FILE_NAME           "FL.jsn"
+  #define     APP_LOG_PREV_FILE_PATH         "log_prev.txt"
+  #define     NET_LOG_PREV_FILE_PATH         "net_log_prev.txt"
+
+  #define     PARAMS_SCHEMA_FILE_NAME        "PS.json"
+  #define     PARAMS_VALUES_FILE_NAME        "PV.json"
+  #define     FILES_LIST_FILE_NAME           "FL.json"
   #define     PACKED_FILES_LIST_FILE_NAME    "FL.pck"
   #define     COMPRESSED_STREAM_FILE_NAME    "tmpc.dat"
   #define     UNCOMPESSED_STREAM_FILE_NAME   "tmpu.dat"
-
-
-// Приоритеты задач
-// Чем меньше значение тем выше приоритет
-  #define     THREAD_HIGHER_PRIO           5
-  #define     IPERF_STARTER_TASK_PRIO      6
-  #define     PLAYER_TASK_PRIO             6
-  #define     MAIN_CYCLE_TASK_PRIO             7
-  #define     CAN_TASK_PRIO                7
-  #define     CHARGER_TASK_PRIO            8
-  #define     THREAD_BSD_PRIORITY          8
-  #define     THREAD_NET_PRIORITY          9
-  #define     MQTT_TASK_PRIO               10
-  #define     MATLAB_TASK_PRIO             11
-  #define     NX_FTP_SERVER_PRIORITY       12
-  #define     VT100_TASK_PRIO              13
-  #define     FREEMASTER_TASK_PRIO         14
-  #define     LOGGER_TASK_PRIO             15
-  #define     BACKGROUND_TASK_PRIO         30  // Низший приоритет для процесса IDLE измеряющего нагрузку процессора (следить за приоритетами сетевых задач!)
-
 
   #define     RES_OK     (0)
   #define     RES_ERROR  (1)
@@ -77,6 +69,7 @@
   #define     EXT_ADC_SCAN_PRIO          0
   #define     IO_EXP_SCAN_PRIO           0
   #define     INT_ADC_SCAN_PRIO          1
+  #define     UART_BLE_PRIO              2  // Приоритет канала связи c BLE модулем
   #define     SPI1_PRIO                  7
   #define     AGT0_PRIO                  5  // Приоритет прерывания обслуживающего ручной энкодер
 
@@ -101,7 +94,7 @@
 
 
 
-  #define     BT3_STATE          R_PFS->P201PFS_b.PIDR    // 0 -
+  #define     BT3_STATE          R_PFS->P201PFS_b.PIDR
   #define     BT2_STATE          R_PFS->P200PFS_b.PIDR
 
   #define     RED_LED            R_PFS->P313PFS_b.PODR
@@ -123,7 +116,10 @@
   #define     LORA_PWR_EN        R_PFS->P808PFS_b.PODR
   #define     LORA_RESET         R_PFS->P909PFS_b.PODR
 
+  #define     SD_CARD_PWR        R_PFS->P809PFS_b.PODR
   #define     VBUSCTRL           R_PFS->P615PFS_b.PODR
+  #define     PWR_SEL            R_PFS->PA11PFS_b.PODR  // Управление ограничением входного тока зарядника.  0 - 2.4 А, 1 - 0.5 A
+
 
   #define     SD_CARD_OK           0
   #define     SD_CARD_ERROR1       1
@@ -141,6 +137,8 @@
 
   #include <ctype.h>
   #include <stdint.h>
+  #include <stdlib.h>
+  #include <string.h>
   #include <limits.h>
   #include <math.h>
   #include <time.h>
@@ -214,14 +212,17 @@ extern void Delay_m7(int cnt); // Задержка на (cnt+1)*7 тактов .
   #include "I2C0.h"
   #include "DAC.h"
   #include "AGT.h"
+  #include "UART_BLE.h"
   #include "ELC_tbl.h"
   #include "Flasher.h"
   #include "LowPower.h"
   #include "CHIP_utils.h"
   #include "Transfer_channels.h"
   #include "Memory_manager.h"
+  #include "SDRAM_mem_pool.h"
   #include "Realtime_clock.h"
   #include "Watchdog_controller.h"
+  #include "WiFi_module_control.h"
 
   #include "SEGGER_RTT.h"
 
@@ -244,49 +245,32 @@ extern void Delay_m7(int cnt); // Задержка на (cnt+1)*7 тактов .
   #include "Background_Task.h"
 
   #include "S7V30_params.h"
-  #include "Main_monitor.h"
   #include "NV_store.h"
+
   #include "JSON_serializer.h"
   #include "JSON_deserializer.h"
-  #include "Params_editor.h"
-  #include "Chip_monitor.h"
-  #include "SD_card_monitor.h"
-  #include "System_info_monitor.h"
+  #include "ParamsSchema_serializer.h"
+  #include "DeviceInfo_serializer.h"
+  #include "WiFi_scan_res_serializer.h"
 
-  #include "Monitor_rtt_drv.h"
-  #include "Monitor_USB_FS_drv.h"
-  #include "Flash_monitor.h"
-
-  #include "Tests_monitor.h"
   #include "DSP_Filters.h"
 
-  #include "nxd_dhcp_server.h"
-  #include "nxd_dhcp_client.h"
-  #include "nxd_telnet_server.h"
-  #include "nxd_mqtt_client.h"
-  #include "nxd_sntp_client.h"
-  #include "Net_common.h"
-  #include "Net_utils.h"
-  #include "Net_thread.h"
-  #include "Net_mDNS.h"
-  #include "USB_RNDIS_network.h"
-  #include "USB_host_cdc_ecm.h"
-  #include "USB_ECM_Host_network.h"
-  #include "WiFi_network.h"
-  #include "WiFi_debug.h"
-  #include "Net_Telnet_serv_driver.h"
-  #include "Net_DNS.h"
-  #include "NXD_exFAT_ftp_server.h"
-  #include "Net_MQTT_client_man.h"
-  #include "Net_MQTT_Msg_Controller.h"
-  #include "Net_FTP_server_man.h"
-  #include "Net_TCP_server.h"
-  #include "Net_SNTP_client.h"
+  #include "Infineon_BLOBs.h"
 
-  #include "Keys.h"
+  #include "Net.h"
+  #include "WEB_server.h"
+
+  #include "VT100_monitor.h"
+
+  #ifdef ENABLE_MATLAB_CONNECTION
+    #include "Net_MATLAB_connection.h"
+  #endif
+
+  #include "..\..\Keys\Keys.h"
   #include "Loader_config.h"
   #include "Loader.h"
-
+  #include "Charger_task.h"
+  #include "BLE_main.h"
 
 
 // Биты событий обрабатываемых основным приложением
@@ -325,6 +309,8 @@ const T_NV_parameters_instance* Get_mod_params_instance(void);
 const char*                     Get_build_date(void);
 const char*                     Get_build_time(void);
 
+
+  #include   "thread_priorities.h"
 #endif
 
 

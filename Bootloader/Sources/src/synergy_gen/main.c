@@ -29,8 +29,8 @@ static void main_thread_create(void)
                    (ULONG) NULL,
                    &main_thread_stack,
                    MAIN_THREAD_STACK_SIZE,
-                   1,
-                   1,
+                   MAIN_THREAD_PRIO,
+                   MAIN_THREAD_PRIO,
                    1,
                    TX_AUTO_START
                   );

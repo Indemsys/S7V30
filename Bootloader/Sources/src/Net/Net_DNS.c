@@ -2,8 +2,8 @@
 // 2021-03-07
 // 18:32:36
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
-#include   "nxd_dns.h"
+#include   "App.h"
+#include   "Net.h"
 
 
 static NX_DNS                  dns_client;
@@ -19,7 +19,7 @@ UCHAR                          dns_local_cache[DNS_LOCAL_CACHE_SIZE];
 
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-static uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
+uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
 {
   UINT status;
 
@@ -32,7 +32,7 @@ static uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
   status = nx_dns_create(&dns_client,ip_ptr,(UCHAR *)"DNS Client");
   if (status != NX_SUCCESS)
   {
-    APPLOG("DNS client creating error %d", status);
+    NETLOG("DNS client creating error %d", status);
     return RES_ERROR;
   }
 
@@ -44,7 +44,7 @@ static uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
   if (status != NX_SUCCESS)
   {
     nx_dns_delete(&dns_client);
-    APPLOG("DNS cache creating error %d", status);
+    NETLOG("DNS cache creating error %d", status);
     return RES_ERROR;
   }
 
@@ -52,25 +52,12 @@ static uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
   if (status != NX_SUCCESS)
   {
     nx_dns_delete(&dns_client);
-    APPLOG("DNS pool setting error %d", status);
+    NETLOG("DNS pool setting error %d", status);
     return RES_ERROR;
   }
 
-// Вызов здесь это функции может вызвать ошибку  NX_DNS_DUPLICATE_ENTRY
-// Поскольку gateway_address по умолчаню является и адресом DNS сервера
-//  if ((g_network_type == NET_BY_WIFI_AP) &&(ivar.wifi_ap_addr_assign_method == IP_ADDRESS_ASSIGNMENT_METHOD_WINDOWS_HOME_NETWORK))
-//  {
-//    status = nx_dns_server_add(&dns_client, wifi_ap_net_props.gateway_address);
-//    if (status != NX_SUCCESS)
-//    {
-//      nx_dns_delete(&dns_client);
-//      APPLOG("DNS server addition error %d", status);
-//      return RES_ERROR;
-//    }
-//  }
 
-
-  APPLOG("DNS client created successfully");
+  NETLOG("DNS client created successfully");
   dns_ip_ptr = ip_ptr;
   return RES_OK;
 }
@@ -82,7 +69,7 @@ static uint32_t Net_DNS_client_create(NX_IP  *ip_ptr)
 
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-static uint32_t Net_DNS_client_delete(void)
+uint32_t Net_DNS_client_delete(void)
 {
   if (dns_ip_ptr == 0) return RES_ERROR;
 
@@ -119,42 +106,6 @@ uint32_t Is_DNS_created(void)
 {
   if (dns_ip_ptr == 0) return 0;
   return 1;
-}
-
-/*-----------------------------------------------------------------------------------------------------
-
-
-  \param void
------------------------------------------------------------------------------------------------------*/
-void DNS_client_controller(void)
-{
-  NX_IP   *ip_ptr = NULL;
-
-  switch (g_network_type)
-  {
-  case NET_BY_WIFI_STA:
-    if (WIFI_STA_network_active_flag()) ip_ptr = wifi_sta_ip_ptr;
-    break;
-  case NET_BY_WIFI_AP:
-    if (WIFI_AP_network_active_flag())  ip_ptr = wifi_ap_ip_ptr;
-    break;
-  case NET_BY_RNDIS:
-    if (RNDIS_network_active_flag())    ip_ptr = rndis_ip_ptr;
-    break;
-  case NET_BY_ECM:
-    if (ECM_Host_network_active_flag()) ip_ptr = ecm_host_ip_ptr;
-    break;
-  }
-
-  if (ip_ptr != NULL)
-  {
-    Net_DNS_client_create(ip_ptr);
-  }
-  else
-  {
-    Net_DNS_client_delete();
-  }
-
 }
 
 

@@ -7,7 +7,7 @@
             #if 0
             #define NX_DHCP_CLIENT_RESTORE_STATE
             #endif
-            #if (0)
+            #if (1)
             #define NX_DHCP_CLIENT_USER_CREATE_PACKET_POOL
             #endif
             #if (0)
@@ -20,7 +20,6 @@
             #define NX_DHCP_ARP_PROBE_MAX                        (2 * NX_IP_PERIODIC_RATE)
             #define NX_DHCP_ARP_PROBE_NUM                        2
             #endif
-            #define NX_DHCP_THREAD_PRIORITY                      3
             #define NX_DHCP_THREAD_STACK_SIZE                    1024
             #define NX_DHCP_TIME_INTERVAL                        (1 * NX_IP_PERIODIC_RATE)
             #define NX_DHCP_MAX_RETRANS_TIMEOUT                  (64 * NX_IP_PERIODIC_RATE)
@@ -29,6 +28,6 @@
             #define NX_DHCP_PACKET_PAYLOAD                       620
             #define NX_DHCP_PACKET_POOL_SIZE                     (5 *  ( NX_DHCP_PACKET_PAYLOAD + sizeof(NX_PACKET)))
             #define NX_DHCP_OPTIONS_BUFFER_SIZE                  312
-            #define NX_DHCP_CLIENT_MAX_RECORDS                   1
+            #define NX_DHCP_CLIENT_MAX_RECORDS                   3
             #define NX_DHCP_RESTART_WAIT                         (10 * NX_IP_PERIODIC_RATE)
 #endif /* NXD_DHCP_CLIENT_CFG_H_ */

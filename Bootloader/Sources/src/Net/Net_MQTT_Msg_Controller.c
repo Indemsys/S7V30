@@ -2,7 +2,8 @@
 // 2019.10.28
 // 17:32:29
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 
 extern NX_IP         *mqtt_ip_ptr;
 
@@ -63,19 +64,19 @@ static void _MQTTMC_subscribe_default_topics(void)
   res = nxd_mqtt_client_subscribe(&mqtt_client, g_cpu_id_str, strlen(g_cpu_id_str), MQTT_QOS1);
   if (res != NXD_MQTT_SUCCESS)
   {
-    APPLOG("Failed to subscribe topic %s. Error 0x%05X", g_cpu_id_str, res);
+    NETLOG("Failed to subscribe topic %s. Error 0x%05X", g_cpu_id_str, res);
     err_cnt++;
   }
 
   res = nxd_mqtt_client_subscribe(&mqtt_client, MQTT_SUBSCR_TOPIC_BROADCAST, strlen(MQTT_SUBSCR_TOPIC_BROADCAST), MQTT_QOS1);
   if (res != NXD_MQTT_SUCCESS)
   {
-    APPLOG("Failed to subscribe topic '%s'. Error 0x%05X", MQTT_SUBSCR_TOPIC_BROADCAST, res);
+    NETLOG("Failed to subscribe topic '%s'. Error 0x%05X", MQTT_SUBSCR_TOPIC_BROADCAST, res);
     err_cnt++;
   }
   if (err_cnt == 0)
   {
-    APPLOG("All subscription to MQTT broker done sucessfully");
+    NETLOG("All subscription to MQTT broker done sucessfully");
   }
   else
   {
@@ -196,7 +197,7 @@ static uint32_t _MQTTMC_send_file_by_handler(FX_FILE *file_handler, uint8_t comp
     res = fx_file_read(file_handler,&g_mqtt_message_buffer[header_len],blsz,&actual_size);
     if (res != FX_SUCCESS)
     {
-      APPLOG("Error %d", res);
+      NETLOG("Error %d", res);
       err = 1;
       break;
     }
@@ -210,7 +211,7 @@ static uint32_t _MQTTMC_send_file_by_handler(FX_FILE *file_handler, uint8_t comp
     res = nxd_mqtt_client_publish(&mqtt_client, g_mqtt_topic_buffer, strlen(g_mqtt_topic_buffer), g_mqtt_message_buffer, blsz + header_len, MQTT_NO_RETAIN, MQTT_QOS1, ms_to_ticks(2000));
     if (res != NXD_MQTT_SUCCESS)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
       err = 1;
       break;
     }
@@ -396,7 +397,7 @@ uint32_t _MQTTMC_binary_stream_receiving(void)
       if (msm.file_transfer)
       {
         MQTTMC_Send_File_transfer_Ack(res); // Передаем сообщение о завершения приема файла
-        APPLOG("MQTT file %s receiving result: %d", msm.data_file.fx_file_name,  res);
+        NETLOG("MQTT file %s receiving result: %d", msm.data_file.fx_file_name,  res);
       }
       memset(&msm.data_file, 0, sizeof(FX_FILE));
     }
@@ -442,7 +443,7 @@ uint32_t _MQTTMC_decompress_stream(void)
   // Если пакет слишком большой для распаковки, то игнорируем его
   if (msm.out_data_sz > (MAX_COMPRESSIBLE_BLOCK_SIZE-1))
   {
-    APPLOG("Error. To long MQTT packet. size=%d, max=%d", msm.out_data_sz, MAX_COMPRESSIBLE_BLOCK_SIZE-1);
+    NETLOG("Error. To long MQTT packet. size=%d, max=%d", msm.out_data_sz, MAX_COMPRESSIBLE_BLOCK_SIZE-1);
     goto EXIT_ON_ERROR;
   }
 
@@ -451,7 +452,7 @@ uint32_t _MQTTMC_decompress_stream(void)
     // Распаковываем файл в файл
     if (Decompress_file_to_file(MQTTMC_COMPRESSION_ALG, COMPRESSED_STREAM_FILE_NAME,UNCOMPESSED_STREAM_FILE_NAME) != RES_OK)
     {
-      APPLOG("Error. MQTT large file don't decompressed.");
+      NETLOG("Error. MQTT large file don't decompressed.");
       goto EXIT_ON_ERROR;
     }
   }
@@ -461,7 +462,7 @@ uint32_t _MQTTMC_decompress_stream(void)
     msm.out_data_buf = App_malloc_pending(msm.out_data_sz+1, 10);
     if (msm.out_data_buf == NULL)
     {
-      APPLOG("Error. No memory for MQTT packet. size=%d", msm.out_data_sz);
+      NETLOG("Error. No memory for MQTT packet. size=%d", msm.out_data_sz);
       goto EXIT_ON_ERROR;
     }
 
@@ -471,7 +472,7 @@ uint32_t _MQTTMC_decompress_stream(void)
       // Распаковываем файл в память
       if (Decompress_file_to_mem(MQTTMC_COMPRESSION_ALG,COMPRESSED_STREAM_FILE_NAME, msm.out_data_buf,msm.out_data_sz) != RES_OK)
       {
-        APPLOG("Error. MQTT file don't decompressed.");
+        NETLOG("Error. MQTT file don't decompressed.");
         goto EXIT_ON_ERROR;
       }
     }
@@ -480,7 +481,7 @@ uint32_t _MQTTMC_decompress_stream(void)
       // Распаковываем буфер из памяти в память
       if (Decompress_mqtt_mem_to_mem(MQTTMC_COMPRESSION_ALG, msm.data_buf, msm.data_sz, msm.out_data_buf,msm.out_data_sz) != msm.out_data_sz)
       {
-        APPLOG("Error. MQTT packet don't decompressed.");
+        NETLOG("Error. MQTT packet don't decompressed.");
         goto EXIT_ON_ERROR;
       }
     }
@@ -544,7 +545,7 @@ static uint32_t _MQTTMC_Send_file_to_topic(char *input_filename, char *topic, ui
   input_file.fx_file_id = 0;
   compressed_file.fx_file_id = 0;
 
-  APPLOG("Sending to topic %s", topic);
+  NETLOG("Sending to topic %s", topic);
 
 
   // Открываем файл и узнаем его размер
@@ -567,14 +568,14 @@ static uint32_t _MQTTMC_Send_file_to_topic(char *input_filename, char *topic, ui
         compressed_file_name = App_malloc_pending(MQTT_MAX_FILE_NAME_LEN+1, 10);
         if (compressed_file_name == NULL)
         {
-          APPLOG("Insufficient memory");
+          NETLOG("Insufficient memory");
           break;
         }
 
         uint32_t name_len = strlen(input_filename);
         if (name_len > (MQTT_MAX_FILE_NAME_LEN - strlen(MQTT_PACK_FILE_EXT)))
         {
-          APPLOG("Fale name len too big");
+          NETLOG("Fale name len too big");
           break;
         }
         strcpy(compressed_file_name,input_filename);
@@ -583,7 +584,7 @@ static uint32_t _MQTTMC_Send_file_to_topic(char *input_filename, char *topic, ui
         res =  Recreate_file_for_write(&compressed_file, compressed_file_name);
         if (res != TX_SUCCESS)
         {
-          APPLOG("Error 0x%04X", res);
+          NETLOG("Error 0x%04X", res);
           break;
         }
 
@@ -609,13 +610,13 @@ static uint32_t _MQTTMC_Send_file_to_topic(char *input_filename, char *topic, ui
       res = fx_file_read(&input_file,g_mqtt_message_buffer, fsize,&actual_size);
       if (res != FX_SUCCESS)
       {
-        APPLOG("Error 0x%04X", res);
+        NETLOG("Error 0x%04X", res);
         break;
       }
       res = nxd_mqtt_client_publish(&mqtt_client, g_mqtt_topic_buffer, strlen(g_mqtt_topic_buffer), g_mqtt_message_buffer, fsize, MQTT_NO_RETAIN, MQTT_QOS1, ms_to_ticks(2000));
       if (res != NX_SUCCESS)
       {
-        APPLOG("Error 0x%05X", res);
+        NETLOG("Error 0x%05X", res);
         break;
       }
       err = 0;
@@ -649,7 +650,7 @@ static uint32_t _MQTTMC_Send_compressed_file_to_topic(char *input_filename, char
   uint32_t res;
   FX_FILE  input_file;
 
-  APPLOG("Sending to topic %s", topic);
+  NETLOG("Sending to topic %s", topic);
 
   // Открываем файл и узнаем его размер
   res = fx_file_open(&fat_fs_media,&input_file, input_filename,  FX_OPEN_FOR_READ);
@@ -682,7 +683,7 @@ uint32_t MQTTMC_Send_Ack(uint32_t ack_code)
     res = nxd_mqtt_client_publish(&mqtt_client, MQTT_PUBLISH_TOPIC_ACK, strlen(MQTT_PUBLISH_TOPIC_ACK), json_str, json_str_sz, MQTT_NO_RETAIN, MQTT_QOS1, ms_to_ticks(2000));
     if (res != NX_SUCCESS)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
     }
     else
     {
@@ -711,7 +712,7 @@ uint32_t MQTTMC_Send_File_transfer_Ack(uint32_t ack_code)
     res = nxd_mqtt_client_publish(&mqtt_client, MQTT_PUBLISH_TOPIC_ACK, strlen(MQTT_PUBLISH_TOPIC_ACK), json_str, json_str_sz, MQTT_NO_RETAIN, MQTT_QOS1, ms_to_ticks(2000));
     if (res != NX_SUCCESS)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
     }
     else
     {
@@ -741,7 +742,7 @@ uint32_t MQTTMC_Send_Device_State(void)
     res = nxd_mqtt_client_publish(&mqtt_client, MQTT_PUBLISH_TOPIC_STATE, strlen(MQTT_PUBLISH_TOPIC_STATE), json_str, json_str_sz, MQTT_NO_RETAIN, MQTT_QOS0, ms_to_ticks(2000));
     if (res != NX_SUCCESS)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
       res = RES_ERROR;
     }
     else
@@ -751,7 +752,7 @@ uint32_t MQTTMC_Send_Device_State(void)
   }
   else
   {
-    APPLOG("Error %d", res);
+    NETLOG("Error %d", res);
     res = RES_ERROR;
   }
   App_free(json_str);
@@ -774,13 +775,13 @@ uint32_t MQTTMC_Send_params_schema(void)
     res = _MQTTMC_Send_file_to_topic(PARAMS_SCHEMA_FILE_NAME, MQTT_PUBLISH_TOPIC_SCHEMA, ENABLE_COMPRESSION);
     if (res != RES_OK)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
     }
     fx_file_delete(&fat_fs_media,PARAMS_SCHEMA_FILE_NAME);
   }
   else
   {
-    APPLOG("Error 0x%05X", res);
+    NETLOG("Error 0x%05X", res);
   }
   return res;
 }
@@ -800,13 +801,13 @@ uint32_t MQTTMC_Send_params_values(void)
     res = _MQTTMC_Send_file_to_topic(PARAMS_VALUES_FILE_NAME, MQTT_PUBLISH_TOPIC_VALUES, ENABLE_COMPRESSION);
     if (res != RES_OK)
     {
-      APPLOG("Error 0x%05X", res);
+      NETLOG("Error 0x%05X", res);
     }
     fx_file_delete(&fat_fs_media,PARAMS_VALUES_FILE_NAME);
   }
   else
   {
-    APPLOG("Error 0x%05X", res);
+    NETLOG("Error 0x%05X", res);
   }
   return res;
 }
@@ -816,35 +817,9 @@ uint32_t MQTTMC_Send_params_values(void)
 
 
 -----------------------------------------------------------------------------------------------------*/
-void MQTT_client_controller(void)
+void Net_MQTT_client_task(NX_IP   *ip_ptr)
 {
-
-  NX_IP   *ip_ptr = NULL;
-
-  switch (g_network_type)
-  {
-  case NET_BY_WIFI_STA:
-    if (WIFI_STA_network_active_flag()) ip_ptr = wifi_sta_ip_ptr;
-    break;
-  case NET_BY_WIFI_AP:
-    if (WIFI_AP_network_active_flag())  ip_ptr = wifi_ap_ip_ptr;
-    break;
-  case NET_BY_RNDIS:
-    if (RNDIS_network_active_flag())    ip_ptr = rndis_ip_ptr;
-    break;
-  case NET_BY_ECM:
-    if (ECM_Host_network_active_flag()) ip_ptr = ecm_host_ip_ptr;
-    break;
-  }
-
-  if (ip_ptr != NULL)
-  {
-    Net_mqtt_client_create(ip_ptr);
-  }
-  else
-  {
-    Net_MQTT_client_delete();
-  }
+  uint32_t     actual_flags;
 
   // Если клиент инициализирован, но не подключен, то предпринимать попытки подключения
   if (Is_mqtt_client_created() == 1)
@@ -863,10 +838,15 @@ void MQTT_client_controller(void)
         MQTTMC_Send_params_schema();
       }
     }
+
+    // Проверяем наличие сообщений для MQTT клиента
+    if ( Wait_net_event(NET_EVT_MQTT_MSG, &actual_flags, TX_NO_WAIT)==TX_SUCCESS)
+    {
+      MQTTMC_messages_processor();  // Отработка сообщения от MQTT брокера
+    }
+
   }
-
 }
-
 
 /*-----------------------------------------------------------------------------------------------------
   Установка переменной cmd_opcode вызовет последующее исполнение команды
@@ -905,31 +885,33 @@ uint32_t _MQTTMC_execute_command(void)
   switch (cmd_opcode)
   {
   case OPCODE_RESET:
-    APPLOG("MQTT command: RESET");
+    NETLOG("MQTT command: RESET");
     MQTTMC_Send_Ack(RES_OK);
+    NETLOG("System reset caused by MQTT command.");
     Wait_ms(200);
     Reset_SoC();
     break;
   case OPCODE_RESET_TO_DEFAULT:
-    APPLOG("MQTT command: RESET_TO_DEFAULT");
+    NETLOG("MQTT command: RESET_TO_DEFAULT");
     MQTTMC_Send_Ack(RES_OK);
-    Wait_ms(200);
     Return_def_params(&ivar_inst);
+    NETLOG("System reset to defaults caused by MQTT command.");
+    Wait_ms(200);
     Reset_SoC();
     break;
   case OPCODE_REQUEST_SCHEMA:
-    APPLOG("MQTT command: REQUEST_SCHEMA");
+    NETLOG("MQTT command: REQUEST_SCHEMA");
     res = MQTTMC_Send_params_schema();
     MQTTMC_Send_Ack(res);
     break;
   case OPCODE_REQUEST_PARAMETERS:
-    APPLOG("MQTT command: REQUEST_PARAMETERS");
+    NETLOG("MQTT command: REQUEST_PARAMETERS");
     res = MQTTMC_Send_params_values();
     MQTTMC_Send_Ack(res);
     break;
 
   case OPCODE_GET_LOG_FILE:
-    _MQTTMC_Send_file_to_topic(LOG_FILE_PATH,MQTT_PUBLISH_TOPIC_LOG,DISABLE_COMPRESSION);
+    _MQTTMC_Send_file_to_topic(APP_LOG_FILE_PATH,MQTT_PUBLISH_TOPIC_LOG,DISABLE_COMPRESSION);
     MQTTMC_Send_Ack(RES_OK);
     break;
   case OPCODE_RESET_LOG_FILE:

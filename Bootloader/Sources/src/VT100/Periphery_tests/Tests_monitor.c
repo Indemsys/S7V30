@@ -2,7 +2,7 @@
 // 2023-02-05
 // 13:43:56
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 const T_VT100_Menu_item MENU_TESTS_ITEMS[] =

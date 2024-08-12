@@ -52,9 +52,10 @@
 #ifndef UX_PORT_H
 #define UX_PORT_H
 
+#include "thread_priorities.h"
+
 
 /* Determine if the optional USBX user define file should be used.  */
-
 #ifdef UX_INCLUDE_USER_DEFINE_FILE
 
 

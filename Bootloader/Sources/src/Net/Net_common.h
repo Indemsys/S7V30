@@ -1,7 +1,7 @@
 ﻿#ifndef NET_COMMON_H
   #define NET_COMMON_H
 
-#define                 PACKETS_IN_POOL     (60)
+#define                 PACKETS_IN_POOL     (70)
 #define                 PACKET_MAX_SZ       1568
 
 #define                 NX_ARP_CACHE_SIZE   (520)

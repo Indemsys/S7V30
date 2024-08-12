@@ -2,7 +2,7 @@
 // 2019.06.06
 // 8:31:00
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 const T_ELC_tbl_rec ELC_tbl[]=

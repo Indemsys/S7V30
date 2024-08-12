@@ -13,7 +13,7 @@ uint32_t    Create_Backgroung_task(void);
 void        Get_reference_time(void);
 uint64_t    Measure_reference_time_interval(uint32_t time_delay_ms);
 void        Request_save_nv_parameters(const T_NV_parameters_instance* pinst, uint8_t ptype);
-
+void        Request_save_bt_nv_data(void);
 #endif // BACKGROUND_TASK_H
 
 

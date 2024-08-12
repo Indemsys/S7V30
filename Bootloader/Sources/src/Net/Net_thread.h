@@ -1,31 +1,26 @@
 ﻿#ifndef NET_THREAD_H
   #define NET_THREAD_H
 
-  #define EVT_NET_IP_READY    BIT(0)
-  #define EVT_MQTT_MSG        BIT(1)
+#define  WIFI_AP_INTF_NUM             1
+#define  WIFI_STA_INTF_NUM            2
+#define  NET_USB_INTF_NUM             3
 
 
-typedef enum
-{
-  NET_NONE,
-  NET_BY_RNDIS,
-  NET_BY_ECM,
-  NET_BY_WIFI_AP,
-  NET_BY_WIFI_STA,
-}
-T_network_type;
+#define  NET_FLG_RNDIS_STOP        BIT(0)
+#define  NET_FLG_RNDIS_START       BIT(1)
+#define  NET_FLG_STA_CONNECTED     BIT(2) // Произошло подключение данного устройства к удаленной точке доступа
+#define  NET_FLG_STA_DISCONNECTED  BIT(3) // Произошло отключение данного устройства от удаленной точки доступа
+#define  NET_FLG_AP_CONNECTED      BIT(4) // Произошло подключение к данному устройству  удаленной станции
+#define  NET_FLG_AP_DISCONNECTED   BIT(5) // Произошло отключение от данного устройства  удаленной точки станции
+#define  NET_FLG_ECM_HOST_START    BIT(6)
+#define  NET_FLG_ECM_HOST_STOP     BIT(7)
 
-extern T_network_type       g_network_type;
-extern uint8_t              g_BSD_initialised;
+#define  NET_EVT_MQTT_MSG          BIT(8)
 
-void       Thread_Net_create(void);
-UINT       Send_Net_task_event(uint32_t event_flag);
-uint32_t   Wait_Net_task_event(uint32_t event_flags, uint32_t timeout_ms);
-void       Determine_network_type(void);
-NX_IP     *Get_net_ip(void);
-uint32_t   Get_device_ip_addr(char *ip_addr_str, uint32_t ip_addr_str_len );
-uint32_t   Get_device_MAC_addr(char *mac_addr_str, uint32_t mac_addr_str_len);
-uint32_t   Get_connected_SSID(char *ssid_str, uint32_t ssid_str_len);
+uint32_t    Thread_Net_create(void);
+uint32_t    Send_net_event(uint32_t event_flag);
+uint32_t    Wait_net_event(uint32_t event_flags, uint32_t *actual_flags, uint32_t timeout_ms);
+NX_IP      *Net_get_ip_ptr(void);
 #endif
 
 

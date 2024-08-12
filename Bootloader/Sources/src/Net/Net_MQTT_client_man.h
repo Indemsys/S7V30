@@ -13,7 +13,7 @@ extern   NXD_MQTT_CLIENT           mqtt_client;
 uint32_t Is_mqtt_client_created(void);
 uint32_t Is_mqtt_client_connected(void);
 uint32_t Get_last_mqtt_connection_time(void);
-uint32_t Net_mqtt_client_create(NX_IP *ip);
+uint32_t Net_MQTT_client_create(NX_IP *ip);
 uint32_t Net_mqtt_client_connect(void);
 uint32_t Net_mqtt_disconnect_mqtt_client(NX_IP *ip_ptr);
 uint32_t Net_MQTT_client_delete(void);

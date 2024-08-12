@@ -24,10 +24,11 @@ extern sdmmc_instance_ctrl_t       sd_card_ctrl;
 extern sf_el_fx_t                  fat_fs_media_cfg;
 extern uint8_t                     fs_memory[];
 
-uint32_t     Get_fs_memory_size(void);
-uint32_t     Init_SD_card_file_system(void);
-
+uint32_t                    Get_fs_memory_size(void);
+uint32_t                    Init_SD_card_file_system(void);
+uint32_t                    Set_SD_card_password(uint8_t operation, char *password, uint32_t password_len, sdmmc_priv_card_status_t  *p_response);
 T_file_system_init_results* Get_FS_init_res(void);
+
 
 #endif // FS_INIT_H
 

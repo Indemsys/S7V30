@@ -2,7 +2,7 @@
 // 2019.05.12
 // 18:13:44
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 #pragma section="FREE_MEM"
@@ -26,7 +26,9 @@ TX_BYTE_POOL    g_app_pool;
 void App_memory_pools_creation(void *first_unused_memory)
 {
   RAM_pool_create();
-  //SDRAM_pool_create();
+#ifdef   ENABLE_SDRAM
+  SDRAM_pool_create();
+#endif
 
   json_set_alloc_funcs(App_malloc, App_free); // Назначаем парсеру JSON функции работы с динамической памятью
 }

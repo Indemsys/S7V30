@@ -2,19 +2,24 @@
 // 2023-02-02
 // 15:05:57
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 /*-----------------------------------------------------------------------------------------------------
   Найти  делители для тактовой частоты SCI обеспечивающие наилучшее совпадение с заданной битовой скоростью baud в битах в  секунду
 
   \param baud
-  \param N
-  \param M
+  \param brme   - флаг разрешения модуляции
+  \param abcse  - значение бита absce
+  \param cks    - значение CKS для регистра SMR (в формуле жто переменная n)
+  \param N      - значение для регистра BRR
+  \param M      - значение для регистра MDDR
+
+  Предполагается что биты BGDM = 0 и ABCS = 0
 
   \return uint32_t возвращает RES_ERROR если подходящих делителей найти не удалось
 -----------------------------------------------------------------------------------------------------*/
-uint32_t SCI_Find_best_divider(uint32_t  baud, uint8_t *cks, uint8_t *N, uint8_t *M)
+uint32_t SCI_Find_best_divider(uint32_t  baud, uint8_t *brme, uint8_t *abcse,  uint8_t *cks, uint8_t *N, uint8_t *M)
 {
   float    NDIV = 0;
   float    f_baud;
@@ -27,18 +32,62 @@ uint32_t SCI_Find_best_divider(uint32_t  baud, uint8_t *cks, uint8_t *N, uint8_t
   uint32_t best_M;
 
   // Подбор подходящей частоты тактирования SCI с учетом что PCLKA = 120 МГц
+  if (baud == 4000000)
+  {
+    //  speed = PCLKA_FREQ (Mhz)/ 12*(2^(2*cks-1))(N+1)
+    *abcse = 1;
+    cks    = 0;
+    *brme  = 0; // Disable bit rate modulation function
+    *N = (uint8_t)4;
+    *M = (uint8_t)0;
+    return RES_OK;
+  }
+  if (baud == 2000000)
+  {
+    //  speed = PCLKA_FREQ (Mhz)/ 12*(2^(2*cks-1))(N+1)
+    *abcse = 1;
+    cks    = 0;
+    *brme  = 0; // Disable bit rate modulation function
+    *N = (uint8_t)9;
+    *M = (uint8_t)0;
+    return RES_OK;
+  }
+  if (baud == 1000000)
+  {
+    //  speed = PCLKA_FREQ (Mhz)/ 12*(2^(2*cks-1))(N+1)
+    *abcse = 1;
+    cks    = 0;
+    *brme  = 0; // Disable bit rate modulation function
+    *N = (uint8_t)19;
+    *M = (uint8_t)0;
+    return RES_OK;
+  }
   if (baud < 120)
   {
     return RES_ERROR;
   }
   if (baud < 7500)
   {
-    *cks = 4;
-    NDIV = 2048.0f;
+    //  speed = PCLKA_FREQ (Mhz)/ (256/M)*64*(2^(2*cks-1))(N+1)
+    *brme  = 1;
+    *cks   = 3;
+    *abcse = 0;
+    NDIV = 2048.0f; //
   }
-  else
+  else if (baud > 1000000)
   {
-    *cks = 0;
+    //  speed = PCLKA_FREQ (Mhz)/ (256/M)*12*(2^(2*cks-1))(N+1)
+    *brme  = 1;
+    *cks   = 0;
+    *abcse = 1;
+    NDIV = 6.0f;   //
+  }
+  else // between 7500 ... 1000000
+  {
+    //  speed = PCLKA_FREQ (Mhz)/ (256/M)*64*(2^(2*cks-1))(N+1)
+    *brme  = 1;
+    *cks   = 0;
+    *abcse = 0;
     NDIV = 32.0f;
   }
 

@@ -3,18 +3,18 @@
 
 
 
-  #define  FIRMWARE_FLASHED_SUCCESFULLY      0
-  #define  DIGEST_CHECK_ERROR                1
-  #define  DECRYPT_IMAGE_DATA_HEADER_ERROR   2
-  #define  DECRYPT_IMAGE_SIGN_ERROR          3
-  #define  IMAGE_SIZE_ERROR                  4
-  #define  FIRMWARE_FILE_READ_ERROR          5
-  #define  FIRMWARE_FILE_HEADER_CRC_ERROR    6
-  #define  IMAGE_DATA_HEADER_READ_ERROR      7
-  #define  INCORECT_FIRMWARE_START_ADDRESS   8
-  #define  FIRMWARE_FLASHING_FAIL            9
-  #define  FIRMWARE_FILE_NOT_FOUND           10
-  #define  LOADING_FIRMWARE_UNKNOWN_ERROR    11
+  #define  FIRMWARE_FLASHED_SUCCESFULLY      1
+  #define  DIGEST_CHECK_ERROR                2
+  #define  DECRYPT_IMAGE_DATA_HEADER_ERROR   3
+  #define  DECRYPT_IMAGE_SIGN_ERROR          4
+  #define  IMAGE_SIZE_ERROR                  5
+  #define  FIRMWARE_FILE_READ_ERROR          6
+  #define  FIRMWARE_FILE_HEADER_CRC_ERROR    7
+  #define  IMAGE_DATA_HEADER_READ_ERROR      8
+  #define  INCORECT_FIRMWARE_START_ADDRESS   9
+  #define  FIRMWARE_FLASHING_FAIL            10
+  #define  FIRMWARE_FILE_NOT_FOUND           11
+  #define  LOADING_FIRMWARE_UNKNOWN_ERROR    12
 
 typedef struct
 {
@@ -41,6 +41,8 @@ void     Set_boot_MassStorage_mode(void);
 uint32_t Load_and_Flash_Image_File(void);
 uint32_t Integrity_check_App_firmware(void);
 void     Restart_to_App_firmware(void);
+uint32_t Erase_firmware_area(void);
+uint32_t Clear_app_DataFlash(void);
 void     Auto_protection(void);
 #endif
 

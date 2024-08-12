@@ -3,7 +3,6 @@
   #define NXD_SNTP_CLIENT_CFG_H_
   #define NX_SNTP_CLIENT_THREAD_STACK_SIZE           (1024)
   #define NX_SNTP_CLIENT_THREAD_TIME_SLICE           (TX_NO_TIME_SLICE)
-  #define NX_SNTP_CLIENT_THREAD_PRIORITY             (2)
   #define NX_SNTP_CLIENT_PREEMPTION_THRESHOLD         NX_SNTP_CLIENT_THREAD_PRIORITY
   #define NX_SNTP_CLIENT_UDP_SOCKET_NAME             "SNTP Client socket"
   #define NX_SNTP_CLIENT_UDP_PORT                    (123)

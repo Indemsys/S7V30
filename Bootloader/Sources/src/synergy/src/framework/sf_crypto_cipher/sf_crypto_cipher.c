@@ -106,7 +106,7 @@ static const ssp_version_t sf_crypto_cipher_version =
 #endif
 /** Name of module used by error logger macro */
 #if BSP_CFG_ERROR_LOG != 0
-static const char g_module_name[] = "sf_crypto_cipher";
+//static const char g_module_name[] = "sf_crypto_cipher";
 #endif
 
 /*******************************************************************************************************************//**

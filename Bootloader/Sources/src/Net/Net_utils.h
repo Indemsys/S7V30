@@ -35,7 +35,9 @@ uint32_t     Prepare_net_mutex(void);
 uint32_t     Get_net_mutex(uint32_t delay_ms);
 uint32_t     Put_net_mutex(void);
 char const*  Get_NX_err_str(uint32_t err);
-
+uint32_t     Get_IP_addr_str(NX_INTERFACE *ip_interface, char *ip_addr_str, uint32_t ip_addr_str_len);
+uint32_t     Get_IP_addr_MAC_str(NX_INTERFACE *ip_interface, char *mac_addr_str, uint32_t mac_addr_str_len);
+void         Get_IP_MAC(NX_INTERFACE *ip_interface, uint8_t *mac);
 
 
 

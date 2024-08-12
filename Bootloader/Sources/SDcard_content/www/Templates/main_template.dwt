@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TemplateBeginEditable name="doctitle" -->
+    <title>Embedded Device Management</title>
+    <!-- TemplateEndEditable -->
+    <link href="../Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../GenScript.js"></script>
+
+  <!-- TemplateBeginEditable name="head" -->
+  <!-- TemplateEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- TemplateBeginEditable name="HeaderRegion" -->
+
+      
+        <!-- TemplateEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- TemplateBeginEditable name="body" -->
+	  
+	  
+  <!-- TemplateEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- TemplateBeginEditable name="script" -->
+	  
+<!-- TemplateEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+</html>

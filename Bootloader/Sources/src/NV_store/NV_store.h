@@ -1,23 +1,24 @@
-#ifndef S7V30_NV_STORE_H
-  #define S7V30_NV_STORE_H
+#ifndef NV_STORE_H
+  #define NV_STORE_H
 
 
-  #define  PARAMS_APP_INI_FILE_NAME                   "PARAMS.INI"
-  #define  PARAMS_APP_USED_INI_FILE_NAME              "PARAMS._NI"
-  #define  PARAMS_APP_JSON_FILE_NAME                  "Settings.json"
-  #define  PARAMS_APP_COMPR_JSON_FILE_NAME            "Settings.dat"
+  #define  PARAMS_APP_INI_FILE_NAME                   "\\PARAMS.INI"
+  #define  PARAMS_APP_USED_INI_FILE_NAME              "\\PARAMS._NI"
+  #define  PARAMS_APP_JSON_FILE_NAME                  "\\Settings.json"
+  #define  PARAMS_APP_COMPR_JSON_FILE_NAME            "\\Settings.dat"
 
-  #define  PARAMS_MOD_INI_FILE_NAME                   "MPARAMS.INI"
-  #define  PARAMS_MOD_USED_INI_FILE_NAME              "MPARAMS._NI"
-  #define  PARAMS_MOD_JSON_FILE_NAME                  "MSettins.json"
-  #define  PARAMS_MOD_COMPR_JSON_FILE_NAME            "MSettins.dat"
+  #define  PARAMS_MODULE_INI_FILE_NAME                "\\PPARAMS.INI"
+  #define  PARAMS_MODULE_USED_INI_FILE_NAME           "\\PPARAMS._NI"
+  #define  PARAMS_MODULE_JSON_FILE_NAME               "\\PSettins.json"
+  #define  PARAMS_MODULE_COMPR_JSON_FILE_NAME         "\\PSettins.dat"
 
-  #define  PARAMS_BOOTL_INI_FILE_NAME                 "BPARAMS.INI"
-  #define  PARAMS_BOOTL_USED_INI_FILE_NAME            "BPARAMS._NI"
-  #define  PARAMS_BOOTL_JSON_FILE_NAME                "BSettins.json"
-  #define  PARAMS_BOOTL_COMPR_JSON_FILE_NAME          "BSettins.dat"
+  // Названия файлов из которых восстанавливает параметры бутлодер
+  #define  PARAMS_BOOTL_INI_FILE_NAME                 "\\BPARAMS.INI"
+  #define  PARAMS_BOOTL_USED_INI_FILE_NAME            "\\BPARAMS._NI"
+  #define  PARAMS_BOOTL_JSON_FILE_NAME                "\\BSettins.json"
+  #define  PARAMS_BOOTL_COMPR_JSON_FILE_NAME          "\\BSettins.dat"
 
-  #define  CA_CERTIFICATE_FILE_NAME                     "CA.der"
+  #define  CA_CERTIFICATE_FILE_NAME                   "\\CA.der"
 
 
   #define COMMAND_KEY                          "OpCode"               // Идентификатор JSON блока с командой устройству
@@ -40,20 +41,22 @@
 
   #define  DATAFLASH_CA_CERT_AREA_SIZE        (0x1000)  // Размер области корневого сертификата
 
-  #define  PARAMS_TYPES_NUM                   3
 
   #define  APPLICATION_PARAMS                 0
   #define  MODULE_PARAMS                      1
   #define  BOOTL_PARAMS                       2
 
+  #define  PARAMS_TYPES_NUM                   3
+
   // Начинаем с области параметров приложени для совместимости с предыдущими версиями
   #define  DATAFLASH_APP_PARAMS_1_ADDR        (DATA_FLASH_START)
   #define  DATAFLASH_APP_PARAMS_2_ADDR        (DATAFLASH_APP_PARAMS_1_ADDR    + DATAFLASH_PARAMS_AREA_SIZE)
-  #define  DATAFLASH_MODULE_PARAMS_1_ADDR     (DATAFLASH_APP_PARAMS_2_ADDR    + DATAFLASH_PARAMS_AREA_SIZE)
-  #define  DATAFLASH_MODULE_PARAMS_2_ADDR     (DATAFLASH_MODULE_PARAMS_1_ADDR + DATAFLASH_PARAMS_AREA_SIZE)
-  #define  DATAFLASH_BOOTL_PARAMS_1_ADDR      (DATAFLASH_MODULE_PARAMS_2_ADDR + DATAFLASH_PARAMS_AREA_SIZE)
+  #define  DATAFLASH_PLATF_PARAMS_1_ADDR      (DATAFLASH_APP_PARAMS_2_ADDR    + DATAFLASH_PARAMS_AREA_SIZE)
+  #define  DATAFLASH_PLATF_PARAMS_2_ADDR      (DATAFLASH_PLATF_PARAMS_1_ADDR  + DATAFLASH_PARAMS_AREA_SIZE)
+  #define  DATAFLASH_BOOTL_PARAMS_1_ADDR      (DATAFLASH_PLATF_PARAMS_2_ADDR  + DATAFLASH_PARAMS_AREA_SIZE)
   #define  DATAFLASH_BOOTL_PARAMS_2_ADDR      (DATAFLASH_BOOTL_PARAMS_1_ADDR  + DATAFLASH_PARAMS_AREA_SIZE)
   #define  DATAFLASH_CA_CERT_ADDR             (DATAFLASH_BOOTL_PARAMS_2_ADDR  + DATAFLASH_PARAMS_AREA_SIZE)
+  #define  DATAFLASH_BLUETOOTH_DATA_ADDR      (DATAFLASH_CA_CERT_ADDR         + DATAFLASH_PARAMS_AREA_SIZE)
 
   #define  MEDIA_TYPE_FILE        1
   #define  MEDIA_TYPE_DATAFLASH   2
@@ -67,10 +70,11 @@ typedef struct
 
 } T_settings_restore_results;
 
-#define  SETT_OK          0
-#define  SETT_WRONG_SIZE  1
-#define  SETT_WRONG_CRC   2
-#define  SETT_WRONG_CHECK 3
+#define  SETT_OK           0
+#define  SETT_WRONG_SIZE   1
+#define  SETT_WRONG_CRC    2
+#define  SETT_WRONG_CHECK  3
+#define  SETT_IS_BLANK     4
 
 typedef struct
 {
@@ -101,6 +105,8 @@ uint32_t                    Accept_certificates_from_file(void);
 uint32_t                    Check_settings_in_DataFlash(uint8_t ptype, T_settings_state *sstate);
 void                        Reset_settings_wr_counters(void);
 
+uint32_t                    Save_buf_to_DataFlash(uint32_t start_addr,  uint8_t *buf, uint32_t buf_sz);
+uint32_t                    Restore_buf_from_DataFlash(uint32_t start_addr,  uint8_t *buf, uint32_t buf_sz);
 #endif
 
 

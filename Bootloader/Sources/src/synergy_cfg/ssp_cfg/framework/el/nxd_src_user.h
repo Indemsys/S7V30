@@ -93,7 +93,7 @@
     #define NX_DISABLE_LOOPBACK_INTERFACE
   #endif
   #if (2+0)
-    #define NX_MAX_PHYSICAL_INTERFACES (2)
+    #define NX_MAX_PHYSICAL_INTERFACES (4)
   #endif
   #if (!1)
     #define NX_DISABLE_FRAGMENTATION

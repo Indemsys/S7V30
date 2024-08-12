@@ -2,8 +2,8 @@
 // 2019.08.11
 // 15:56:12
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
-#include   "nx_secure_tls_api.h"
+#include   "App.h"
+#include   "Net.h"
 
 
 NX_PACKET_POOL          net_packet_pool;
@@ -20,7 +20,7 @@ void Net_packet_pool_init(void)
   err = nx_packet_pool_create(&net_packet_pool, "net packets", PACKET_MAX_SZ,&net_packet_pool_buffer[0],(PACKETS_IN_POOL * (PACKET_MAX_SZ + sizeof(NX_PACKET))));
   if (NX_SUCCESS != err)
   {
-    APPLOG("Failed to create net packet pool. Error %d", err);
+    NETLOG("Failed to create net packet pool. Error %d", err);
   }
 }
 

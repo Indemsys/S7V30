@@ -68,7 +68,7 @@ extern   "C" {
 
 /* Define the HTTP version.  */
 #define NX_WEB_HTTP_VERSION                     "HTTP/1.1"
-    
+
 /* Define HTTP TCP socket create options.  */
 
 #ifndef NX_WEB_HTTP_TYPE_OF_SERVICE
@@ -84,7 +84,7 @@ extern   "C" {
 #endif
 
 #ifndef NX_WEB_HTTP_MAX_RESOURCE
-#define NX_WEB_HTTP_MAX_RESOURCE                40
+#define NX_WEB_HTTP_MAX_RESOURCE                256
 #endif
 
 #ifndef NX_WEB_HTTP_MAX_NAME
@@ -94,14 +94,14 @@ extern   "C" {
 #ifndef NX_WEB_HTTP_MAX_PASSWORD
 #define NX_WEB_HTTP_MAX_PASSWORD                20
 #endif
-  
-/* To enabled HTTPS, define this symbol 
+
+/* To enabled HTTPS, define this symbol
 #define NX_WEB_HTTPS_ENABLE
 */
 
-/* To enable MD5 digest authentication, define this symbol 
+/* To enable MD5 digest authentication, define this symbol
 #define NX_WEB_HTTP_DIGEST_ENABLE
-*/    
+*/
 
 #ifndef NX_PHYSICAL_TRAILER
 #define NX_PHYSICAL_TRAILER                     4
@@ -238,7 +238,7 @@ extern   "C" {
 
 /* Define the max length of header field. */
 
-#ifndef NX_WEB_HTTP_MAX_HEADER_FIELD            
+#ifndef NX_WEB_HTTP_MAX_HEADER_FIELD
 #define NX_WEB_HTTP_MAX_HEADER_FIELD            256
 #endif
 

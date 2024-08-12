@@ -122,14 +122,14 @@ typedef struct
 T_reg_PFS;
 
 
-void      S7V30_board_pins_init(void);
+void      Board_pins_init(void);
 
 void      Config_pins(const T_IO_pins_configuration *cfg, uint32_t sz);
 void      S7G2_led_pins_init(void);
 void      S7G2_sdram_pins_init(void);
 void      S7G2_set_pins_to_shut_down_mode(void);
-uint32_t  S7V30_get_board_pin_count(void);
-void      S7V30_get_board_pin_conf_str(uint32_t pin_num, char *dstr);
+uint32_t  Get_board_pin_count(void);
+void      Get_board_pin_conf_str(uint32_t pin_num, char *dstr);
 void      S7G2_clkout_init(void);
 void      S7G2_LoRa_pins_init(void);
 void      S7G2_LoRa_pins_shutdown(void);

@@ -1,17 +1,17 @@
-#ifndef S7V30_BQ25619_H
-  #define S7V30_BQ25619_H
+#ifndef SYNERGY_BQ25619_H
+  #define SYNERGY_BQ25619_H
 
 
   #define  BQ25619_OPEN_TIMEOUT                              100
 
-  #define  BQ25619_INPUT_SOURCE_CONTROL                      0x00
-  #define  BQ25619_POWER_ON_CONFIGURATION                    0x01
-  #define  BQ25619_CHARGE_CURRENT_CONTROL                    0x02
-  #define  BQ25619_PRE_CHARGE_TERMINATION_CURRENT_CONTROL    0x03
-  #define  BQ25619_CHARGE_VOLTAGE_CONTROL                    0x04
-  #define  BQ25619_CHARGE_TERMINATION_TIMER_CONTROL          0x05
-  #define  BQ25619_BOOST_VOLTAGE_THERMAL_REGULATION_CONTROL  0x06
-  #define  BQ25619_MISC_OPERATION_CONTROL                    0x07
+  #define  BQ25619_INPUT_CURRENT_LIMIT                       0x00
+  #define  BQ25619_CHARGER_CONTROL_0                         0x01
+  #define  BQ25619_CHARGE_CURRENT_LIMIT                      0x02
+  #define  BQ25619_PRE_CHARGE_TERMINATION_CURRENT_LIMIT      0x03
+  #define  BQ25619_BATTERY_VOLTAGE_LIMIT                     0x04
+  #define  BQ25619_CHARGER_CONTROL_1                         0x05
+  #define  BQ25619_CHARGER_CONTROL_2                         0x06
+  #define  BQ25619_CHARGER_CONTROL_3                         0x07
   #define  BQ25619_SYSTEM_STATUS0                            0x08
   #define  BQ25619_SYSTEM_STATUS1                            0x09
   #define  BQ25619_SYSTEM_STATUS2                            0x0A
@@ -55,10 +55,10 @@
   #define  BQ25619_IN_LIMIT_3200MA      31
 
 
-  #define  BQ25619_PWR_SRC_ACCUM        0
-  #define  BQ25619_PWR_SRC_USB_HOST     1
-  #define  BQ25619_PWR_SRC_ADAPTER      3
-  #define  BQ25619_PWR_SRC_BOOST        7
+  #define  BQ25619_VBUS_NO_INPUT        0
+  #define  BQ25619_VBUS_USB             1
+  #define  BQ25619_VBUS_ADAPTER         3
+  #define  BQ25619_VBUS_BOOST           7
 
   #define  CONV_TO_CURR_LIMIT(X)       (((X & 0x1F) +1) * 100)
   #define  FAST_CHARGE_CURR_LIMIT(X)   ((X & 0x3F) *20)
@@ -77,24 +77,79 @@ typedef struct
 uint32_t             BQ25619_reg_count(void);
 T_bq25619_reg_descr const* BQ25619_get_reg_descr(uint8_t indx);
 
-uint32_t   BQ25619_open(void);
-ssp_err_t  BQ25619_lock(uint32_t timeout);
-ssp_err_t  BQ25619_unlock(void);
-uint32_t   BQ25619_close(void);
+uint8_t     Is_BQ25619_opened(void);
+ssp_err_t   BQ25619_open(void);
+ssp_err_t   BQ25619_lock(uint32_t timeout);
+ssp_err_t   BQ25619_unlock(void);
+uint32_t    BQ25619_close(void);
 
-ssp_err_t  BQ25619_write_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
-ssp_err_t  BQ25619_read_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
-ssp_err_t  BQ25619_write_reg(uint8_t addr, uint8_t val);
-ssp_err_t  BQ25619_read_reg(uint8_t addr, uint8_t *val);
-uint32_t   BQ25619_read_all(void);
-uint8_t    BQ25619_get_system_status(void);
+ssp_err_t   BQ25619_write_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
+ssp_err_t   BQ25619_read_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
+ssp_err_t   BQ25619_write_reg(uint8_t addr, uint8_t val);
+ssp_err_t   BQ25619_read_reg(uint8_t addr, uint8_t *val);
+uint32_t    BQ25619_read_all(void);
+uint8_t     BQ25619_get_system_status(void);
 
-void       Set_BQ25619_PSEL_HIGH(void);
-void       Set_BQ25619_PSEL_LOW(void);
 
-uint32_t   BQ25619_sw_off_accum(void);
-uint32_t   BQ25619_sw_off_charger(void);
+uint32_t    BQ25619_set_max_sys_voltage(void);
+uint32_t    BQ25619_sw_off_accum(void);
+uint32_t    BQ25619_disable_charger(void);
+uint32_t    BQ25619_switch_off_accum(void);
 
+uint32_t    BQ25619_get_charge_state(uint8_t status);
+uint32_t    BQ25619_get_vbus_state(uint8_t status);
+uint32_t    BQ25619_switch_off_vbus(void);
+
+float       Get_BQ25619_ilim_val(uint8_t b);
+float       Get_BQ25619_sysv_val(uint8_t b);
+float       Get_BQ25619_charge_curr_lim_val(uint8_t b);
+float       Get_BQ25619_precharge_curr_lim_val(uint8_t b);
+float       Get_BQ25619_charge_term_curr_lim_val(uint8_t b);
+float       Get_BQ25619_batt_volt_lim_val(uint8_t b);
+float       Get_BQ25619_VINDPM_val(uint8_t b);
+
+char const* Get_BQ25619_VBUS_status_str(uint8_t src);
+char const* Get_BQ25619_charging_status_str(uint8_t b);
+char const* Get_BQ25619_NTC_monitoring_str(uint8_t b);
+char const* Get_BQ25619_HiZ_state_str(uint8_t b);
+char const* Get_BQ25619_PFM_state_str(uint8_t b);
+char const* Get_BQ25619_WDT_state_str(uint8_t b);
+char const* Get_BQ25619_boost_state_str(uint8_t b);
+char const* Get_BQ25619_charge_state_str(uint8_t b);
+char const* Get_BQ25619_pgood_state_str(uint8_t b);
+char const* Get_BQ25619_therm_state_str(uint8_t b);
+char const* Get_BQ25619_vsys_state_str(uint8_t b);
+char const* Get_BQ25619_wdt_fault_str(uint8_t b);
+char const* Get_BQ25619_boost_fault_str(uint8_t b);
+char const* Get_BQ25619_charge_fault_str(uint8_t b);
+char const* Get_BQ25619_batt_fault_str(uint8_t b);
+char const* Get_BQ25619_NTC_fault_str(uint8_t b);
+char const* Get_BQ25619_VBUS_GD_str(uint8_t b);
+char const* Get_BQ25619_VINDPM_STAT_str(uint8_t b);
+char const* Get_BQ25619_IINDPM_STAT_str(uint8_t b);
+char const* Get_BQ25619_BATSNS_STAT_str(uint8_t b);
+char const* Get_BQ25619_TOPOFF_ACTIVE_str(uint8_t b);
+char const* Get_BQ25619_ACOV_STAT_str(uint8_t b);
+char const* Get_BQ25619_VINDPM_INT_MASK_str(uint8_t b);
+char const* Get_BQ25619_IINDPM_INT_MASK_str(uint8_t b);
+char const* Get_BQ25619_Q1_FULLON_str(uint8_t b);
+char const* Get_BQ25619_TOPOFF_TIMER_str(uint8_t b);
+char const* Get_BQ25619_VRECHG_str(uint8_t b);
+char const* Get_BQ25619_EN_TERM_str(uint8_t b);
+char const* Get_BQ25619_WATCHDOG_str(uint8_t b);
+char const* Get_BQ25619_EN_TIMER_str(uint8_t b);
+char const* Get_BQ25619_CHG_TIMER_str(uint8_t b);
+char const* Get_BQ25619_TREG_str(uint8_t b);
+char const* Get_BQ25619_JEITA_VSET_str(uint8_t b);
+char const* Get_BQ25619_OVP_str(uint8_t b);
+char const* Get_BQ25619_BOOSTV_str(uint8_t b);
+char const* Get_BQ25619_IINDET_EN_str(uint8_t b);
+char const* Get_BQ25619_TMR2X_EN_str(uint8_t b);
+char const* Get_BQ25619_BATFET_DIS_str(uint8_t b);
+char const* Get_BQ25619_BATFET_RST_WVBUS_str(uint8_t b);
+char const* Get_BQ25619_BATFET_DLY_str(uint8_t b);
+char const* Get_BQ25619_BATFET_RST_EN_str(uint8_t b);
+char const* Get_BQ25619_VINDPM_BAT_TRACK_str(uint8_t b);
 
 #endif
 

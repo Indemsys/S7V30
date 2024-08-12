@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  * Copyright [2015-2023] Renesas Electronics Corporation and/or its licensors. All Rights Reserved.
- * 
+ *
  * This file is part of Renesas SynergyTM Software Package (SSP)
  *
  * The contents of this file (the "contents") are proprietary and confidential to Renesas Electronics Corporation
@@ -100,7 +100,7 @@ static const char g_module_name[] = "dmac";
 #endif
 
 #if defined(__GNUC__)
-/* This structure is affected by warnings from a GCC compiler bug. This pragma suppresses the warnings in this 
+/* This structure is affected by warnings from a GCC compiler bug. This pragma suppresses the warnings in this
  * structure only.*/
 /*LDRA_INSPECTED 69 S */
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -874,10 +874,10 @@ static ssp_err_t r_dmac_enable_alignment_check(void const * p_src, void const * 
  **********************************************************************************************************************/
 static void dma_ir_flag_clear(dmac_instance_ctrl_t * const p_ctrl)
 {
-	if(1U == p_ctrl->ir_flag_stat)
-	{
-		HW_ICU_DmacClear(gp_icu_regs, p_ctrl->channel);
-	}
+  if(1U == p_ctrl->ir_flag_stat)
+  {
+    HW_ICU_DmacClear(gp_icu_regs, p_ctrl->channel);
+  }
 }/* End of function dma_ir_flag_clear */
 
 /*******************************************************************************************************************//**

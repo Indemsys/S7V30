@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Parameters</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+    <style>
+
+.accordion 
+{
+  background-color: #fff;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header 
+{
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  margin: -15px -15px 0px -15px;
+}
+
+.accordion-content 
+{
+  display: none;
+  padding: 10px 0px 0px 0px;
+}
+
+.form-element 
+{
+  margin-bottom: 10px;
+}
+
+.btn
+{
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+.pars-grid {
+  display: grid;
+  grid: none;
+  gap: 2px 2px; 
+}
+
+.pars-name 
+{
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #1e3a8a; 
+  margin-top: 10px;
+}
+
+.grid_value_item
+{
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+}
+
+.pars-val 
+{
+  font-size: 1em;
+  font-weight: normal;
+  color: #AF2626;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.3);
+  background-color: #eef1fa;
+}
+
+
+
+    </style>
+    
+  <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+      <button id="SubmitDataBtn" class="cmd_btn" onclick="submitData()">&#128228; Submit Data</button>
+        <button class="cmd_btn" onclick="collapseAll()">&#128469; Collapse All</button>
+        <button class="cmd_btn" onclick="expandAll()">&#128470; Expand All</button>
+      
+      <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+      <div class="panel" id="accordion-container">
+
+      </div>	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+    <script>
+      var module_parameters;
+
+      function createAccordion(container, nodes)
+      {
+        nodes.forEach(function(node) {
+          const accordion = document.createElement('div');
+          accordion.className = 'accordion';
+
+          const header = document.createElement('div');
+          header.className = 'accordion-header';
+          header.textContent = node.Name;
+          header.onclick = function() { toggleAccordion(header); };
+          accordion.appendChild(header);
+
+          
+          const accordion_content = document.createElement('div');
+          accordion_content.className = 'accordion-content';
+          
+          const grid_content = document.createElement('div');
+          grid_content.className = 'pars-grid';
+
+          node.Parameters.forEach(function(parameter)
+          {
+            
+            const label_cell = document.createElement('div');
+            label_cell.textContent = parameter.description;
+            label_cell.className = 'pars-name';
+            grid_content.appendChild(label_cell);
+
+            const value_cell = document.createElement('div');
+            value_cell.className = 'grid_value_item';
+
+            if (parameter.options.length > 0)
+            {
+              const selector = document.createElement('select');
+              selector.setAttribute('data-id', parameter.name);
+              selector.className = 'pars-val';
+              parameter.options.forEach(function(option) {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.v;
+                optionElement.textContent = option.n.trim();
+                if (parameter.value === option.v)
+                {
+                  optionElement.selected = true;
+                }
+                selector.appendChild(optionElement);
+              });
+              value_cell.appendChild(selector);
+            } else
+            {
+              const input = document.createElement('input');
+              if ((parameter.attr >> 2) & 1) 
+              {
+                input.type = 'password';
+              }
+              else
+              {
+                input.type = 'text';
+              }
+              input.setAttribute('data-id', parameter.name);
+              input.className = 'pars-val';
+              input.value = parameter.value;
+              value_cell.appendChild(input);
+            }
+            grid_content.appendChild(value_cell);
+            accordion_content.appendChild(grid_content);
+            
+          });
+
+          if (node.Children && node.Children.length > 0)
+          {
+            createAccordion(accordion_content, node.Children);
+          }
+
+          accordion.appendChild(accordion_content);
+          container.appendChild(accordion);
+        });
+      }
+
+      function toggleAccordion(element)
+      {
+        const content = element.nextElementSibling;
+        const parent = element.parentNode.parentNode;
+
+        const allPanels = parent.querySelectorAll('.accordion-content');
+        allPanels.forEach(function(panel) {if (panel !== content)
+          {
+            panel.style.display = "none";
+          }
+        });
+        content.style.display = content.style.display === "block" ? "none" : "block";
+      }
+
+      function collapseAll()
+      {
+        const allPanels = document.querySelectorAll('.accordion-content');
+        allPanels.forEach(function(panel) {panel.style.display = "none";});
+      }
+
+      function expandAll()
+      {
+        const allPanels = document.querySelectorAll('.accordion-content');
+        allPanels.forEach(function(panel) {panel.style.display = "block";});
+      }
+
+
+      function gatherData(nodes, output_json)
+      {
+        nodes.forEach(function(node)
+        {
+          // Проходим по массиву Parameters в тукущем узле JSON
+          node.Parameters.forEach(function(parameter)
+          {
+            // Ищем элементы
+            let name = parameter.name;
+            const element = document.querySelector(`[data-id="${name}"]`);
+            if (element)
+            {
+              output_json.push([ String(name), String(element.value) ]);
+            }
+          });
+
+          if (node.Children && node.Children.length > 0)
+          {
+            gatherData(node.Children, output_json);
+          }
+        });
+      }
+
+      async function submitData()
+      {
+        var arr1 = [ ];
+        var json_array = [ ];
+
+        gatherData(module_parameters.Children, arr1);
+        json_array.push({ Parameters: arr1 });
+
+        try
+        {
+          var response = await fetch('/post_save_module_params', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(json_array)
+          });
+
+          if (!response.ok)
+          {
+            throw new Error('Network response was not ok');
+          }
+
+          //var responseData = await response.json();
+          alert('Data submitted successfully!');
+        } catch (error)
+        {
+          alert('Failed to submit data.');
+        }
+      }
+      async function LoadModuleParameters()
+      {
+        try
+        {
+          const response = await fetch('post_get_module_params', { method: 'POST' });
+          module_parameters = await response.json();
+          const container = document.getElementById('accordion-container');
+          createAccordion(container, module_parameters.Children);
+        } catch (error)
+        {
+          console.error('Error loading JSON:', error);
+        }
+      }
+      document.addEventListener('DOMContentLoaded', LoadModuleParameters());
+    </script>
+	  
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

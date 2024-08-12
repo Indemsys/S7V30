@@ -2,7 +2,7 @@
 // 2023-02-06
 // 17:23:49
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 static void can0_error_isr(void);
@@ -20,7 +20,7 @@ static IRQn_Type can0_mailbox_rx_int_num;
 static IRQn_Type can0_mailbox_tx_int_num;
 
 
-SSP_VECTOR_DEFINE_CHAN(can0_error_isr,         CAN , ERROR       , 0)
+SSP_VECTOR_DEFINE_CHAN(can0_error_isr,         CAN, ERROR, 0)
 SSP_VECTOR_DEFINE_CHAN(can0_fifo_rx_isr     ,  CAN , FIFO_RX     , 0)
 SSP_VECTOR_DEFINE_CHAN(can0_fifo_tx_isr     ,  CAN , FIFO_TX     , 0)
 SSP_VECTOR_DEFINE_CHAN(can0_mailbox_rx_isr  ,  CAN , MAILBOX_RX  , 0)
@@ -37,8 +37,8 @@ TX_QUEUE              can0_rx_queue;
 TX_QUEUE              can0_tx_queue;
 TX_EVENT_FLAGS_GROUP  can0_flags;
 
-T_cam_msg             can0_rx_queue_buf[RX_MESSAGES_RING_SZ];
-T_cam_msg             can0_tx_queue_buf[TX_MESSAGES_RING_SZ];
+T_CAN_msg             can0_rx_queue_buf[RX_MESSAGES_RING_SZ];
+T_CAN_msg             can0_tx_queue_buf[TX_MESSAGES_RING_SZ];
 
 #define CAN0_MSG_RECEIVED BIT(0)
 #define CAN0_MSG_TO_SEND  BIT(1)
@@ -50,10 +50,16 @@ static TX_THREAD       can_thread;
 
 uint8_t                can_task_ready;
 
-static void CAN0_send_mailbox(T_cam_msg  *p_mb);
+uint32_t g_can_rx_func_period_us;
+uint32_t g_can_rx_func_max_period_us;
+uint32_t g_can_rx_func_duration_us;
+uint32_t g_can_rx_func_max_duration_us;
 
 
-extern void CAN_packet_reciever(T_cam_msg  *mailbox_ptr);
+static void CAN0_send_mailbox(T_CAN_msg  *p_mb);
+
+
+extern void CAN_packet_reciever(T_CAN_msg  *mailbox_ptr);
 
 
 /*-----------------------------------------------------------------------------------------------------
@@ -264,7 +270,7 @@ static void can0_mailbox_rx_isr(void)
   uint8_t   mssr = R_CAN0->MSSR;
   uint8_t   mctl;
   uint8_t   box_num;
-  T_cam_msg mb;
+  T_CAN_msg mb;
 
   // Проверем есть ли какой либо майл бокс с полученным пакетом
   if ((mssr & BIT(7)) == 0)
@@ -289,7 +295,7 @@ static void can0_mailbox_rx_isr(void)
       mb.data[6] = R_CAN0->MBn[box_num].MBn_D[6];
       mb.data[7] = R_CAN0->MBn[box_num].MBn_D[7];
 
-      tx_queue_send(&can0_rx_queue, &mb,  TX_NO_WAIT);
+      tx_queue_send(&can0_rx_queue,&mb,  TX_NO_WAIT);
 
       R_CAN0->MCTLn_RX[box_num] = mctl ^ BIT(0); // Сбрасываем флаг принятых данных
     }
@@ -309,7 +315,7 @@ static void can0_mailbox_tx_isr(void)
 {
   uint8_t          mctl;
   ULONG            enqueued;
-  T_cam_msg        mb = {0};
+  T_CAN_msg        mb = {0};
 
   mctl = R_CAN0->MCTLn_TX[31]; // Получаем контрольное слова майлбокса
 
@@ -326,7 +332,7 @@ static void can0_mailbox_tx_isr(void)
       if (enqueued > 0)
       {
         // Извлекаем новый пакет из очереди и отправлем его здесь
-        if (tx_queue_receive(&can0_tx_queue, &mb, TX_NO_WAIT) == TX_SUCCESS)
+        if (tx_queue_receive(&can0_tx_queue,&mb, TX_NO_WAIT) == TX_SUCCESS)
         {
           CAN0_send_mailbox(&mb);
         }
@@ -474,7 +480,7 @@ static void CAN0_set_mailbox_to_stop(uint8_t box_num, uint32_t msg_id)
 
   \param p_mb
 -----------------------------------------------------------------------------------------------------*/
-static void CAN0_send_mailbox(T_cam_msg  *p_mb)
+static void CAN0_send_mailbox(T_CAN_msg  *p_mb)
 {
   R_CAN0->MBn[31].MBn_ID = p_mb->can_id;
   R_CAN0->MBn[31].MBn_ID_b.IDE = 1;
@@ -528,14 +534,14 @@ static uint32_t CAN0_create_RTOS_services(void)
     return RES_ERROR;
   }
 
-  if (tx_queue_create(&can0_rx_queue, (CHAR *) "CAN0_RX", sizeof(T_cam_msg)/sizeof(uint32_t),can0_rx_queue_buf, sizeof(T_cam_msg) * RX_MESSAGES_RING_SZ) != TX_SUCCESS)
+  if (tx_queue_create(&can0_rx_queue, (CHAR *) "CAN0_RX", sizeof(T_CAN_msg) / sizeof(uint32_t),can0_rx_queue_buf, sizeof(T_CAN_msg) * RX_MESSAGES_RING_SZ) != TX_SUCCESS)
   {
     tx_event_flags_delete(&can0_flags);
     return RES_ERROR;
   }
   tx_queue_send_notify(&can0_rx_queue, CAN0_receved_notify);
 
-  if (tx_queue_create(&can0_tx_queue, (CHAR *) "CAN0_TX", sizeof(T_cam_msg)/sizeof(uint32_t),can0_tx_queue_buf, sizeof(T_cam_msg) * TX_MESSAGES_RING_SZ) != TX_SUCCESS)
+  if (tx_queue_create(&can0_tx_queue, (CHAR *) "CAN0_TX", sizeof(T_CAN_msg) / sizeof(uint32_t),can0_tx_queue_buf, sizeof(T_CAN_msg) * TX_MESSAGES_RING_SZ) != TX_SUCCESS)
   {
     tx_event_flags_delete(&can0_flags);
     tx_queue_delete(&can0_rx_queue);
@@ -576,55 +582,55 @@ uint32_t CAN_init(void)
 
   // Конфигурируем регистр CTLR. Его можно конфигурировать только в режиме halt
   reg16 = 0
-         + LSHIFT(0, 15) // Reserver  |
-         + LSHIFT(0, 14) // Reserver  |
-         + LSHIFT(0, 13) // RBOC      | Forcible Return from Bus-Off
-                             //             0: Nothing occurred
-                             //             1: Forced return from bus-off state
-                             //
-         + LSHIFT(0, 11) // BOM[1:0]  | Bus-Off Recovery Mode
-                             //             00: Normal mode (ISO11898-1-compliant)
-                             //             01: Enter CAN halt mode automatically on entering bus-off state
-                             //             10: Enter CAN halt mode automatically on end of bus-off state
-                             //             11: Enter CAN halt mode during bus-off recovery period through a software request.
-                             //
-         + LSHIFT(0, 10) // SLPM      | CAN Sleep Mode
-                             //             0: All other modes
-                             //             1: CAN sleep mode
-                             //
-         + LSHIFT(2,  8) // CANM[1:0] | CAN Mode of Operation Select
-                             //             00: CAN operation mode
-                             //             01: CAN reset mode
-                             //             10: CAN halt mode
-                             //             11: CAN reset mode (forced transition).
-                             //
-         + LSHIFT(0,  6) // TSPS[1:0] | Time Stamp Prescaler Select
-                             //             00: Every bit time
-                             //             01: Every 2-bit time
-                             //             10: Every 4-bit time
-                             //             11: Every 8-bit time
-                             //
-         + LSHIFT(1,  5) // TSRC      | Time Stamp Counter Reset Command
-                             //             0: Nothing occurred
-                             //             1: Reset (This bit automatically is set to 0 after being set to 1. It should read as 0.)
-                             //
-         + LSHIFT(0,  4) // TPM       | Transmission Priority Mode Select
-                             //             0: ID priority transmit mode
-                             //             1: Mailbox number priority transmit mode.
-                             //
-         + LSHIFT(0,  3) // MLM       | Message Lost Mode Select
-                             //             0: Overwrite mode
-                             //             1: Overrun mode.
-                             //
-         + LSHIFT(1,  1) // IDFM[1:0] | ID Format Mode Select
-                             //             00: Standard ID mode All mailboxes, including FIFO mailboxes, handle only standard IDs.
-                             //             01: Extended ID mode All mailboxes, including FIFO mailboxes, handle only extended IDs
-                             //             10: Mixed ID mode. All mailboxes, including FIFO mailboxes, handle both standard and extended IDs.
-                             //             11: Setting prohibited
-                             //
-         + LSHIFT(0,  0) // MBM       | CAN Mailbox Mode Select
-                             //             0: Normal mailbox mode
-                             //             1: FIFO mailbox mode
+          + LSHIFT(0, 15) // Reserver  |
+          + LSHIFT(0, 14) // Reserver  |
+          + LSHIFT(0, 13) // RBOC      | Forcible Return from Bus-Off
+                          //             0: Nothing occurred
+          //             1: Forced return from bus-off state
+          //
+          + LSHIFT(0, 11) // BOM[1:0]  | Bus-Off Recovery Mode
+                          //             00: Normal mode (ISO11898-1-compliant)
+          //             01: Enter CAN halt mode automatically on entering bus-off state
+          //             10: Enter CAN halt mode automatically on end of bus-off state
+          //             11: Enter CAN halt mode during bus-off recovery period through a software request.
+          //
+          + LSHIFT(0, 10) // SLPM      | CAN Sleep Mode
+                          //             0: All other modes
+          //             1: CAN sleep mode
+          //
+          + LSHIFT(2,  8) // CANM[1:0] | CAN Mode of Operation Select
+                          //             00: CAN operation mode
+          //             01: CAN reset mode
+          //             10: CAN halt mode
+          //             11: CAN reset mode (forced transition).
+          //
+          + LSHIFT(0,  6) // TSPS[1:0] | Time Stamp Prescaler Select
+                          //             00: Every bit time
+          //             01: Every 2-bit time
+          //             10: Every 4-bit time
+          //             11: Every 8-bit time
+          //
+          + LSHIFT(1,  5) // TSRC      | Time Stamp Counter Reset Command
+                          //             0: Nothing occurred
+          //             1: Reset (This bit automatically is set to 0 after being set to 1. It should read as 0.)
+          //
+          + LSHIFT(0,  4) // TPM       | Transmission Priority Mode Select
+                          //             0: ID priority transmit mode
+          //             1: Mailbox number priority transmit mode.
+          //
+          + LSHIFT(0,  3) // MLM       | Message Lost Mode Select
+                          //             0: Overwrite mode
+          //             1: Overrun mode.
+          //
+          + LSHIFT(1,  1) // IDFM[1:0] | ID Format Mode Select
+                          //             00: Standard ID mode All mailboxes, including FIFO mailboxes, handle only standard IDs.
+          //             01: Extended ID mode All mailboxes, including FIFO mailboxes, handle only extended IDs
+          //             10: Mixed ID mode. All mailboxes, including FIFO mailboxes, handle both standard and extended IDs.
+          //             11: Setting prohibited
+          //
+          + LSHIFT(0,  0) // MBM       | CAN Mailbox Mode Select
+                          //             0: Normal mailbox mode
+  //             1: FIFO mailbox mode
   ;
   R_CAN0->CTLR = reg16;
 
@@ -657,7 +663,7 @@ uint32_t CAN_init(void)
   }
 
   // 31 майлбокс сконфигурировать на прием пакетов с любыми идентификаторами
-  for (uint32_t i=0; i < 31; i++)
+  for (uint32_t i = 0; i < 31; i++)
   {
     CAN0_set_mailbox_to_recieve(i, 0);
   }
@@ -712,7 +718,7 @@ uint32_t CAN_reinit(uint8_t speed_code)
   CAN0_set_and_clear_interrupts();
 
   // Остановить работу 31 майлбокса
-  for (uint32_t i=0; i < 31; i++)
+  for (uint32_t i = 0; i < 31; i++)
   {
     CAN0_set_mailbox_to_stop(i, 0);
   }
@@ -750,55 +756,55 @@ uint32_t CAN_reinit(uint8_t speed_code)
 
   // Конфигурируем регистр CTLR. Его можно конфигурировать только в режиме halt
   reg16 = 0
-         + LSHIFT(0, 15) // Reserver  |
-         + LSHIFT(0, 14) // Reserver  |
-         + LSHIFT(0, 13) // RBOC      | Forcible Return from Bus-Off
-                             //             0: Nothing occurred
-                             //             1: Forced return from bus-off state
-                             //
-         + LSHIFT(0, 11) // BOM[1:0]  | Bus-Off Recovery Mode
-                             //             00: Normal mode (ISO11898-1-compliant)
-                             //             01: Enter CAN halt mode automatically on entering bus-off state
-                             //             10: Enter CAN halt mode automatically on end of bus-off state
-                             //             11: Enter CAN halt mode during bus-off recovery period through a software request.
-                             //
-         + LSHIFT(0, 10) // SLPM      | CAN Sleep Mode
-                             //             0: All other modes
-                             //             1: CAN sleep mode
-                             //
-         + LSHIFT(2,  8) // CANM[1:0] | CAN Mode of Operation Select
-                             //             00: CAN operation mode
-                             //             01: CAN reset mode
-                             //             10: CAN halt mode
-                             //             11: CAN reset mode (forced transition).
-                             //
-         + LSHIFT(0,  6) // TSPS[1:0] | Time Stamp Prescaler Select
-                             //             00: Every bit time
-                             //             01: Every 2-bit time
-                             //             10: Every 4-bit time
-                             //             11: Every 8-bit time
-                             //
-         + LSHIFT(1,  5) // TSRC      | Time Stamp Counter Reset Command
-                             //             0: Nothing occurred
-                             //             1: Reset (This bit automatically is set to 0 after being set to 1. It should read as 0.)
-                             //
-         + LSHIFT(0,  4) // TPM       | Transmission Priority Mode Select
-                             //             0: ID priority transmit mode
-                             //             1: Mailbox number priority transmit mode.
-                             //
-         + LSHIFT(0,  3) // MLM       | Message Lost Mode Select
-                             //             0: Overwrite mode
-                             //             1: Overrun mode.
-                             //
-         + LSHIFT(1,  1) // IDFM[1:0] | ID Format Mode Select
-                             //             00: Standard ID mode All mailboxes, including FIFO mailboxes, handle only standard IDs.
-                             //             01: Extended ID mode All mailboxes, including FIFO mailboxes, handle only extended IDs
-                             //             10: Mixed ID mode. All mailboxes, including FIFO mailboxes, handle both standard and extended IDs.
-                             //             11: Setting prohibited
-                             //
-         + LSHIFT(0,  0) // MBM       | CAN Mailbox Mode Select
-                             //             0: Normal mailbox mode
-                             //             1: FIFO mailbox mode
+          + LSHIFT(0, 15) // Reserver  |
+          + LSHIFT(0, 14) // Reserver  |
+          + LSHIFT(0, 13) // RBOC      | Forcible Return from Bus-Off
+                          //             0: Nothing occurred
+          //             1: Forced return from bus-off state
+          //
+          + LSHIFT(0, 11) // BOM[1:0]  | Bus-Off Recovery Mode
+                          //             00: Normal mode (ISO11898-1-compliant)
+          //             01: Enter CAN halt mode automatically on entering bus-off state
+          //             10: Enter CAN halt mode automatically on end of bus-off state
+          //             11: Enter CAN halt mode during bus-off recovery period through a software request.
+          //
+          + LSHIFT(0, 10) // SLPM      | CAN Sleep Mode
+                          //             0: All other modes
+          //             1: CAN sleep mode
+          //
+          + LSHIFT(2,  8) // CANM[1:0] | CAN Mode of Operation Select
+                          //             00: CAN operation mode
+          //             01: CAN reset mode
+          //             10: CAN halt mode
+          //             11: CAN reset mode (forced transition).
+          //
+          + LSHIFT(0,  6) // TSPS[1:0] | Time Stamp Prescaler Select
+                          //             00: Every bit time
+          //             01: Every 2-bit time
+          //             10: Every 4-bit time
+          //             11: Every 8-bit time
+          //
+          + LSHIFT(1,  5) // TSRC      | Time Stamp Counter Reset Command
+                          //             0: Nothing occurred
+          //             1: Reset (This bit automatically is set to 0 after being set to 1. It should read as 0.)
+          //
+          + LSHIFT(0,  4) // TPM       | Transmission Priority Mode Select
+                          //             0: ID priority transmit mode
+          //             1: Mailbox number priority transmit mode.
+          //
+          + LSHIFT(0,  3) // MLM       | Message Lost Mode Select
+                          //             0: Overwrite mode
+          //             1: Overrun mode.
+          //
+          + LSHIFT(1,  1) // IDFM[1:0] | ID Format Mode Select
+                          //             00: Standard ID mode All mailboxes, including FIFO mailboxes, handle only standard IDs.
+          //             01: Extended ID mode All mailboxes, including FIFO mailboxes, handle only extended IDs
+          //             10: Mixed ID mode. All mailboxes, including FIFO mailboxes, handle both standard and extended IDs.
+          //             11: Setting prohibited
+          //
+          + LSHIFT(0,  0) // MBM       | CAN Mailbox Mode Select
+                          //             0: Normal mailbox mode
+  //             1: FIFO mailbox mode
   ;
   R_CAN0->CTLR = reg16;
 
@@ -830,7 +836,7 @@ uint32_t CAN_reinit(uint8_t speed_code)
   }
 
   // 31 майлбокс сконфигурировать на прием пакетов с любыми идентификаторами
-  for (uint32_t i=0; i < 31; i++)
+  for (uint32_t i = 0; i < 31; i++)
   {
     CAN0_set_mailbox_to_recieve(i, 0);
   }
@@ -851,9 +857,9 @@ uint32_t CAN_reinit(uint8_t speed_code)
 -----------------------------------------------------------------------------------------------------*/
 uint32_t CAN0_post_packet_to_send(uint32_t canid, uint8_t *data, uint8_t len)
 {
-  T_cam_msg mb = {0};
+  T_CAN_msg mb = {0};
 
-  if (Is_CAN0_task_ready()==0) return RES_ERROR;
+  if (Is_CAN0_task_ready() == 0) return RES_ERROR;
 
   mb.can_id = canid;
   memcpy(mb.data , data, len);
@@ -896,7 +902,7 @@ uint8_t  Is_CAN0_task_ready(void)
 static void CAN_task(ULONG arg)
 {
   ULONG            actual_flags;
-  T_cam_msg        mb = {0};
+  T_CAN_msg        mb = {0};
 
   if (CAN0_create_RTOS_services() != RES_OK) return;
   if (CAN_init() != RES_OK) return;
@@ -914,7 +920,7 @@ static void CAN_task(ULONG arg)
     {
       if (actual_flags & CAN0_MSG_TO_SEND)
       {
-         // Проверить не продолжается ли еще отправка предыдущего пакета
+        // Проверить не продолжается ли еще отправка предыдущего пакета
         if (R_CAN0->MCTLn_TX_b[31].TRMREQ == 0)
         {
           // Майл бокс не назначен как передающий и значит свободен для отправки
@@ -928,21 +934,39 @@ static void CAN_task(ULONG arg)
 
       if (actual_flags & CAN0_MSG_RECEIVED)
       {
-        if (tx_queue_receive(&can0_rx_queue,&mb, TX_NO_WAIT) == TX_SUCCESS)
+        static T_sys_timestump     tstart       = {0};
+        static T_sys_timestump     tfinish      = {0};
+        static T_sys_timestump     tfinish_prev = {0};
+        Get_hw_timestump(&tstart);
+
+        // Извлекаем и выполняем команды из очереди
+        while (tx_queue_receive(&can0_rx_queue,&mb, TX_NO_WAIT) == TX_SUCCESS)
         {
           CAN_packet_reciever(&mb);
         }
+
+        // Фиксируем периодичнсть и максимальную длительность выполнения фрагмента кода выполнения команд CAN
+        Get_hw_timestump(&tfinish);
+        if (tfinish_prev.ticks != 0)
+        {
+          g_can_rx_func_period_us = Timestump_diff_to_usec(&tfinish_prev,&tfinish);
+          if (g_can_rx_func_period_us > g_can_rx_func_max_period_us) g_can_rx_func_max_period_us = g_can_rx_func_period_us;
+        }
+        tfinish_prev = tfinish;
+
+        g_can_rx_func_duration_us = Timestump_diff_to_usec(&tstart,&tfinish);
+        if (g_can_rx_func_duration_us > g_can_rx_func_max_duration_us) g_can_rx_func_max_duration_us = g_can_rx_func_duration_us;
+
       }
     }
 
-    can0_recr =R_CAN0->RECR;
-    can0_tecr =R_CAN0->TECR;
+    can0_recr = R_CAN0->RECR;
+    can0_tecr = R_CAN0->TECR;
     can0_str = (T_can_str)(R_CAN0->STR);
 
   } while (1);
 
 }
-
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -953,9 +977,9 @@ static void CAN_task(ULONG arg)
 -----------------------------------------------------------------------------------------------------*/
 uint32_t Create_CAN_task(void)
 {
-  UINT              err;
+  UINT              res;
 
-  err = tx_thread_create(
+  res = tx_thread_create(
                          &can_thread,
                          (CHAR *)"CAN0",
                          CAN_task,
@@ -968,14 +992,14 @@ uint32_t Create_CAN_task(void)
                          TX_AUTO_START
                         );
 
-  if (err == TX_SUCCESS)
+  if (res == TX_SUCCESS)
   {
     APPLOG("CAN task created.");
     return RES_OK;
   }
   else
   {
-    APPLOG("CAN creating error %d.", err);
+    APPLOG("CAN creating error %04X.", res);
     return RES_ERROR;
   }
 }

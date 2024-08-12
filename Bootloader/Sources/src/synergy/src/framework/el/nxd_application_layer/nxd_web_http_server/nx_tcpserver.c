@@ -185,8 +185,8 @@ NX_TCP_SESSION *session_ptr;
             return NX_TCPSERVER_FAIL;
         }
 
-        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip, 
-                                               server_ptr -> nx_tcpserver_listen_port, 
+        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip,
+                                               server_ptr -> nx_tcpserver_listen_port,
                                                &session_ptr -> nx_tcp_session_socket);
         if((status != NX_SUCCESS) && (status != NX_CONNECTION_PENDING))
         {
@@ -199,8 +199,8 @@ NX_TCP_SESSION *session_ptr;
     else if(server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_socket.nx_tcp_socket_state == NX_TCP_CLOSED)
     {
 
-        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip, 
-                                               server_ptr -> nx_tcpserver_listen_port, 
+        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip,
+                                               server_ptr -> nx_tcpserver_listen_port,
                                                &server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_socket);
         if((status != NX_SUCCESS) && (status != NX_CONNECTION_PENDING))
         {
@@ -287,7 +287,7 @@ NX_TCP_SESSION *session_ptr;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_tcpserver_create(NX_IP *ip_ptr, NX_TCPSERVER *server_ptr, CHAR *name, 
+UINT _nx_tcpserver_create(NX_IP *ip_ptr, NX_TCPSERVER *server_ptr, CHAR *name,
                           ULONG type_of_service, ULONG fragment, UINT time_to_live, ULONG window_size,
                           VOID (*new_connection)(NX_TCPSERVER *server_ptr, NX_TCP_SESSION *session_ptr),
                           VOID (*receive_data)(NX_TCPSERVER *server_ptr, NX_TCP_SESSION *session_ptr),
@@ -315,7 +315,7 @@ UINT            status;
     /* Create the tcpserver thread. */
     status = tx_thread_create(&server_ptr -> nx_tcpserver_thread, "TCPSERVER Thread",
                               _nx_tcpserver_thread_entry, (ULONG)server_ptr, stack_ptr,
-                              stack_size, thread_priority, thread_priority, 
+                              stack_size, thread_priority, thread_priority,
                               TX_NO_TIME_SLICE, TX_DONT_START);
 
     /* Create the tcpserver event flags. */
@@ -333,7 +333,7 @@ UINT            status;
     /* Initialize TCP sockets. */
     for(i = 0; i < server_ptr -> nx_tcpserver_sessions_count; i++)
     {
-        status += nx_tcp_socket_create(ip_ptr, &server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_socket, name, type_of_service, fragment, time_to_live, 
+        status += nx_tcp_socket_create(ip_ptr, &server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_socket, name, type_of_service, fragment, time_to_live,
                                        window_size, NX_NULL, _nx_tcpserver_disconnect_present);
 
         status += nx_tcp_socket_receive_notify(&server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_socket, _nx_tcpserver_data_present);
@@ -346,6 +346,10 @@ UINT            status;
 
 
 #ifdef NX_TCPSERVER_ENABLE_TLS
+
+extern const USHORT nx_crypto_ecc_supported_groups_synergys7[];
+extern const NX_CRYPTO_METHOD *nx_crypto_ecc_curves_synergys7[];
+extern const USHORT nx_crypto_ecc_supported_groups_synergys7_size;
 
 /**************************************************************************/
 /*                                                                        */
@@ -464,7 +468,7 @@ UINT status;
 
     /* Get our per-session packet buffer size. */
     session_pkt_buffer_size = packet_buffer_size / num_sessions;
-    
+
     /* Get our per-session metadata. */
     session_metadata = metadata_buffer;
     session_metadata_size = metadata_size / num_sessions;
@@ -476,13 +480,13 @@ UINT status;
            remote certificates to get per-certificate size. */
         session_cert_buffer_size = remote_cert_buffer_size / remote_certs_num;
     }
-    
+
     /* Loop through all sessions, initialize each one. */
     for(i = 0; i < num_sessions; ++i)
     {
         /* This server instance is using TLS so mark as such. */
         server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_using_tls = NX_TRUE;
-      
+
         /* Setup per-session data. Get the session from the server structure, then initialize it. */
         tls_session =  &(server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_tls_session);
         status = nx_secure_tls_session_create(tls_session, crypto_table, session_metadata, session_metadata_size);
@@ -493,22 +497,27 @@ UINT status;
         }
 
         /* Allocate space for packet reassembly. */
-        status = nx_secure_tls_session_packet_buffer_set(tls_session, &packet_buffer[i * session_pkt_buffer_size], 
+        status = nx_secure_tls_session_packet_buffer_set(tls_session, &packet_buffer[i * session_pkt_buffer_size],
                                                          session_pkt_buffer_size);
 
         if(status != NX_SUCCESS)
         {
             return(status);
         }
-        
+        /* Initialize ECC parameters for this session. */
+        status = nx_secure_tls_ecc_initialize(tls_session,
+            nx_crypto_ecc_supported_groups_synergys7,
+            nx_crypto_ecc_supported_groups_synergys7_size,
+            nx_crypto_ecc_curves_synergys7);
+
         /* Add identity certificate. */
         status = nx_secure_tls_local_certificate_add(tls_session, identity_certificate);
 
         if(status != NX_SUCCESS)
         {
             return(status);
-        }       
-        
+        }
+
         /* See if remote certificates are provided. */
         if(remote_certs_num > 0)
         {
@@ -975,8 +984,8 @@ NX_TCP_SESSION *session_ptr = NX_NULL;
             return;
         }
 
-        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip, 
-                                               server_ptr -> nx_tcpserver_listen_port, 
+        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip,
+                                               server_ptr -> nx_tcpserver_listen_port,
                                                &session_ptr -> nx_tcp_session_socket);
         if((status != NX_SUCCESS) && (status != NX_CONNECTION_PENDING))
         {
@@ -989,8 +998,8 @@ NX_TCP_SESSION *session_ptr = NX_NULL;
     else if(server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_socket.nx_tcp_socket_state == NX_TCP_CLOSED)
     {
 
-        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip, 
-                                               server_ptr -> nx_tcpserver_listen_port, 
+        status = nx_tcp_server_socket_relisten(server_ptr -> nx_tcpserver_ip,
+                                               server_ptr -> nx_tcpserver_listen_port,
                                                &session_ptr -> nx_tcp_session_socket);
         if((status != NX_SUCCESS) && (status != NX_CONNECTION_PENDING))
         {
@@ -1009,14 +1018,14 @@ NX_TCP_SESSION *session_ptr = NX_NULL;
 
     if(status == NX_SUCCESS)
     {
-        
+
 #ifdef NX_TCPSERVER_ENABLE_TLS
         /* If TLS, start the TLS handshake. */
         if(server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_using_tls == NX_TRUE)
         {
-            status = nx_secure_tls_session_start(&server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_tls_session, 
+            status = nx_secure_tls_session_start(&server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_tls_session,
                                                  &server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_socket, server_ptr -> nx_tcpserver_timeout * NX_IP_PERIODIC_RATE);
-            
+
             if(status != NX_SUCCESS)
             {
                 nx_secure_tls_session_end(&server_ptr -> nx_tcpserver_listen_session -> nx_tcp_session_tls_session, NX_WAIT_FOREVER);
@@ -1180,14 +1189,14 @@ NX_TCP_SOCKET  *socket_ptr;
     {
         return;
     }
-    
+
     /* Initialize TCP sockets. */
     for(i = 0; i < server_ptr -> nx_tcpserver_sessions_count; i++)
     {
         socket_ptr = &(server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_socket);
 
         if((socket_ptr -> nx_tcp_socket_state > NX_TCP_ESTABLISHED) ||
-           ((socket_ptr -> nx_tcp_socket_state < NX_TCP_SYN_SENT) && 
+           ((socket_ptr -> nx_tcp_socket_state < NX_TCP_SYN_SENT) &&
              server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_expiration))
         {
 
@@ -1195,7 +1204,7 @@ NX_TCP_SOCKET  *socket_ptr;
             server_ptr -> nx_tcpserver_connection_end(server_ptr, &server_ptr -> nx_tcpserver_sessions[i]);
 
             /* Reset epiration of session. */
-            server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_expiration = 0; 
+            server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_expiration = 0;
 
             /* Set connection flag to false. */
             server_ptr -> nx_tcpserver_sessions[i].nx_tcp_session_connected = NX_FALSE;
@@ -1260,7 +1269,7 @@ NX_TCP_SESSION *session_ptr;
     {
         return;
     }
-    
+
     /* Initialize TCP sockets. */
     for(i = 0; i < server_ptr -> nx_tcpserver_sessions_count; i++)
     {
@@ -1281,7 +1290,7 @@ NX_TCP_SESSION *session_ptr;
         /* Is the session timeout? */
         if(session_ptr -> nx_tcp_session_expiration > NX_TCPSERVER_TIMEOUT_PERIOD)
             session_ptr -> nx_tcp_session_expiration -= NX_TCPSERVER_TIMEOUT_PERIOD;
-        else 
+        else
         {
 
             session_ptr -> nx_tcp_session_expiration = 0;
@@ -1466,7 +1475,7 @@ UINT status;
     if(status == NX_SUCCESS)
     {
 
-        /* Clear. */ 
+        /* Clear. */
         server_ptr -> nx_tcpserver_listen_port = 0;
         server_ptr -> nx_tcpserver_listen_session = NX_NULL;
     }

@@ -2,24 +2,28 @@
 #ifndef NX_SECURE_USER_H_
   #define NX_SECURE_USER_H_
 
-#define NX_SECURE_POWER_ON_SELF_TEST_MODULE_INTEGRITY_CHECK
+//#define NX_SECURE_POWER_ON_SELF_TEST_MODULE_INTEGRITY_CHECK
 
 /* NX_CRYPTO_AES_OUTPUT_BUFFER specifies the size of internal data buffer used for Encryption/Decryption processing.*/
   #ifndef NX_CRYPTO_AES_OUTPUT_BUFFER_SIZE
     #define NX_CRYPTO_AES_OUTPUT_BUFFER_SIZE              (2048U)
   #endif
 
-/* NX_SECURE_TLS_ENABLE_TLS_1_3 defines whether or not to disable TLS 1.3 protocol support.
- BY default TLS 1.3 is not enabled. */
-  #if (0)
-    #define NX_SECURE_TLS_ENABLE_TLS_1_3
-  #endif
+//#define NX_CRYPTO_ENGINE_SW  // С этой опцией TLS работает
+
+/* NX_SECURE_ENABLE_ECC_CIPHERSUITES enables ECC ciphersuites.  By default this feature is not enabled. */
+  #define NX_SECURE_ENABLE_ECC_CIPHERSUITE // Нужно включить если используется NX_SECURE_TLS_ENABLE_TLS_1_3
+
+#define NX_SECURE_TLS_ENABLE_TLS_1_0  //с этой опцией TLS с Chrome и Edge не работает
+#define NX_SECURE_TLS_ENABLE_TLS_1_1
+
+
+/* NX_SECURE_TLS_ENABLE_TLS_1_3 defines whether or not to disable TLS 1.3 protocol support. BY default TLS 1.3 is not enabled. */
+#define NX_SECURE_TLS_ENABLE_TLS_1_3  //с этой опцией TLS с Chrome и Edge не работает
 
 /* NX_SECURE_TLS_DISABLE_PROTOCOL_VERSION_DOWNGRADE defines whether or not to disables
  protocol version downgrade for TLS client. BY default protocol version downgrade is supported. */
-  #if (0)
-    #define NX_SECURE_TLS_DISABLE_PROTOCOL_VERSION_DOWNGRADE
-  #endif
+  //#define NX_SECURE_TLS_DISABLE_PROTOCOL_VERSION_DOWNGRADE
 
 /* Defines Maximum RSA Modulus Bits*/
   #ifndef NX_CRYPTO_MAX_RSA_MODULUS_SIZE
@@ -54,25 +58,18 @@
     #define NX_SECURE_ENABLE_PSK_CIPHERSUITES
   #endif
 
-/* NX_SECURE_ENABLE_ECC_CIPHERSUITES enables ECC ciphersuites.  By default
- this feature is not enabled. */
-  #if (0)
-    #define NX_SECURE_ENABLE_ECC_CIPHERSUITE
-  #else
-    #define NX_SECURE_DISABLE_ECC_CIPHERSUITE
-  #endif
 
 /* NX_SECURE_ENABLE_AEAD_CIPHER enables AEAD ciphersuites.
  For AEAD ciphersuites other than AES-CCM or AES-GCM, additional definition of
  NX_SECURE_AEAD_CIPHER_CHECK must be defined. By default this feature is not enabled. */
-  #if (0)
+  #if (1)
     #define NX_SECURE_ENABLE_AEAD_CIPHER
   #endif
 
 /* NX_SECURE_AEAD_CIPHER_CHECK AEAD ciphersuites other than AES-CCM or AES-GCM.
  It works only when NX_SECURE_ENABLE_AEAD_CIPHER is defined.
  By default this feature is not enabled. */
-  #if (0)
+  #if (1)
     #define NX_SECURE_AEAD_CIPHER_CHECK(a) ((a) == (NX_FALSE))
   #endif
 
@@ -84,7 +81,7 @@
 
 /* NX_SECURE_TLS_USE_SCSV_CIPHPERSUITE enables SCSV ciphersuite in ClientHello message.
  By default this feature is not enabled. */
-  #if(0)
+  #if(1)
     #define NX_SECURE_TLS_USE_SCSV_CIPHPERSUITE
   #endif
 
@@ -156,7 +153,7 @@
 
 /* NX_SECURE_TLS_PREMASTER_SIZE defines the sie of pre-master secret.
  The default value is 48. */
-  #define NX_SECURE_TLS_PREMASTER_SIZE (48)
+  #define NX_SECURE_TLS_PREMASTER_SIZE (100)
 
 /* NX_SECURE_TLS_SNI_EXTENSION_DISABLED disables Server Name Indication (SNI) extension.
  By default this feature is enabled */
@@ -180,10 +177,7 @@
     #define NX_SECURE_ALLOW_SELF_SIGNED_CERTIFICATES
   #endif
 
-/* This option specifies whether to use Software Crypto Engines or not */
-  #if (0)
-    #define NX_CRYPTO_ENGINE_SW
-  #endif
+
 
 /* NX_SECURE_MEMCMP defines the memory compare function.
  By default it is mapped to C library function. */

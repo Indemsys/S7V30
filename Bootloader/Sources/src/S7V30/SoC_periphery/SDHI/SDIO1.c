@@ -2,7 +2,7 @@
 // 2019.06.23
 // 12:41:17
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 #include   "sdhi.h"
 
 #define WIFI_SDIO_BLOCK_SIZE 64
@@ -80,7 +80,11 @@ sdmmc_cfg_t g_sdhi1_cfg =
   .hw =
   {
     .media_type    = SDMMC_MEDIA_TYPE_CARD,
-    .bus_width     = SDMMC_BUS_WIDTH_4_BITS, //SDMMC_BUS_WIDTH_4_BITS, //SDMMC_BUS_WIDTH_1_BIT,
+#ifdef SDIO1_1BIT_MODE
+    .bus_width     = SDMMC_BUS_WIDTH_1_BIT,
+#else
+    .bus_width     = SDMMC_BUS_WIDTH_4_BITS,
+#endif
     .channel       = 1,
   },
   .p_callback      = NULL,              // Указатель на функцию вызываемую из разных прерываний accs_isr, card_isr, sdio_isr в штатном драйвере
@@ -453,16 +457,16 @@ uint32_t SDIO1_wait_transfer_complete(uint32_t timeout_ms)
 -----------------------------------------------------------------------------------------------------*/
 uint32_t Init_SDIO1(void)
 {
-
   ssp_err_t    ssp_res;
   uint32_t     block_size;
+  uint32_t     err_line;
 
 
   if (tx_event_flags_create(&sdio1_flags, "SDIO1") != TX_SUCCESS)
   {
-    return RES_ERROR;
+    err_line = __LINE__;
+    goto _err;
   }
-
 
   // Получение вектора прерывания и номера ивента для прерывний DMA3
   Find_IRQ_number_by_attrs(SSP_IP_DMAC, 3, 0, SSP_SIGNAL_DMAC_INT,&DMA3_IRQn,&DMA3_event);
@@ -478,41 +482,32 @@ uint32_t Init_SDIO1(void)
   // Выводим модуль SDHI/MMC1 из STOP режима если он там находился
   R_MSTP->MSTPCRC_b.MSTPC11 = 0;
 
-
   ssp_res = g_sdio1.p_api->open(&g_sdhi1_ctrl,&g_sdhi1_cfg);
-  if (ssp_res == SSP_SUCCESS)
+  if (ssp_res != SSP_SUCCESS)
   {
-    APPLOG("SDIO1 interface opened.");
-  }
-  else
-  {
-    APPLOG("SDIO1 interface opening error = %08X.",ssp_res);
-    return RES_ERROR;
+    tx_event_flags_delete(&sdio1_flags);
+    err_line = __LINE__;
+    goto _err;
   }
 
   // Размер блока равен 64 байта для SDIO WiFi модуля
   block_size = WIFI_SDIO_BLOCK_SIZE;
   ssp_res = g_sdio1.p_api->control(&g_sdhi1_ctrl,SSP_COMMAND_SET_BLOCK_SIZE,&block_size);
-
   if (ssp_res != SSP_SUCCESS)
   {
-    APPLOG("SDIO1 unnable set block size. error = %08X.",ssp_res);
+    g_sdio1.p_api->close(&g_sdhi1_ctrl);
+    tx_event_flags_delete(&sdio1_flags);
+    err_line = __LINE__;
+    goto _err;
   }
 
   SDIO1_irq_disable();
 
-  //  ssp_res = g_sdio1.p_api->IoIntEnable(&g_sdhi1_ctrl,true);
-  //  if (ssp_res != SSP_SUCCESS)
-  //  {
-  //    APPLOG("SDIO1 IoIntEnable error = %08X.",ssp_res);
-  //  }
-
-  if (ssp_res != SSP_SUCCESS)
-  {
-    return RES_ERROR;
-  }
+  APPLOG("SDIO1 initialized");
   return RES_OK;
-
+_err:
+  APPLOG("SDIO1 initialization error in line %d. Result=%08X", err_line, ssp_res);
+  return RES_ERROR;
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -520,23 +515,13 @@ uint32_t Init_SDIO1(void)
 
   \param void
 
-  \return ssp_err_t
+  \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-uint32_t Deinit_SDIO1(void)
+uint32_t DeInit_SDIO1(void)
 {
-  ssp_err_t    ssp_res;
-
-  ssp_res = g_sdio1.p_api->close(&g_sdhi1_ctrl);
-  if (ssp_res == SSP_SUCCESS)
-  {
-    APPLOG("SDIO1 interface closed.");
-    return RES_OK;
-  }
-  else
-  {
-    APPLOG("SDIO1 interface closing error = %08X.",ssp_res);
-    return RES_ERROR;
-  }
-
+  SDIO1_irq_disable();
+  g_sdio1.p_api->close(&g_sdhi1_ctrl);
+  tx_event_flags_delete(&sdio1_flags);
+  return RES_OK;
 }
 

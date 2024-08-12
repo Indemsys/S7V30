@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Time sync</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+    <style>
+      .dt 
+      {
+      font-size: 20px;  
+        
+      }
+    </style>
+    <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+      <button id="SyncTimeBtn" class="cmd_btn" onclick="SyncDateTime()">&#128339; Sync Date-Time</button>        
+      
+      <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+   <div class="panel">
+    <div class="grid"> 
+      <div class="itemc">Local time</div> <div class="dt" style="color:crimson " id="local_date_time">   </div>  
+      <div class="itemc">Device time</div> <div class="dt" id="device_date_time">   </div>  
+    </div>  
+    </div>   
+	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+    <script>
+
+      async function SyncDateTime()
+      {
+        try
+        {
+          var json_data = { };
+          var currentDate = new Date();
+          json_data.year = currentDate.getFullYear();
+          json_data.month = currentDate.getMonth();
+          json_data.day = currentDate.getDate();
+          json_data.hours = currentDate.getHours();
+          json_data.mins = currentDate.getMinutes();
+          json_data.secs = currentDate.getSeconds();
+
+          const response = await fetch("upload_time", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(json_data)});
+          if (!response.ok)
+          {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          const text = await response.text();
+        } catch (error)
+        {
+          alert('There has been a problem with fetch operation:', error);
+        }
+
+      }
+
+      async function Post_device_status()
+      {
+        try
+        {
+          const response = await fetch('post_status', { method: 'POST' });
+          const data = await response.json();
+
+          document.getElementById('device_date_time').innerText = data.local_time;
+        } catch (error)
+        {
+          console.error('Error fetching data:', error);
+        }
+      }
+
+
+
+      function updateTime()
+      {
+        const timeElement = document.getElementById('local_date_time');
+        const now = new Date();
+
+        const year = now.getFullYear()
+        const month = (now.getMonth()+ 1).toString().padStart(2, '0');;
+        const day = now.getDate().toString().padStart(2, '0');
+
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        timeElement.textContent = `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+        Post_device_status();
+      }
+
+
+      setInterval(updateTime, 1000);
+      updateTime();
+
+    </script>
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

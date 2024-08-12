@@ -16,7 +16,7 @@ typedef struct
   uint32_t len;
   uint8_t  data[8];
 
-} T_cam_msg;
+} T_CAN_msg;
 
 
 
@@ -65,6 +65,10 @@ typedef union
     } str_b;
 } T_can_str;
 
+extern uint32_t g_can_rx_func_period_us;
+extern uint32_t g_can_rx_func_max_period_us;
+extern uint32_t g_can_rx_func_duration_us;
+extern uint32_t g_can_rx_func_max_duration_us;
 
 
 uint32_t CAN_init(void);
@@ -74,7 +78,7 @@ uint32_t CAN0_post_packet_to_send(uint32_t canid, uint8_t *data, uint8_t len);
 uint8_t  Is_CAN0_in_error_state(void);
 uint8_t  Is_CAN0_task_ready(void);
 
-#endif
+#endif // SB200M2BU1_CAN_H
 
 
 

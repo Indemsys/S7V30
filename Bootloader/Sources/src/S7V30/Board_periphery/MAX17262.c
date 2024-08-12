@@ -2,179 +2,158 @@
 // 2020.04.30
 // 10:09:05
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
+static uint32_t        MAX17262_opened = 0;
 
-const i2c_cfg_t g_sf_i2c_max17262_i2c_cfg =
-{
-  .channel             = 2,
-  .rate                = I2C_RATE_STANDARD,
-  .slave               = 0x36,
-  .addr_mode           = I2C_ADDR_MODE_7BIT,
-  .sda_delay           = (300),
-  .p_transfer_tx       = &DTC_I2C2_TX_transfer_instance,
-  .p_transfer_rx       = &DTC_I2C2_RX_transfer_instance,
-  .p_callback          = (NULL),
-  .p_context           = &I2C2_interface_instance,
-  .rxi_ipl             = 12,
-  .txi_ipl             = 12,
-  .tei_ipl             = 12,
-  .eri_ipl             = 12,
-  .p_extend            = &I2C2_extended_configuration,
-};
-
-sf_i2c_instance_ctrl_t g_sf_i2c_max17262_ctrl =
-{
-  .p_lower_lvl_ctrl =&I2C2_control_block,
-};
-const sf_i2c_cfg_t g_sf_i2c_max17262_cfg =
-{
-  .p_bus                    = (sf_i2c_bus_t *)&I2C2_bus,
-  .p_lower_lvl_cfg          =&g_sf_i2c_max17262_i2c_cfg,
-};
-
-const sf_i2c_instance_t g_sf_i2c_max17262 =
-{
-  .p_ctrl        =&g_sf_i2c_max17262_ctrl,
-  .p_cfg         =&g_sf_i2c_max17262_cfg,
-  .p_api         =&g_sf_i2c_on_sf_i2c
-};
-
+static uint16_t  rv[91];
 
 const T_MAX17262_reg_descr MAX17262_regs[]=
 {
-  {  MAX17262_STATUS             ,"STATUS         " },
-  {  MAX17262_VALRTTH            ,"VALRTTH        " },
-  {  MAX17262_TALRTTH            ,"TALRTTH        " },
-  {  MAX17262_SALRTTH            ,"SALRTTH        " },
-  {  MAX17262_ATRATE             ,"ATRATE         " },
-  {  MAX17262_REPCAP             ,"REPCAP         " },
-  {  MAX17262_REPSOC             ,"REPSOC         " },
-  {  MAX17262_AGE                ,"AGE            " },
-  {  MAX17262_TEMP               ,"TEMP           " },
-  {  MAX17262_VCELL              ,"VCELL          " },
-  {  MAX17262_CURRENT            ,"CURRENT        " },
-  {  MAX17262_AVGCURRENT         ,"AVGCURRENT     " },
-  {  MAX17262_QRESIDUAL          ,"QRESIDUAL      " },
-  {  MAX17262_MIXSOC             ,"MIXSOC         " },
-  {  MAX17262_AVSOC              ,"AVSOC          " },
-  {  MAX17262_MIXCAP             ,"MIXCAP         " },
-  {  MAX17262_FULLCAPREP         ,"FULLCAPREP     " },
-  {  MAX17262_TTE                ,"TTE            " },
-  {  MAX17262_QRTABLE00          ,"QRTABLE00      " },
-  {  MAX17262_FULLSOCTHR         ,"FULLSOCTHR     " },
-  {  MAX17262_RCELL              ,"RCELL          " },
-  {  MAX17262_AVGTA              ,"AVGTA          " },
-  {  MAX17262_CYCLES             ,"CYCLES         " },
-  {  MAX17262_DESIGNCAP          ,"DESIGNCAP      " },
-  {  MAX17262_AVGVCELL           ,"AVGVCELL       " },
-  {  MAX17262_MAXMINTEMP         ,"MAXMINTEMP     " },
-  {  MAX17262_MAXMINVOLT         ,"MAXMINVOLT     " },
-  {  MAX17262_MAXMINCURR         ,"MAXMINCURR     " },
-  {  MAX17262_CONFIG             ,"CONFIG         " },
-  {  MAX17262_ICHGTERM           ,"ICHGTERM       " },
-  {  MAX17262_AVCAP              ,"AVCAP          " },
-  {  MAX17262_TTF                ,"TTF            " },
-  {  MAX17262_DEVNAME            ,"DEVNAME        " },
-  {  MAX17262_QRTABLE10          ,"QRTABLE10      " },
-  {  MAX17262_FULLCAPNOM         ,"FULLCAPNOM     " },
-  {  MAX17262_AIN                ,"AIN            " },
-  {  MAX17262_LEARNCFG           ,"LEARNCFG       " },
-  {  MAX17262_FILTERCFG          ,"FILTERCFG      " },
-  {  MAX17262_RELAXCFG           ,"RELAXCFG       " },
-  {  MAX17262_MISCCFG            ,"MISCCFG        " },
-  {  MAX17262_TGAIN              ,"TGAIN          " },
-  {  MAX17262_TOFF               ,"TOFF           " },
-  {  MAX17262_CGAIN              ,"CGAIN          " },
-  {  MAX17262_COFF               ,"COFF           " },
-  {  MAX17262_QRTABLE20          ,"QRTABLE20      " },
-  {  MAX17262_DIETEMP            ,"DIETEMP        " },
-  {  MAX17262_FULLCAP            ,"FULLCAP        " },
-  {  MAX17262_RCOMP0             ,"RCOMP0         " },
-  {  MAX17262_TEMPCO             ,"TEMPCO         " },
-  {  MAX17262_VEMPTY             ,"VEMPTY         " },
-  {  MAX17262_FSTAT              ,"FSTAT          " },
-  {  MAX17262_TIMER              ,"TIMER          " },
-  {  MAX17262_SHDNTIMER          ,"SHDNTIMER      " },
-  {  MAX17262_QRTABLE30          ,"QRTABLE30      " },
-  {  MAX17262_RGAIN              ,"RGAIN          " },
-  {  MAX17262_DQACC              ,"DQACC          " },
-  {  MAX17262_DPACC              ,"DPACC          " },
-  {  MAX17262_CONVGCFG           ,"CONVGCFG       " },
-  {  MAX17262_VFREMCAP           ,"VFREMCAP       " },
-  {  MAX17262_QH                 ,"QH             " },
-  {  MAX17262_STATUS2            ,"STATUS2        " },
-  {  MAX17262_POWER              ,"POWER          " },
-  {  MAX17262_ID_USERMEM2        ,"ID_USERMEM2    " },
-  {  MAX17262_AVGPOWER           ,"AVGPOWER       " },
-  {  MAX17262_IALRTTH            ,"IALRTTH        " },
-  {  MAX17262_TTFCFG             ,"TTFCFG         " },
-  {  MAX17262_CVMIXCAP           ,"CVMIXCAP       " },
-  {  MAX17262_CVHALFTIME         ,"CVHALFTIME     " },
-  {  MAX17262_CGTEMPCO           ,"CGTEMPCO       " },
-  {  MAX17262_CURVE              ,"CURVE          " },
-  {  MAX17262_HIBCFG             ,"HIBCFG         " },
-  {  MAX17262_CONFIG2            ,"CONFIG2        " },
-  {  MAX17262_VRIPPLE            ,"VRIPPLE        " },
-  {  MAX17262_RIPPLECFG          ,"RIPPLECFG      " },
-  {  MAX17262_TIMERH             ,"TIMERH         " },
-  {  MAX17262_RSENSE_USERMEM3    ,"RSENSE_USERMEM3" },
-  {  MAX17262_SCOCVLIM           ,"SCOCVLIM       " },
-  {  MAX17262_VGAIN              ,"VGAIN          " },
-  {  MAX17262_SOCHOLD            ,"SOCHOLD        " },
-  {  MAX17262_MAXPEAKPOWER       ,"MAXPEAKPOWER   " },
-  {  MAX17262_SUSPEAKPOWER       ,"SUSPEAKPOWER   " },
-  {  MAX17262_PACKRESISTANCE     ,"PACKRESISTANCE " },
-  {  MAX17262_SYSRESISTANCE      ,"SYSRESISTANCE  " },
-  {  MAX17262_MINSYSVOLTAGE      ,"MINSYSVOLTAGE  " },
-  {  MAX17262_MPPCURRENT         ,"MPPCURRENT     " },
-  {  MAX17262_SPPCURRENT         ,"SPPCURRENT     " },
-  {  MAX17262_MODELCFG           ,"MODELCFG       " },
-  {  MAX17262_ATQRESIDUAL        ,"ATQRESIDUAL    " },
-  {  MAX17262_ATTTE              ,"ATTTE          " },
-  {  MAX17262_ATAVSOC            ,"ATAVSOC        " },
-  {  MAX17262_ATAVCAP            ,"ATAVCAP        " },
+  {  MAX17262_STATUS             ,"STATUS         " ,&rv[ 0] },
+  {  MAX17262_VALRTTH            ,"VALRTTH        " ,&rv[ 1] },
+  {  MAX17262_TALRTTH            ,"TALRTTH        " ,&rv[ 2] },
+  {  MAX17262_SALRTTH            ,"SALRTTH        " ,&rv[ 3] },
+  {  MAX17262_ATRATE             ,"ATRATE         " ,&rv[ 4] },
+  {  MAX17262_REPCAP             ,"REPCAP         " ,&rv[ 5] },
+  {  MAX17262_REPSOC             ,"REPSOC         " ,&rv[ 6] },
+  {  MAX17262_AGE                ,"AGE            " ,&rv[ 7] },
+  {  MAX17262_TEMP               ,"TEMP           " ,&rv[ 8] },
+  {  MAX17262_VCELL              ,"VCELL          " ,&rv[ 9] },
+  {  MAX17262_CURRENT            ,"CURRENT        " ,&rv[10] },
+  {  MAX17262_AVGCURRENT         ,"AVGCURRENT     " ,&rv[11] },
+  {  MAX17262_QRESIDUAL          ,"QRESIDUAL      " ,&rv[12] },
+  {  MAX17262_MIXSOC             ,"MIXSOC         " ,&rv[13] },
+  {  MAX17262_AVSOC              ,"AVSOC          " ,&rv[14] },
+  {  MAX17262_MIXCAP             ,"MIXCAP         " ,&rv[15] },
+  {  MAX17262_FULLCAPREP         ,"FULLCAPREP     " ,&rv[16] },
+  {  MAX17262_TTE                ,"TTE            " ,&rv[17] },
+  {  MAX17262_QRTABLE00          ,"QRTABLE00      " ,&rv[18] },
+  {  MAX17262_FULLSOCTHR         ,"FULLSOCTHR     " ,&rv[19] },
+  {  MAX17262_RCELL              ,"RCELL          " ,&rv[20] },
+  {  MAX17262_AVGTA              ,"AVGTA          " ,&rv[21] },
+  {  MAX17262_CYCLES             ,"CYCLES         " ,&rv[22] },
+  {  MAX17262_DESIGNCAP          ,"DESIGNCAP      " ,&rv[23] },
+  {  MAX17262_AVGVCELL           ,"AVGVCELL       " ,&rv[24] },
+  {  MAX17262_MAXMINTEMP         ,"MAXMINTEMP     " ,&rv[25] },
+  {  MAX17262_MAXMINVOLT         ,"MAXMINVOLT     " ,&rv[26] },
+  {  MAX17262_MAXMINCURR         ,"MAXMINCURR     " ,&rv[27] },
+  {  MAX17262_CONFIG             ,"CONFIG         " ,&rv[28] },
+  {  MAX17262_ICHGTERM           ,"ICHGTERM       " ,&rv[29] },
+  {  MAX17262_AVCAP              ,"AVCAP          " ,&rv[30] },
+  {  MAX17262_TTF                ,"TTF            " ,&rv[31] },
+  {  MAX17262_DEVNAME            ,"DEVNAME        " ,&rv[32] },
+  {  MAX17262_QRTABLE10          ,"QRTABLE10      " ,&rv[33] },
+  {  MAX17262_FULLCAPNOM         ,"FULLCAPNOM     " ,&rv[34] },
+  {  MAX17262_AIN                ,"AIN            " ,&rv[35] },
+  {  MAX17262_LEARNCFG           ,"LEARNCFG       " ,&rv[36] },
+  {  MAX17262_FILTERCFG          ,"FILTERCFG      " ,&rv[37] },
+  {  MAX17262_RELAXCFG           ,"RELAXCFG       " ,&rv[38] },
+  {  MAX17262_MISCCFG            ,"MISCCFG        " ,&rv[39] },
+  {  MAX17262_TGAIN              ,"TGAIN          " ,&rv[40] },
+  {  MAX17262_TOFF               ,"TOFF           " ,&rv[41] },
+  {  MAX17262_CGAIN              ,"CGAIN          " ,&rv[42] },
+  {  MAX17262_COFF               ,"COFF           " ,&rv[43] },
+  {  MAX17262_QRTABLE20          ,"QRTABLE20      " ,&rv[44] },
+  {  MAX17262_DIETEMP            ,"DIETEMP        " ,&rv[45] },
+  {  MAX17262_FULLCAP            ,"FULLCAP        " ,&rv[46] },
+  {  MAX17262_RCOMP0             ,"RCOMP0         " ,&rv[47] },
+  {  MAX17262_TEMPCO             ,"TEMPCO         " ,&rv[48] },
+  {  MAX17262_VEMPTY             ,"VEMPTY         " ,&rv[49] },
+  {  MAX17262_FSTAT              ,"FSTAT          " ,&rv[50] },
+  {  MAX17262_TIMER              ,"TIMER          " ,&rv[51] },
+  {  MAX17262_SHDNTIMER          ,"SHDNTIMER      " ,&rv[52] },
+  {  MAX17262_QRTABLE30          ,"QRTABLE30      " ,&rv[53] },
+  {  MAX17262_RGAIN              ,"RGAIN          " ,&rv[54] },
+  {  MAX17262_DQACC              ,"DQACC          " ,&rv[55] },
+  {  MAX17262_DPACC              ,"DPACC          " ,&rv[56] },
+  {  MAX17262_CONVGCFG           ,"CONVGCFG       " ,&rv[57] },
+  {  MAX17262_VFREMCAP           ,"VFREMCAP       " ,&rv[58] },
+  {  MAX17262_QH                 ,"QH             " ,&rv[59] },
+  {  MAX17262_STATUS2            ,"STATUS2        " ,&rv[60] },
+  {  MAX17262_POWER              ,"POWER          " ,&rv[61] },
+  {  MAX17262_ID_USERMEM2        ,"ID_USERMEM2    " ,&rv[62] },
+  {  MAX17262_AVGPOWER           ,"AVGPOWER       " ,&rv[63] },
+  {  MAX17262_IALRTTH            ,"IALRTTH        " ,&rv[64] },
+  {  MAX17262_TTFCFG             ,"TTFCFG         " ,&rv[65] },
+  {  MAX17262_CVMIXCAP           ,"CVMIXCAP       " ,&rv[66] },
+  {  MAX17262_CVHALFTIME         ,"CVHALFTIME     " ,&rv[67] },
+  {  MAX17262_CGTEMPCO           ,"CGTEMPCO       " ,&rv[68] },
+  {  MAX17262_CURVE              ,"CURVE          " ,&rv[69] },
+  {  MAX17262_HIBCFG             ,"HIBCFG         " ,&rv[70] },
+  {  MAX17262_CONFIG2            ,"CONFIG2        " ,&rv[71] },
+  {  MAX17262_VRIPPLE            ,"VRIPPLE        " ,&rv[72] },
+  {  MAX17262_RIPPLECFG          ,"RIPPLECFG      " ,&rv[73] },
+  {  MAX17262_TIMERH             ,"TIMERH         " ,&rv[74] },
+  {  MAX17262_RSENSE_USERMEM3    ,"RSENSE_USERMEM3" ,&rv[75] },
+  {  MAX17262_SCOCVLIM           ,"SCOCVLIM       " ,&rv[76] },
+  {  MAX17262_VGAIN              ,"VGAIN          " ,&rv[77] },
+  {  MAX17262_SOCHOLD            ,"SOCHOLD        " ,&rv[78] },
+  {  MAX17262_MAXPEAKPOWER       ,"MAXPEAKPOWER   " ,&rv[79] },
+  {  MAX17262_SUSPEAKPOWER       ,"SUSPEAKPOWER   " ,&rv[80] },
+  {  MAX17262_PACKRESISTANCE     ,"PACKRESISTANCE " ,&rv[81] },
+  {  MAX17262_SYSRESISTANCE      ,"SYSRESISTANCE  " ,&rv[82] },
+  {  MAX17262_MINSYSVOLTAGE      ,"MINSYSVOLTAGE  " ,&rv[83] },
+  {  MAX17262_MPPCURRENT         ,"MPPCURRENT     " ,&rv[84] },
+  {  MAX17262_SPPCURRENT         ,"SPPCURRENT     " ,&rv[85] },
+  {  MAX17262_MODELCFG           ,"MODELCFG       " ,&rv[86] },
+  {  MAX17262_ATQRESIDUAL        ,"ATQRESIDUAL    " ,&rv[87] },
+  {  MAX17262_ATTTE              ,"ATTTE          " ,&rv[88] },
+  {  MAX17262_ATAVSOC            ,"ATAVSOC        " ,&rv[89] },
+  {  MAX17262_ATAVCAP            ,"ATAVCAP        " ,&rv[90] },
 };
 
 
 static ssp_err_t   _MAX17262_read_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
 static ssp_err_t   _MAX17262_write_buf(uint8_t addr, uint8_t *buf, uint32_t sz);
 
-static uint32_t MAX17262_open_err = 0;
 
 #define MAX1762_VERIFY_RESULT( x )  { ssp_err_t vres; vres = (x); if ( vres != SSP_SUCCESS ) { goto EXIT_ON_ERROR; } }
 
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+
+  \return uint8_t
+-----------------------------------------------------------------------------------------------------*/
+uint8_t Is_MAX17262_opened(void)
+{
+  return MAX17262_opened;
+}
+
 /*-----------------------------------------------------------------------------------------------------
   Открытие коммуникационного канала с чипом MAX17262
-  Поскольку на шине I2C находятся и другие чипы то здесь также производится ожидание захвата шины.
 
   Функция использует глобальный объект  g_sf_i2c_max17262
   Быть внимательным при вызове из разных задач!!!
 
-
-
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-uint32_t  MAX17262_open(uint32_t timeout)
+ssp_err_t  MAX17262_open(void)
 {
-  ssp_err_t           res = SSP_SUCCESS;
-  res = g_sf_i2c_max17262.p_api->open(g_sf_i2c_max17262.p_ctrl, g_sf_i2c_max17262.p_cfg);
+  uint32_t      attempt_cnt = 0;
+  ssp_err_t     res = SSP_SUCCESS;
+  do
+  {
+    res = g_sf_i2c_max17262.p_api->open(g_sf_i2c_max17262.p_ctrl, g_sf_i2c_max17262.p_cfg);
+    if (res == SSP_ERR_ALREADY_OPEN) res = SSP_SUCCESS;
+    if (res == SSP_SUCCESS)  break;
+    if (attempt_cnt > 5) break;
+    Wait_ms(50);
+    attempt_cnt++;
+  } while (1);
+
   if (res == SSP_SUCCESS)
   {
-    res = g_sf_i2c_max17262.p_api->lockWait(g_sf_i2c_max17262.p_ctrl, timeout);
-    if (res != SSP_SUCCESS)
-    {
-      g_sf_i2c_max17262.p_api->close(g_sf_i2c_max17262.p_ctrl);
-      return RES_ERROR;
-    }
-    return RES_OK;
-
+    MAX17262_opened = 1;
   }
   else
   {
-    MAX17262_open_err++;
-    return RES_ERROR;
+    MAX17262_opened = 0;
   }
+  return res;
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -188,16 +167,7 @@ uint32_t  MAX17262_open(uint32_t timeout)
 -----------------------------------------------------------------------------------------------------*/
 uint32_t MAX17262_close(void)
 {
-  ssp_err_t           res;
-  g_sf_i2c_max17262.p_api->reset(g_sf_i2c_max17262.p_ctrl, 2); // Сброс чтобы избежать ошибки при вызове close
-  g_sf_i2c_max17262.p_api->unlock(g_sf_i2c_max17262.p_ctrl);
-  res = g_sf_i2c_max17262.p_api->close(g_sf_i2c_max17262.p_ctrl);
-  if (res != SSP_SUCCESS)
-  {
-    return RES_ERROR;
-  }
-  return RES_OK;
-
+  return g_sf_i2c_max17262.p_api->close(g_sf_i2c_max17262.p_ctrl);
 }
 
 /*-----------------------------------------------------------------------------------------------------
@@ -305,7 +275,7 @@ T_MAX17262_reg_descr const* MAX17262_get_reg_descr(uint8_t indx)
 -----------------------------------------------------------------------------------------------------*/
 uint32_t MAX17262_read_reg_transaction(uint8_t addr, uint16_t *val)
 {
-  if (MAX17262_open(MAX17262_OPEN_TIMEOUT) != RES_OK) return RES_ERROR;
+  if (MAX17262_open() != RES_OK) return RES_ERROR;
   MAX1762_VERIFY_RESULT(MAX17262_read_reg(addr,val));
   MAX17262_close();
   return RES_OK;
@@ -325,7 +295,7 @@ EXIT_ON_ERROR:
 -----------------------------------------------------------------------------------------------------*/
 uint32_t  MAX17262_write_reg_transaction(uint8_t addr, uint16_t val)
 {
-  if (MAX17262_open(MAX17262_OPEN_TIMEOUT) != RES_OK) return RES_ERROR;
+  if (MAX17262_open() != RES_OK) return RES_ERROR;
   MAX1762_VERIFY_RESULT(MAX17262_write_reg(addr,val));
   MAX17262_close();
   return RES_OK;

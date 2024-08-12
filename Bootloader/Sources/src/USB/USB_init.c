@@ -2,7 +2,8 @@
 // 2019.08.06
 // 9:30:25
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 #include   "USB_descriptors.h"
 #include   "ux_hcd_synergy.h"
 #include   "ux_device_class_rndis.h"
@@ -152,6 +153,27 @@ uint8_t Get_usb_2_mode(void)
 /*-----------------------------------------------------------------------------------------------------
 
 
+  \param arg    UX_DEVICE_RESET
+                UX_DEVICE_ATTACHED
+                UX_DEVICE_ADDRESSED
+                UX_DEVICE_CONFIGURED
+                UX_DEVICE_SUSPENDED
+                UX_DEVICE_RESUMED
+                UX_DEVICE_SELF_POWERED_STATE
+                UX_DEVICE_BUS_POWERED_STATE
+                UX_DEVICE_REMOTE_WAKEUP
+                UX_DEVICE_BUS_RESET_COMPLETED
+                UX_DEVICE_REMOVED
+                UX_DEVICE_FORCE_DISCONNECT
+  \return UINT
+-----------------------------------------------------------------------------------------------------*/
+static UINT ux_system_slave_change_callback(ULONG arg)
+{
+  return 0;
+}
+/*-----------------------------------------------------------------------------------------------------
+
+
   \param void
 -----------------------------------------------------------------------------------------------------*/
 void Set_usb_mode(void)
@@ -185,6 +207,10 @@ void Set_usb_mode(void)
   case USB_MODE_VCOM_AND_MASS_STORAGE:
     usb_1_interface_type = USB1_INTF_VIRTUAL_COM_PORT;
     usb_2_interface_type = USB2_INTF_MASS_STORAGE_DEVICE;
+    break;
+  case USB_MODE_VCOM_AND_VCOM:
+    usb_1_interface_type = USB1_INTF_VIRTUAL_COM_PORT;
+    usb_2_interface_type = USB2_INTF_VIRTUAL_COM_PORT;
     break;
   case USB_MODE_VCOM_AND_FREEMASTER_PORT   :
     usb_1_interface_type = USB1_INTF_VIRTUAL_COM_PORT;
@@ -589,11 +615,11 @@ static uint32_t _USB_dev_init(void)
 
   if (ivar.usd_dev_interface == USB_DEV_INTERFACE_HIGH_SPEED_INTERFACE)
   {
-    status = ux_device_stack_initialize((UCHAR *)usbd_hs_framework,hs_descr_sz, (UCHAR *)usbd_fs_framework, fs_descr_sz, p_string_descr, string_descr_sz, p_lang_descr, lang_descr_sz, UX_NULL);
+    status = ux_device_stack_initialize((UCHAR *)usbd_hs_framework,hs_descr_sz, (UCHAR *)usbd_fs_framework, fs_descr_sz, p_string_descr, string_descr_sz, p_lang_descr, lang_descr_sz, ux_system_slave_change_callback);
   }
   else if (ivar.usd_dev_interface == USB_DEV_INTERFACE_FULL_SPEED_INTERFACE)
   {
-    status = ux_device_stack_initialize(NULL, 0, (UCHAR *)usbd_fs_framework, fs_descr_sz, p_string_descr, string_descr_sz,p_lang_descr, lang_descr_sz, UX_NULL);
+    status = ux_device_stack_initialize(NULL, 0, (UCHAR *)usbd_fs_framework, fs_descr_sz, p_string_descr, string_descr_sz,p_lang_descr, lang_descr_sz, ux_system_slave_change_callback);
   }
   else
   {
@@ -641,10 +667,10 @@ static uint32_t _USB_storage_setup(void)
 
   \param void
 -----------------------------------------------------------------------------------------------------*/
-static void _USB_cdc0_setup(void)
+static void _USB_cdc0_setup(T_cdc_acm_evt_callback init_callback, T_cdc_acm_evt_callback deinit_callback)
 {
-  cdc0_parms.ux_slave_class_cdc_acm_instance_activate   = ux_cdc_device0_instance_activate;
-  cdc0_parms.ux_slave_class_cdc_acm_instance_deactivate = ux_cdc_device0_instance_deactivate;
+  cdc0_parms.ux_slave_class_cdc_acm_instance_activate   = init_callback;
+  cdc0_parms.ux_slave_class_cdc_acm_instance_deactivate = deinit_callback;
   /* Initializes the device cdc class. */
   ux_device_stack_class_register(_ux_system_slave_class_cdc_acm_name, ux_device_class_cdc_acm_entry, 1, 0x00, (VOID *)&cdc0_parms);
 }
@@ -654,10 +680,10 @@ static void _USB_cdc0_setup(void)
 
   \param void
 -----------------------------------------------------------------------------------------------------*/
-void _USB_cdc1_setup(void)
+void _USB_cdc1_setup(T_cdc_acm_evt_callback init_callback, T_cdc_acm_evt_callback deinit_callback)
 {
-  cdc1_parms.ux_slave_class_cdc_acm_instance_activate   = ux_cdc_device1_instance_activate;
-  cdc1_parms.ux_slave_class_cdc_acm_instance_deactivate = ux_cdc_device1_instance_deactivate;
+  cdc1_parms.ux_slave_class_cdc_acm_instance_activate   = init_callback;
+  cdc1_parms.ux_slave_class_cdc_acm_instance_deactivate = deinit_callback;
   /* Initializes the device cdc class. */
   ux_device_stack_class_register(_ux_system_slave_class_cdc_acm_name, ux_device_class_cdc_acm_entry, 1, 0x02, (VOID *)&cdc1_parms);
 }
@@ -697,6 +723,9 @@ uint32_t _USB_device_transport_initialize(void)
 -----------------------------------------------------------------------------------------------------*/
 void Init_USB_stack(void)
 {
+  Set_usb_mode();
+
+  if (ivar.usb_mode == USB_MODE_NONE) return;
 
   ux_system_initialize((CHAR *)usb_mem_regular, USBX_REGULAR_MEMORY_SIZE, usb_mem_cache_safe, USBX_CACHE_SAFE_MEMORY_SIZE);
 
@@ -714,7 +743,7 @@ void Init_USB_stack(void)
     case USB1_INTF_OFF:
       break;
     case USB1_INTF_VIRTUAL_COM_PORT:
-      _USB_cdc0_setup();
+      _USB_cdc0_setup(Monitor_USB_Init_callback, Monitor_USB_DeInit_callback);
       break;
     case USB1_INTF_MASS_STORAGE_DEVICE:
       _USB_storage_setup();
@@ -729,13 +758,19 @@ void Init_USB_stack(void)
     case USB2_INTF_OFF:
       break;
     case USB2_INTF_VIRTUAL_COM_PORT:
-      _USB_cdc1_setup();
+      _USB_cdc1_setup(Monitor_USB_Init_callback, Monitor_USB_DeInit_callback);
       break;
     case USB2_INTF_MASS_STORAGE_DEVICE:
       _USB_storage_setup();
       break;
     }
     _USB_device_transport_initialize();  // Инициализируем драйвер USB девайса
+
+    if (ivar.usb_mode == USB_MODE_RNDIS)
+    {
+      ux_network_driver_init();  // Запускаем сетевой драйвер чере USB
+    }
+
   }
 
 

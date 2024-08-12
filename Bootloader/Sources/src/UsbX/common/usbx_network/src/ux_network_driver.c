@@ -36,6 +36,8 @@
 #include "nx_api.h"
 
 #include "ux_network_driver.h"
+#include "Net_thread.h"
+
 
 static UINT usb_network_driver_initialized;
 
@@ -787,7 +789,6 @@ UINT                            i;
 /*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
-
 VOID  _ux_network_driver_packet_received(VOID *ux_network_handle, NX_PACKET *packet_ptr)
 {
 
@@ -812,6 +813,8 @@ NX_IP           *nx_ip;
 
     /* Storing in into the packet the interface.  */
     packet_ptr -> nx_packet_ip_interface =  usb_network_device_ptr -> ux_network_device_interface_ptr;
+
+    packet_ptr->nx_packet_address.nx_packet_interface_ptr = &(Net_get_ip_ptr()->nx_ip_interface[NET_USB_INTF_NUM]);
 
     /* Get the IP instance.  */
     nx_ip = usb_network_device_ptr -> ux_network_device_ip_instance;

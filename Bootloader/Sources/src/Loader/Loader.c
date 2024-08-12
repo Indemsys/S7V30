@@ -1,4 +1,4 @@
-#include "S7V30.h"
+#include "App.h"
 #include "nx_crypto_rsa_sce.h"
 #include "nx_crypto_aes_sce.h"
 #include "nx_crypto_md5_sce.h"
@@ -712,7 +712,7 @@ error:
 
 
    Результаты тестирования для загрузчика скомпилированного без оптимизации по скорости:
-   Загрузка, расшифровка и распаковка образа PLCS7 размером 0x00200000 (2097152) байт
+   Загрузка, расшифровка и распаковка образа размером 0x00200000 (2097152) байт
 
    - с сжатием по алгоритму SIXPACK (данные сжаты до размера 1053024), с шифрованием AES256 GCM, с хэшем SHA256, с подписью RSA 2048 длится   10.80  сек
    - с сжатием по алгоритму SIXPACK (данные сжаты до размера 1053024), с шифрованием AES256 GCM, с хэшем SHA256, без подписи длится           10.30  сек
@@ -723,12 +723,12 @@ error:
    - без сжатия, без шифрования, с хэшем MD5, без подписи длится                                                                               0.84  сек
 
    Результаты тестирования для загрузчика скомпилированного с максимальной оптимизации по размеру:
-   Загрузка, расшифровка и распаковка образа PLCS7 размером 0x00200000 (2097152) байт
+   Загрузка, расшифровка и распаковка образа размером 0x00200000 (2097152) байт
 
    - с сжатием по алгоритму SIXPACK (данные сжаты до размера 1053024), с шифрованием AES256 GCM, с хэшем SHA256, с подписью RSA 2048 длится    6.53  сек
 
    Результаты тестирования для загрузчика скомпилированного с максимальной оптимизации по скорости:
-   Загрузка, расшифровка и распаковка образа PLCS7 размером 0x00200000 (2097152) байт
+   Загрузка, расшифровка и распаковка образа размером 0x00200000 (2097152) байт
 
    - с сжатием по алгоритму SIXPACK (данные сжаты до размера 1053024), с шифрованием AES256 GCM, с хэшем SHA256, с подписью RSA 2048 длится    5.88  сек
    - без сжатия, без шифрования, с хэшем MD5, без подписи длится                                                                               0.52  сек
@@ -1202,7 +1202,7 @@ uint32_t Load_and_Flash_Image_File(void)
     memcpy(ivar.ftp_serv_password, Monitor_pass, Monitor_pass_SIZE);
     ivar.ftp_serv_password[Monitor_pass_SIZE] = 0;
 
-    if (Save_settings_to(&ivar_inst, MEDIA_TYPE_DATAFLASH, 0, BOOTL_PARAMS)!= RES_OK)
+    if (Save_settings_to(&ivar_inst, MEDIA_TYPE_DATAFLASH, 0, BOOTL_PARAMS) != RES_OK)
     {
       loader_cbl.settings_err  = 1;
     }
@@ -1210,6 +1210,7 @@ uint32_t Load_and_Flash_Image_File(void)
     {
       loader_cbl.settings_err  = 0;
     }
+    //Set_SD_card_password(SD_SET_PASSWORD, (char *)Monitor_pass, Monitor_pass_SIZE);
   }
 
   //.................................................................
@@ -1252,6 +1253,49 @@ error:
   BLUE_LED  = 1;
 
   return RES_ERROR;
+}
+
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Erase_firmware_area(void)
+{
+  uint32_t res  = 0;
+  uint32_t n = APP_IMG_SIZE/CODE_FLASH_EBLOCK_SZ;
+  Switch_Flash_driver_to_no_bgo();
+  __disable_interrupt();
+  res = Flash_erase_block(APP_IMG_START_ADDRESS, n);
+  __enable_interrupt();
+  Switch_Flash_driver_to_bgo();
+  return  res;
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Clear_app_DataFlash(void)
+{
+  uint32_t res = 0;
+  // Стираем области
+  //   DATAFLASH_MODULE_PARAMS_1_ADDR
+  //   DATAFLASH_MODULE_PARAMS_2_ADDR
+  //   DATAFLASH_BOOTL_PARAMS_1_ADDR
+  //   DATAFLASH_BOOTL_PARAMS_2_ADDR
+
+  res |= DataFlash_bgo_EraseArea(DATAFLASH_APP_PARAMS_1_ADDR       ,DATAFLASH_PARAMS_AREA_SIZE);
+  res |= DataFlash_bgo_EraseArea(DATAFLASH_APP_PARAMS_2_ADDR       ,DATAFLASH_PARAMS_AREA_SIZE);
+  res |= DataFlash_bgo_EraseArea(DATAFLASH_PLATF_PARAMS_1_ADDR    ,DATAFLASH_PARAMS_AREA_SIZE);
+  res |= DataFlash_bgo_EraseArea(DATAFLASH_PLATF_PARAMS_2_ADDR    ,DATAFLASH_PARAMS_AREA_SIZE);
+
+  return res;
 }
 
 /*-----------------------------------------------------------------------------------------------------

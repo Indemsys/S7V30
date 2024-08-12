@@ -1,10 +1,8 @@
-#ifndef S7V30_MAX17262_H
-  #define S7V30_MAX17262_H
+#ifndef SYNERGY_MAX17262_H
+  #define SYNERGY_MAX17262_H
 
 
   #define    MAX17262_CHIP_ID              0x4039
-
-  #define    MAX17262_OPEN_TIMEOUT         100
 
   #define    MAX17262_STATUS                0
   #define    MAX17262_VALRTTH               1
@@ -102,11 +100,12 @@ typedef struct
 {
     uint16_t      reg_addr;
     char  const  *reg_name;
+    uint16_t      *reg_val;
 
 } T_MAX17262_reg_descr;
 
-
-uint32_t                     MAX17262_open(uint32_t timeout);
+uint8_t                      Is_MAX17262_opened(void);
+ssp_err_t                    MAX17262_open(void);
 uint32_t                     MAX17262_close(void);
 uint32_t                     MAX17262_reg_count(void);
 T_MAX17262_reg_descr const*  MAX17262_get_reg_descr(uint8_t indx);

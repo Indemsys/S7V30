@@ -37,6 +37,8 @@ extern const sci_spi_extended_cfg  SPI5_extended_configuration;
 extern sf_spi_bus_t                SPI5_bus;
 
 extern const transfer_instance_t   DMA_CH2_transfer_instance;
+extern const transfer_instance_t   DMA_CH4_rx_transfer_instance;
+extern const transfer_instance_t   DMA_CH5_tx_transfer_instance;
 
 extern const transfer_instance_t   DMA_CH3_transfer_instance;
 extern dmac_instance_ctrl_t        DMA_CH3_control_block;
@@ -51,9 +53,10 @@ extern riic_instance_ctrl_t        I2C2_control_block;
 extern const riic_extended_cfg     I2C2_extended_configuration;
 extern sf_i2c_bus_t                I2C2_bus;
 
+extern const sf_i2c_instance_t     g_sf_i2c_bq25619;
+extern const sf_i2c_instance_t     g_sf_i2c_max17262;
 
-
-#endif // TRANSFER_CHANNELS_H
+#endif
 
 
 

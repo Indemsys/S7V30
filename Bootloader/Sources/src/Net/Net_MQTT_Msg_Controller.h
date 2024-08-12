@@ -71,7 +71,7 @@
 
 void     MQTTMC_messages_processor(void);
 void     MQTTMC_set_opcode(uint32_t opcode);
-void     MQTT_client_controller(void);
+void     Net_MQTT_client_task(NX_IP   *ip_ptr);
 
 
 uint32_t MQTTMC_Send_Ack(uint32_t ack_code);

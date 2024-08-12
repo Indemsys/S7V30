@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Files upload</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+    <script>
+      var xhr;
+
+      window.addEventListener('beforeunload', function(event) {
+                                if (xhr.readyState !== 0 && xhr.readyState !== 4)
+                                {
+                                  xhr.abort();
+                                }
+                              });
+    </script>
+    <style>
+.ifl {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+}
+    </style>
+    <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+
+      
+      <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+  <div class="panel">    
+  <form id="uploadForm" style="display: flex;flex-direction: column">
+    <label for="input_file" class="ifl">Choose File</label>
+    <input type="file" id="input_file" name="file" onchange="updateFileName()">    
+    <button id="uploadButton" class="cmd_btn" style="margin-top: 20px;max-width: fit-content" type="button" onclick="Upload_File()">Upload File</button>
+    </form>
+  <div id="progressBarContainer">
+      <div id="progressBar">0%</div>
+    </div>	
+  <div>    
+    <p id="info_str">  </p>
+    </div>  
+    </div>  
+	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+    <script>
+
+      function cancelUpload()
+      {
+        xhr.abort();
+        resetButton();
+      }
+
+      function Upload_File()
+      {
+        var file = document.getElementById('input_file').files[0];
+        if (!file)
+        {
+          alert("Please select a file first!");
+          return;
+        }
+        var formData = new FormData();
+        formData.append('file_size', file.size);
+        formData.append('file', file);
+
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', 'firmware_upload', true);
+
+        document.getElementById('uploadButton').textContent = 'Abort Upload';
+        document.getElementById('uploadButton').onclick = cancelUpload;
+
+        var startTime = new Date().getTime();
+
+        xhr.upload.onprogress = function(e) {
+          if (e.lengthComputable)
+          {
+            var percentComplete = Math.round((e.loaded / e.total) * 100);
+            var currentTime = new Date().getTime();
+            var timeElapsed = (currentTime - startTime) / 1000;
+            var speed = (e.loaded / 1024) / timeElapsed;
+
+            var progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percentComplete + '%';
+            progressBar.textContent = percentComplete + '%';
+            var info_str = document.getElementById('info_str');
+            info_str.textContent = 'Speed: ' + speed.toFixed(2) + ' KB/s'
+          }
+        };
+
+        xhr.onload = function() {
+          if (xhr.status == 200)
+          {
+            var response = JSON.parse(xhr.responseText);
+            if (response.status === 0)
+            {
+              alert('File successfully uploaded');
+              var progressBar = document.getElementById('progressBar');
+              progressBar.textContent = '100%';
+              restoreButton();
+            }
+            else
+            {
+              alert('An error occurred during file upload');
+              resetButton();
+            }
+          }
+          else
+          {
+            alert('An error occurred during file upload');
+            resetButton();
+          }
+        };
+        xhr.send(formData);
+
+      }
+
+      function resetButton()
+      {
+        var progressBar = document.getElementById('progressBar');
+        progressBar.style.width = '0%';
+        var uploadButton = document.getElementById('uploadButton');
+        uploadButton.textContent = 'Upload File';
+        uploadButton.onclick = Upload_File;
+        var info_str = document.getElementById('info_str');
+        info_str.textContent = 'Upload cancelled';
+      }
+
+      function restoreButton()
+      {
+        var progressBar = document.getElementById('progressBar');
+        progressBar.style.width = 0;
+        progressBar.textContent = '';
+        var uploadButton = document.getElementById('uploadButton');
+        uploadButton.textContent = 'Upload File';
+        uploadButton.onclick = Upload_File;
+        var info_str = document.getElementById('info_str');
+        info_str.textContent = '';
+      }
+
+
+      function updateFileName()
+      {
+        var fileInput = document.getElementById('input_file');
+        var label = document.querySelector('label[for="input_file"]');
+        var fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose File";
+        label.textContent = fileName;
+      }
+    </script>
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

@@ -1,32 +1,30 @@
-﻿#include "S7V30.h"
+﻿#include "App.h"
 
-
-#define  IVAR_SIZE        62
-#define  PARMNU_ITEM_NUM   16
+#define  IVAR_SIZE        66
 
 #define  SELECTORS_NUM     7
 
 IVAR_TYPE  ivar;
 
 
-static const T_parmenu parmenu[PARMNU_ITEM_NUM]=
+const T_parmenu parmenu[PARMNU_ITEM_NUM]=
 {
-{ S7V30BOOT_WIFI_STA          , S7V30BOOT_WIFI_STA_COMMON   , "WiFi Station Common settings", "                    ", -1   }, // 
-{ S7V30BOOT_WIFI_STA          , S7V30BOOT_WIFI_STA_CFG1     , "WiFi Station Configuration 1", "                    ", -1   }, // 
+{ S7V30BOOT_WIFI_STA          , S7V30BOOT_WIFI_STA1         , "WiFi Station Configuration 1", "                    ", -1   }, // 
 { S7V30BOOT_0                 , S7V30BOOT_main              , "Parameters and settings    ", "PARAMETERS          ", -1   }, // Основная категория
-{ S7V30BOOT_WIFI_STA          , S7V30BOOT_WIFI_STA_CFG2     , "WiFi Station Configuration 2 ", "                    ", -1   }, // 
+{ S7V30BOOT_WIFI_STA          , S7V30BOOT_WIFI_STA2         , "WiFi Station Configuration 2 ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_General           , "General settings           ", "GENERAL_SETTINGS    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_USB_Interface     , "USB Interface settings     ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_Network           , "Network settings           ", "                    ", -1   }, // 
+{ S7V30BOOT_main              , S7V30BOOT_BLE               , "Bluetooth settings         ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_WIFI_STA          , "WiFi Station interface settings", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_WIFI_AP           , "WiFi Access Point interface settings", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_Telnet            , "Telnet settings            ", "                    ", -1   }, // 
+{ S7V30BOOT_main              , S7V30BOOT_WEB               , "HTTP server settings       ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_FTP_server        , "FTP server settings        ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_MQTT              , "MQTT settings              ", "                    ", -1   }, // 
 { S7V30BOOT_main              , S7V30BOOT_SNTP              , "Net time protocol setting  ", "                    ", -1   }, // 
-{ S7V30BOOT_main              , S7V30BOOT_MATLAB            , "MATLAB communication settings", "                    ", -1   }, // 
-{ S7V30BOOT_main              , S7V30BOOT_FreeMaster        , "FreeMaster communication settings", "                    ", -1   }, // 
-{ S7V30BOOT_main              , S7V30BOOT_Audio             , "Audio settings             ", "                    ", -1   }, // 
+{ S7V30BOOT_main              , S7V30BOOT_FreeMaster        , "FreeMaster communication settings", "                    ", 0    }, // 
+{ S7V30BOOT_main              , S7V30BOOT_Audio             , "Audio settings             ", "                    ", 0    }, // 
 };
 
 
@@ -53,12 +51,69 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
   },
 // N: 1
   {
+    "en_ble",
+    "Enable Bluetooth",
+    "-",
+    (void*)&ivar.en_ble,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_BLE,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.en_ble),
+    0,
+    1,
+  },
+// N: 2
+  {
+    "bt_device_name",
+    "Bluetooth Classic device name",
+    "-",
+    (void*)&ivar.bt_device_name,
+    tstring,
+    0,
+    0,
+    0,
+    0,
+    S7V30BOOT_BLE,
+    "BT_S7V30",
+    "%s",
+    0,
+    sizeof(ivar.bt_device_name)-1,
+    1,
+    0,
+  },
+// N: 3
+  {
+    "ble_device_name",
+    "Bluetooth LE device name",
+    "-",
+    (void*)&ivar.ble_device_name,
+    tstring,
+    0,
+    0,
+    0,
+    0,
+    S7V30BOOT_BLE,
+    "BLE_S7V30",
+    "%s",
+    0,
+    sizeof(ivar.ble_device_name)-1,
+    2,
+    0,
+  },
+// N: 4
+  {
     "en_freemaster",
     "Enable FreeMaster protocol",
     "-",
     (void*)&ivar.en_freemaster,
     tint8u,
-    1,
+    0,
     0,
     1,
     0,
@@ -70,7 +125,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     1,
   },
-// N: 2
+// N: 5
   {
     "en_log_to_freemaster",
     "Enable logging to FreeMaster pipe",
@@ -86,17 +141,17 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.en_log_to_freemaster),
-    0,
+    1,
     1,
   },
-// N: 3
+// N: 6
   {
     "enable_ftp_server",
     "Enable FTP server",
     "-",
     (void*)&ivar.enable_ftp_server,
     tint8u,
-    0,
+    1,
     0,
     1,
     0,
@@ -108,7 +163,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     1,
   },
-// N: 4
+// N: 7
   {
     "ftp_serv_login",
     "Login",
@@ -127,7 +182,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 5
+// N: 8
   {
     "ftp_serv_password",
     "Password ",
@@ -137,7 +192,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    0,
+    4,
     S7V30BOOT_FTP_server,
     "ftp_pass",
     "%s",
@@ -146,12 +201,12 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     0,
   },
-// N: 6
+// N: 9
   {
-    "name",
+    "product_name",
     "Product  name",
     "SYSNAM",
-    (void*)&ivar.name,
+    (void*)&ivar.product_name,
     tstring,
     0,
     0,
@@ -161,11 +216,11 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "S7V30",
     "%s",
     0,
-    sizeof(ivar.name)-1,
+    sizeof(ivar.product_name)-1,
     1,
     0,
   },
-// N: 7
+// N: 10
   {
     "software_version",
     "Software version",
@@ -184,7 +239,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 8
+// N: 11
   {
     "hardware_version",
     "Hardware version",
@@ -203,7 +258,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     0,
   },
-// N: 9
+// N: 12
   {
     "manuf_date",
     "Manufacturing date",
@@ -222,10 +277,29 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     4,
     0,
   },
-// N: 10
+// N: 13
+  {
+    "en_wifi_module",
+    "Enable  Wi-Fi Bluetooth module ",
+    "-",
+    (void*)&ivar.en_wifi_module,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_General,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.en_wifi_module),
+    5,
+    1,
+  },
+// N: 14
   {
     "en_log_to_file",
-    "Enable logging to file (1-yes, 0-no)",
+    "Enable logging to file",
     "-",
     (void*)&ivar.en_log_to_file,
     tint8u,
@@ -238,13 +312,13 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.en_log_to_file),
-    5,
+    6,
     1,
   },
-// N: 11
+// N: 15
   {
     "en_compress_settins",
-    "Enable compress settings file (1-yes, 0-no)",
+    "Enable compress settings file",
     "-",
     (void*)&ivar.en_compress_settins,
     tint8u,
@@ -257,13 +331,13 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.en_compress_settins),
-    6,
+    7,
     1,
   },
-// N: 12
+// N: 16
   {
     "en_formating_settings",
-    "Enable formating in  settings file (1-yes, 0-no)",
+    "Enable formating in  settings file",
     "-",
     (void*)&ivar.en_formated_settings,
     tint8u,
@@ -276,10 +350,10 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.en_formated_settings),
-    7,
+    8,
     1,
   },
-// N: 13
+// N: 17
   {
     "disable_jump_to_applacation",
     "Disable jump to application",
@@ -295,17 +369,17 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.disable_jump_to_applacation),
-    8,
+    9,
     1,
   },
-// N: 14
+// N: 18
   {
     "en_auto_protection",
-    "Enable auto protection (1-yes, 0-no)",
+    "Enable auto protection",
     "-",
     (void*)&ivar.en_auto_protection,
     tint8u,
-    1,
+    0,
     0,
     1,
     0,
@@ -314,29 +388,29 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.en_auto_protection),
-    9,
+    10,
     1,
   },
-// N: 15
+// N: 19
   {
-    "en_matlab",
-    "Enable MATLAB communication server",
+    "sd_card_password",
+    "SD card password",
     "-",
-    (void*)&ivar.en_matlab,
-    tint8u,
+    (void*)&ivar.sd_card_password,
+    tstring,
     0,
     0,
-    1,
     0,
-    S7V30BOOT_MATLAB,
-    "",
-    "%d",
+    4,
+    S7V30BOOT_General,
+    "1234",
+    "%s",
     0,
-    sizeof(ivar.en_matlab),
-    1,
-    1,
+    sizeof(ivar.sd_card_password)-1,
+    11,
+    0,
   },
-// N: 16
+// N: 20
   {
     "mqtt_enable",
     "Enable MQTT client ",
@@ -355,7 +429,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     1,
   },
-// N: 17
+// N: 21
   {
     "mqtt_client_id",
     "Client ID",
@@ -374,7 +448,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 18
+// N: 22
   {
     "mqtt_server_ip",
     "MQTT server IP address",
@@ -393,7 +467,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     0,
   },
-// N: 19
+// N: 23
   {
     "mqtt_server_port",
     "MQTT server port number",
@@ -412,7 +486,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     4,
     0,
   },
-// N: 20
+// N: 24
   {
     "mqtt_user_name",
     "User name",
@@ -431,7 +505,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     5,
     0,
   },
-// N: 21
+// N: 25
   {
     "mqtt_password",
     "User password",
@@ -441,7 +515,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    0,
+    4,
     S7V30BOOT_MQTT,
     "pass",
     "%s",
@@ -449,82 +523,6 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     sizeof(ivar.mqtt_password)-1,
     6,
     0,
-  },
-// N: 22
-  {
-    "default_ip_addr",
-    "Default IP address",
-    "DEFIPAD",
-    (void*)&ivar.default_ip_addr,
-    tstring,
-    0,
-    0,
-    0,
-    0,
-    S7V30BOOT_Network,
-    "192.168.8.200",
-    "%s",
-    0,
-    sizeof(ivar.default_ip_addr)-1,
-    1,
-    2,
-  },
-// N: 23
-  {
-    "default_net_mask",
-    "Default network mask ",
-    "DEFNTMS",
-    (void*)&ivar.default_net_mask,
-    tstring,
-    0,
-    0,
-    0,
-    0,
-    S7V30BOOT_Network,
-    "255.255.255.0",
-    "%s",
-    0,
-    sizeof(ivar.default_net_mask)-1,
-    2,
-    2,
-  },
-// N: 24
-  {
-    "default_gateway_addr",
-    "Default gateway address",
-    "DEFGATE",
-    (void*)&ivar.default_gateway_addr,
-    tstring,
-    0,
-    0,
-    0,
-    0,
-    S7V30BOOT_Network,
-    "192.168.8.1",
-    "%s",
-    0,
-    sizeof(ivar.default_gateway_addr)-1,
-    3,
-    2,
-  },
-// N: 25
-  {
-    "en_dhcp_client",
-    "Enable DHCP client (0-No, 1-Yes)",
-    "ENDHCPC",
-    (void*)&ivar.en_dhcp_client,
-    tint8u,
-    1,
-    0,
-    1,
-    0,
-    S7V30BOOT_Network,
-    "",
-    "%d",
-    0,
-    sizeof(ivar.en_dhcp_client),
-    4,
-    1,
   },
 // N: 26
   {
@@ -542,10 +540,29 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%s",
     0,
     sizeof(ivar.this_host_name)-1,
-    5,
+    0,
     0,
   },
 // N: 27
+  {
+    "en_net_log",
+    "Enable log",
+    "-",
+    (void*)&ivar.en_net_log,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_Network,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.en_net_log),
+    1,
+    1,
+  },
+// N: 28
   {
     "en_sntp",
     "Enable SNTP client",
@@ -564,7 +581,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     1,
   },
-// N: 28
+// N: 29
   {
     "en_sntp_time_receiving",
     "Allow to receive time from time servers",
@@ -583,7 +600,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     1,
   },
-// N: 29
+// N: 30
   {
     "utc_offset",
     "UTC offset (difference in hours +-)",
@@ -602,7 +619,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     0,
   },
-// N: 30
+// N: 31
   {
     "time_server_1",
     "Time server 1 URL",
@@ -621,7 +638,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     4,
     0,
   },
-// N: 31
+// N: 32
   {
     "time_server_2",
     "Time server 2 URL",
@@ -640,7 +657,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     5,
     0,
   },
-// N: 32
+// N: 33
   {
     "time_server_3",
     "Time serber 3 URL",
@@ -659,7 +676,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     6,
     0,
   },
-// N: 33
+// N: 34
   {
     "sntp_poll_interval",
     "Poll interval (s)",
@@ -678,10 +695,10 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     7,
     0,
   },
-// N: 34
+// N: 35
   {
     "en_telnet",
-    "Enable Telnet (1-yes, 0-no)",
+    "Enable Telnet",
     "-",
     (void*)&ivar.en_telnet,
     tint8u,
@@ -697,16 +714,16 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     1,
   },
-// N: 35
+// N: 36
   {
     "usb_mode",
-    "USB mode(1-VCOM, 2-MSD, 3-VCOM&MSD, 4-VCOM&FMST, 5-RNDIS, 6-Host ECM)",
+    "USB interface mode",
     "USBIMOD",
     (void*)&ivar.usb_mode,
     tint32u,
-    4,
+    1,
     0,
-    6,
+    7,
     0,
     S7V30BOOT_USB_Interface,
     "",
@@ -716,29 +733,10 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     4,
   },
-// N: 36
-  {
-    "rndis_ip_addr_assign_method",
-    "RNDIS IP address assignment method (0-Win home net, 1 - DHCP server)",
-    "RNDSCFG",
-    (void*)&ivar.rndis_ip_addr_assign_method,
-    tint8u,
-    0,
-    0,
-    1,
-    0,
-    S7V30BOOT_USB_Interface,
-    "",
-    "%d",
-    0,
-    sizeof(ivar.rndis_ip_addr_assign_method),
-    2,
-    5,
-  },
 // N: 37
   {
     "usd_dev_interface",
-    "USB device interface (0- HS, 1- FS)",
+    "USB device interface (HS/FS)",
     "-",
     (void*)&ivar.usd_dev_interface,
     tint8u,
@@ -751,17 +749,150 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.usd_dev_interface),
-    3,
+    2,
     6,
   },
 // N: 38
   {
+    "en_rndis_dhcp_server",
+    "Enable DHCP server on RNDIS interface ",
+    "RNDSCFG",
+    (void*)&ivar.en_rndis_dhcp_server,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_USB_Interface,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.en_rndis_dhcp_server),
+    3,
+    1,
+  },
+// N: 39
+  {
+    "en_ecm_host_dhcp_client",
+    "Enable DHCP client on ECM host interface ",
+    "-",
+    (void*)&ivar.en_ecm_host_dhcp_client,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_USB_Interface,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.en_ecm_host_dhcp_client),
+    4,
+    1,
+  },
+// N: 40
+  {
+    "usb_default_ip_addr",
+    "Default IP address",
+    "DEFIPAD",
+    (void*)&ivar.usb_default_ip_addr,
+    tstring,
+    0,
+    0,
+    0,
+    0,
+    S7V30BOOT_USB_Interface,
+    "192.168.13.1",
+    "%s",
+    0,
+    sizeof(ivar.usb_default_ip_addr)-1,
+    5,
+    2,
+  },
+// N: 41
+  {
+    "usb_default_net_mask",
+    "Default network mask ",
+    "DEFNTMS",
+    (void*)&ivar.usb_default_net_mask,
+    tstring,
+    0,
+    0,
+    0,
+    0,
+    S7V30BOOT_USB_Interface,
+    "255.255.255.0",
+    "%s",
+    0,
+    sizeof(ivar.usb_default_net_mask)-1,
+    6,
+    2,
+  },
+// N: 42
+  {
+    "enable_HTTP_server",
+    "Enable HTTP server",
+    "-",
+    (void*)&ivar.enable_HTTP_server,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_WEB,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.enable_HTTP_server),
+    0,
+    1,
+  },
+// N: 43
+  {
+    "enable_HTTPS",
+    "Enable TLS",
+    "-",
+    (void*)&ivar.enable_HTTPS,
+    tint8u,
+    1,
+    0,
+    1,
+    0,
+    S7V30BOOT_WEB,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.enable_HTTPS),
+    1,
+    1,
+  },
+// N: 44
+  {
+    "HTTP_server_password",
+    "HTTP server password",
+    "-",
+    (void*)&ivar.HTTP_server_password,
+    tstring,
+    0,
+    0,
+    0,
+    4,
+    S7V30BOOT_WEB,
+    "123456789",
+    "%d",
+    0,
+    sizeof(ivar.HTTP_server_password)-1,
+    2,
+    0,
+  },
+// N: 45
+  {
     "en_wifi_ap",
-    "Enable Accces Point mode (1-yes, 0-no)",
+    "Enable Acces Point mode",
     "-",
     (void*)&ivar.en_wifi_ap,
     tint8u,
-    0,
+    1,
     0,
     1,
     0,
@@ -773,7 +904,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     1,
   },
-// N: 39
+// N: 46
   {
     "wifi_ap_ssid",
     "Access Point SSID",
@@ -792,7 +923,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     0,
   },
-// N: 40
+// N: 47
   {
     "wifi_ap_key",
     "Access Point password (>=8 symbols)",
@@ -802,7 +933,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    0,
+    4,
     S7V30BOOT_WIFI_AP,
     "12345678",
     "%s",
@@ -811,7 +942,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 41
+// N: 48
   {
     "ap_default_ip_addr",
     "Default IP address",
@@ -823,14 +954,14 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     S7V30BOOT_WIFI_AP,
-    "192.168.1.1",
+    "192.168.10.1",
     "%s",
     0,
     sizeof(ivar.ap_default_ip_addr)-1,
     3,
     0,
   },
-// N: 42
+// N: 49
   {
     "ap_default_net_mask",
     "Default network mask ",
@@ -849,12 +980,12 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     4,
     0,
   },
-// N: 43
+// N: 50
   {
-    "ap_enable_dhcp_server",
-    "Enable DHCP server (1-yes, 0-no)",
+    "ap_en_dhcp_server",
+    "Enable DHCP server",
     "-",
-    (void*)&ivar.ap_enable_dhcp_server,
+    (void*)&ivar.ap_en_dhcp_server,
     tint8u,
     1,
     0,
@@ -864,49 +995,11 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "",
     "%d",
     0,
-    sizeof(ivar.ap_enable_dhcp_server),
+    sizeof(ivar.ap_en_dhcp_server),
     5,
     1,
   },
-// N: 44
-  {
-    "ap_dhcp_serv_start_ip",
-    "DHCP server start IP addres",
-    "-",
-    (void*)&ivar.ap_dhcp_serv_start_ip,
-    tstring,
-    0,
-    0,
-    0,
-    0,
-    S7V30BOOT_WIFI_AP,
-    "192.168.1.100",
-    "%s",
-    0,
-    sizeof(ivar.ap_dhcp_serv_start_ip)-1,
-    6,
-    0,
-  },
-// N: 45
-  {
-    "ap_mac_addr",
-    "AP MAC address",
-    "-",
-    (void*)&ivar.ap_mac_addr,
-    tstring,
-    0,
-    0,
-    0,
-    0,
-    S7V30BOOT_WIFI_AP,
-    "00:B0:51:23:F8:0F",
-    "%s",
-    0,
-    sizeof(ivar.ap_mac_addr)-1,
-    7,
-    0,
-  },
-// N: 46
+// N: 51
   {
     "wifi_ap_channel",
     "WIFI channell",
@@ -922,29 +1015,29 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     "%d",
     0,
     sizeof(ivar.wifi_ap_channel),
-    8,
+    6,
     0,
   },
-// N: 47
+// N: 52
   {
-    "wifi_ap_addr_assign_method",
-    "IP address assignment method  (0-Win home net, 1 - DHCP server)",
+    "wifi_sta_cfg1_en",
+    "Enable configuration",
     "-",
-    (void*)&ivar.wifi_ap_addr_assign_method,
+    (void*)&ivar.wifi_sta_cfg1_en,
     tint8u,
-    1,
+    0,
     0,
     1,
     0,
-    S7V30BOOT_WIFI_AP,
+    S7V30BOOT_WIFI_STA1,
     "",
     "%d",
     0,
-    sizeof(ivar.wifi_ap_addr_assign_method),
-    9,
-    5,
+    sizeof(ivar.wifi_sta_cfg1_en),
+    0,
+    1,
   },
-// N: 48
+// N: 53
   {
     "wifi_sta_cfg1_pass",
     "Password ",
@@ -954,8 +1047,8 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    0,
-    S7V30BOOT_WIFI_STA_CFG1,
+    4,
+    S7V30BOOT_WIFI_STA1,
     "wifi_pass",
     "%s",
     0,
@@ -963,7 +1056,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     0,
   },
-// N: 49
+// N: 54
   {
     "wifi_sta_cfg1_ssid",
     "SSID",
@@ -974,7 +1067,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG1,
+    S7V30BOOT_WIFI_STA1,
     "wifi_login",
     "%d",
     0,
@@ -982,10 +1075,10 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 50
+// N: 55
   {
     "wifi_sta_cfg1_en_dhcp",
-    "Enable DHCP client (1-yes, 0-no)",
+    "Enable DHCP client",
     "-",
     (void*)&ivar.wifi_sta_cfg1_en_dhcp,
     tint8u,
@@ -993,7 +1086,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     1,
     0,
-    S7V30BOOT_WIFI_STA_CFG1,
+    S7V30BOOT_WIFI_STA1,
     "",
     "%d",
     0,
@@ -1001,7 +1094,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     1,
   },
-// N: 51
+// N: 56
   {
     "wifi_sta_cfg1_default_ip_addr",
     "Default IP address",
@@ -1012,15 +1105,15 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG1,
-    "192.168.0.1",
+    S7V30BOOT_WIFI_STA1,
+    "192.168.11.1",
     "%s",
     0,
     sizeof(ivar.wifi_sta_cfg1_default_ip_addr)-1,
     4,
     2,
   },
-// N: 52
+// N: 57
   {
     "wifi_sta_cfg1_default_net_mask",
     "Default network mask ",
@@ -1031,7 +1124,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG1,
+    S7V30BOOT_WIFI_STA1,
     "255.255.255.0",
     "%s",
     0,
@@ -1039,7 +1132,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     5,
     2,
   },
-// N: 53
+// N: 58
   {
     "wifi_sta_cfg1_default_gate_addr",
     "Default gateway address",
@@ -1050,15 +1143,34 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG1,
-    "192.168.0.254",
+    S7V30BOOT_WIFI_STA1,
+    "192.168.11.1",
     "%s",
     0,
     sizeof(ivar.wifi_sta_cfg1_default_gate_addr)-1,
     6,
     2,
   },
-// N: 54
+// N: 59
+  {
+    "wifi_sta_cfg2_en",
+    "Enable configuration",
+    "-",
+    (void*)&ivar.wifi_sta_cfg2_en,
+    tint8u,
+    0,
+    0,
+    1,
+    0,
+    S7V30BOOT_WIFI_STA2,
+    "",
+    "%d",
+    0,
+    sizeof(ivar.wifi_sta_cfg2_en),
+    0,
+    1,
+  },
+// N: 60
   {
     "wifi_sta_cfg2_pass",
     "Password ",
@@ -1068,8 +1180,8 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    0,
-    S7V30BOOT_WIFI_STA_CFG2,
+    4,
+    S7V30BOOT_WIFI_STA2,
     "wifi_pass",
     "%s",
     0,
@@ -1077,7 +1189,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     1,
     0,
   },
-// N: 55
+// N: 61
   {
     "wifi_sta_cfg2_ssid",
     "SSID",
@@ -1088,7 +1200,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG2,
+    S7V30BOOT_WIFI_STA2,
     "wifi_login",
     "%s",
     0,
@@ -1096,10 +1208,10 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     2,
     0,
   },
-// N: 56
+// N: 62
   {
     "wifi_sta_cfg2_en_dhcp",
-    "Enable DHCP client (1-yes, 0-no)",
+    "Enable DHCP client",
     "-",
     (void*)&ivar.wifi_sta_cfg2_en_dhcp,
     tint8u,
@@ -1107,7 +1219,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     1,
     0,
-    S7V30BOOT_WIFI_STA_CFG2,
+    S7V30BOOT_WIFI_STA2,
     "",
     "%d",
     0,
@@ -1115,7 +1227,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     3,
     1,
   },
-// N: 57
+// N: 63
   {
     "wifi_sta_cfg2_default_ip_addr",
     "Default IP address",
@@ -1126,15 +1238,15 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG2,
-    "192.168.0.1",
+    S7V30BOOT_WIFI_STA2,
+    "192.168.12.1",
     "%s",
     0,
     sizeof(ivar.wifi_sta_cfg2_default_ip_addr)-1,
     4,
     0,
   },
-// N: 58
+// N: 64
   {
     "wifi_sta_cfg2_default_net_mask",
     "Default network mask ",
@@ -1145,7 +1257,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG2,
+    S7V30BOOT_WIFI_STA2,
     "255.255.255.0",
     "%s",
     0,
@@ -1153,7 +1265,7 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     5,
     0,
   },
-// N: 59
+// N: 65
   {
     "wifi_sta_cfg2_default_gate_addr",
     "Default gateway address",
@@ -1164,51 +1276,13 @@ static const T_NV_parameters arr_ivar[IVAR_SIZE]=
     0,
     0,
     0,
-    S7V30BOOT_WIFI_STA_CFG2,
-    "192.168.0.254",
+    S7V30BOOT_WIFI_STA2,
+    "192.168.12.1",
     "%s",
     0,
     sizeof(ivar.wifi_sta_cfg2_default_gate_addr)-1,
     6,
     0,
-  },
-// N: 60
-  {
-    "wifi_sta_cfg1_en",
-    "Enable configuration 1  (1-yes, 0-no)",
-    "-",
-    (void*)&ivar.wifi_sta_cfg1_en,
-    tint8u,
-    0,
-    0,
-    1,
-    0,
-    S7V30BOOT_WIFI_STA_COMMON,
-    "",
-    "%d",
-    0,
-    sizeof(ivar.wifi_sta_cfg1_en),
-    0,
-    1,
-  },
-// N: 61
-  {
-    "wifi_sta_cfg2_en",
-    "Enable configuration 2  (1-yes, 0-no)",
-    "-",
-    (void*)&ivar.wifi_sta_cfg2_en,
-    tint8u,
-    0,
-    0,
-    1,
-    0,
-    S7V30BOOT_WIFI_STA_COMMON,
-    "",
-    "%d",
-    0,
-    sizeof(ivar.wifi_sta_cfg2_en),
-    0,
-    1,
   },
 };
  
@@ -1228,22 +1302,23 @@ static const T_selector_items selector_3[2] =
 };
  
 // Selector description:  USB mode
-static const T_selector_items selector_4[7] = 
+static const T_selector_items selector_4[8] = 
 {
   { 0 , "None                                        " , -1},
   { 1 , "VCOM port                                   " , -1},
   { 2 , "Mass storage                                " , -1},
   { 3 , "VCOM and Mass storage                       " , -1},
-  { 4 , "VCOM and FreeMaster port                    " , -1},
-  { 5 , "RNDIS                                       " , -1},
-  { 6 , "Host ECM                                    " , -1},
+  { 5 , "VCOM and FreeMaster port                    " , -1},
+  { 6 , "RNDIS                                       " , -1},
+  { 7 , "Host ECM                                    " , -1},
+  { 4 , "VCOM and VCOM                               " , -1},
 };
  
 // Selector description:  IP address assignment method
 static const T_selector_items selector_5[2] = 
 {
-  { 0 , "Windows home network                        " , -1},
-  { 1 , "Preconfigured DHCP server                   " , -1},
+  { 0 , "Static adress                               " , -1},
+  { 1 , "DHCP server                                 " , -1},
 };
  
 // Selector description:  Выбор интерфейса для работы USB device
@@ -1259,7 +1334,7 @@ static const T_selectors_list selectors_list[SELECTORS_NUM] =
   {"binary"                      , 2    , selector_1    },
   {"ip_addr"                     , 0    , 0             },
   {"leds_mode"                   , 2    , selector_3    },
-  {"usb_mode"                    , 7    , selector_4    },
+  {"usb_mode"                    , 8    , selector_4    },
   {"IP_address_assignment_method", 2    , selector_5    },
   {"usb_dev_interface"           , 2    , selector_6    },
 };

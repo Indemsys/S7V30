@@ -350,7 +350,9 @@
 
 /*#define UX_TRACE_INSERT_MACROS*/
 
-#define UX_ENABLE_MEMORY_STATISTICS
+  #define UX_ENABLE_MEMORY_STATISTICS
+
+
 
 #endif
 

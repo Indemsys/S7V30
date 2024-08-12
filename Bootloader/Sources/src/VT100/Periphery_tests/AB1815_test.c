@@ -2,7 +2,7 @@
 // 2023-01-28
 // 17:10:20
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 
 /*-----------------------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ static uint32_t _AB1815_Write_register(void)
     reg_val = b;
     MPRINTF("Register %02X (%s) = %02X\n\r", reg_addr, AB1815_get_register_name_by_addr(reg_addr), reg_val);
 
-    if (Edit_string_in_pos(in_str, 31, 11, "") != RES_OK) break;
+    if (VT100_edit_string_in_pos(in_str, 31, 11, "") != RES_OK) break;
 
     if (sscanf(in_str, "%02X %02X",&reg_addr,&reg_val) == 2)
     {

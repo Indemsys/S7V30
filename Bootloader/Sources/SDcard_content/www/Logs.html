@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Logs</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+   
+    <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+      <div style="display: flex; flex-direction: column; flex-grow: inherit; text-align: left; padding-left: 10px" >
+		  <div ><a href="log">Link to general log</a> </div> 
+		  <div ><a href="netlog">Link to net log</a></div> 
+	  </div>  
+      
+      <button id="OpenLogMenuBtn" class="cmd_btn" onclick="OpenLogMenu()">&#9776; Operations</button>        
+      <div id="Log_menu" class="menu" style="right: 0;">
+        <a href="javascript:void(0)" class="closebtn" onclick="CloseLogMenu()">&times;</a>
+        <a href="#" onclick="Fetch_Log('log')">Load general log file</a>
+        <a href="#" onclick="Fetch_Log('netlog')">Load net log file</a>
+        <a href="#" onclick="scrollToTop()">Scroll to top</a>
+        <a href="#" onclick="scrollToBottom()">Scroll to bottom</a>
+        <a href="#" onclick="Clear_Log('clear_log')">Clear general log</a>
+        <a href="#" onclick="Clear_Log('clear_netlog')">Clear net log</a>
+      </div>        
+      <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+      <pre id="log_output" style="margin: 0px;overflow-y: scroll; height: 98%;overflow-x: scroll;width: 100%;">
+
+      </pre>
+	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+    <script>
+      async function Fetch_Log(name)
+      {
+        try
+        {
+          const response = await fetch(name, {method: 'GET', headers: {'Pragma': 'no-cache', 'Expires': '0'}});
+          if (!response.ok)
+          {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          const text = await response.text();
+          document.getElementById('log_output').textContent = text;
+          document.getElementById('log_output').scrollTop = 0;
+        } catch (error)
+        {
+          alert('There has been a problem with fetch operation:', error);
+        }
+        CloseLogMenu();
+      }
+
+      async function Clear_Log(name)
+      {
+        try
+        {
+          const response = await fetch(name, {method: 'POST'});
+          if (!response.ok)
+          {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          const text = await response.text();
+          document.getElementById('log_output').textContent = text;
+          document.getElementById('log_output').scrollTop = 0;
+        } catch (error)
+        {
+          alert('There has been a problem with fetch operation:', error);
+        }
+        CloseLogMenu();
+      }
+      
+      function scrollToTop() 
+      {
+        const logContainer = document.getElementById('log_output');
+        logContainer.scrollTop = 0;
+        CloseLogMenu();
+      }
+
+      function scrollToBottom() 
+      {
+        const logContainer = document.getElementById('log_output');
+        logContainer.scrollTop = logContainer.scrollHeight;
+        CloseLogMenu();
+      }
+      
+      function OpenLogMenu()
+      {
+        document.getElementById("Log_menu").style.width = "250px";
+      }
+      function CloseLogMenu()
+      {
+        document.getElementById("Log_menu").style.width = "0";
+      }
+    </script>
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

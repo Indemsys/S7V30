@@ -38,7 +38,7 @@ UINT _nx_secure_tls_send_clienthello_psk_extension(NX_SECURE_TLS_SESSION *tls_se
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_tls_send_clienthello                     PORTABLE C      */
-/*                                                           6.1.11       */
+/*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -82,8 +82,11 @@ UINT _nx_secure_tls_send_clienthello_psk_extension(NX_SECURE_TLS_SESSION *tls_se
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
 /*  04-25-2022     Zhen Kong                Modified comment(s), removed  */
-/*                                            the code to copy session    */
-/*                                            id, resulting in version 6.1.11*/
+/*                                            the code to copy session id,*/
+/*                                            resulting in version 6.1.11 */
+/*  03-08-2023     Yanwu Cai                Modified comment(s),          */
+/*                                            fixed compile errors,       */
+/*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_tls_send_clienthello(NX_SECURE_TLS_SESSION *tls_session, NX_PACKET *send_packet)
@@ -144,7 +147,9 @@ ULONG                      extension_length, total_extensions_length;
 #ifdef NX_SECURE_TLS_USE_SCSV_CIPHPERSUITE
     /* If this is an initial handshake (and not a response to a HelloRequest for session re-negotiation)
        then include the length of the SCSV pseudo-ciphersuite (if enabled). */
+#ifndef NX_SECURE_TLS_DISABLE_SECURE_RENEGOTIATION
     if (!tls_session -> nx_secure_tls_renegotiation_handshake && tls_session -> nx_secure_tls_client_state != NX_SECURE_TLS_CLIENT_STATE_RENEGOTIATING)
+#endif
     {
         ciphersuites_length = (USHORT)(ciphersuites_length + 2);
     }
@@ -177,7 +182,7 @@ ULONG                      extension_length, total_extensions_length;
         gmt_time = tls_session -> nx_secure_tls_session_time_function();
     }
     NX_CHANGE_ULONG_ENDIAN(gmt_time);
-    NX_SECURE_MEMCPY(tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random, (UCHAR *)&gmt_time, sizeof(gmt_time)); /* Use case of memcpy is verified. */
+    NX_SECURE_MEMCPY(tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random, (UCHAR *)&gmt_time, sizeof(gmt_time)); /* Use case of memcpy is verified. lgtm[cpp/banned-api-usage-required-any] */
 
 #if (NX_SECURE_TLS_TLS_1_3_ENABLED)
     if (tls_session -> nx_secure_tls_client_state == NX_SECURE_TLS_CLIENT_STATE_HELLO_RETRY)
@@ -200,7 +205,7 @@ ULONG                      extension_length, total_extensions_length;
         }
 
         /* Copy the random data into the packet. */
-        NX_SECURE_MEMCPY(&packet_buffer[length], tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random,
+        NX_SECURE_MEMCPY(&packet_buffer[length], tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random, /* lgtm[cpp/banned-api-usage-required-any] */
                          sizeof(tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random)); /* Use case of memcpy is verified. */
     }
     length += sizeof(tls_session -> nx_secure_tls_key_material.nx_secure_tls_client_random);
@@ -241,7 +246,9 @@ ULONG                      extension_length, total_extensions_length;
 #ifdef NX_SECURE_TLS_USE_SCSV_CIPHPERSUITE
     /* Only send SCSV on initial ClientHello. The SCSV is used for compatibility with OLD TLS 1.0
        and SSLv3.0 servers and generally shouldn't be needed. */
+#ifndef NX_SECURE_TLS_DISABLE_SECURE_RENEGOTIATION
     if (!tls_session -> nx_secure_tls_renegotiation_handshake && tls_session -> nx_secure_tls_client_state != NX_SECURE_TLS_CLIENT_STATE_RENEGOTIATING)
+#endif
     {
         /* For the secure rengotiation indication extension, we need to send a
            Signalling Ciphersuite Value (SCSV) as detailled in RFC5746. */

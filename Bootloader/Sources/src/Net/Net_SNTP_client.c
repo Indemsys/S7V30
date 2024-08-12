@@ -2,7 +2,8 @@
 // 2021-03-05
 // 12:07:22
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "Net.h"
 
 extern VOID  _nx_sntp_client_utility_fraction_to_usecs(ULONG fraction, ULONG *usecs);
 
@@ -102,13 +103,13 @@ static uint32_t SNTP_get_server_address(uint8_t *ip_address_ptr)
       status =  DNS_get_host_address((UCHAR *)sntp_servers[serv_indx].address,&host_ip_address, MS_TO_TICKS(2000));
       if (status == NX_SUCCESS)
       {
-        APPLOG("SNTP. Selected server %s (%03d.%03d.%03d.%03d)",sntp_servers[serv_indx].address, IPADDR(host_ip_address));
+        NETLOG("SNTP. Selected server %s (%03d.%03d.%03d.%03d)",sntp_servers[serv_indx].address, IPADDR(host_ip_address));
         memcpy(ip_address_ptr,&host_ip_address, 4);
         return RES_OK;
       }
       else
       {
-        APPLOG("SNTP. DNS request of %s failed. Error %04X",sntp_servers[serv_indx].address, status);
+        NETLOG("SNTP. DNS request of %s failed. Error %04X",sntp_servers[serv_indx].address, status);
       }
 
       // Если неудача, то переходим на следующий адрес, а текущий исключаем из списка кандидатов
@@ -118,7 +119,7 @@ static uint32_t SNTP_get_server_address(uint8_t *ip_address_ptr)
     }
     else
     {
-      APPLOG("SNTP. Selected server %s",sntp_servers[serv_indx].address);
+      NETLOG("SNTP. Selected server %s",sntp_servers[serv_indx].address);
       memcpy(ip_address_ptr,&host_ip_address, 4);
       return RES_OK;
     }
@@ -183,7 +184,7 @@ static void _Time_update_callback(NX_SNTP_TIME_MESSAGE *time_update_ptr, NX_SNTP
 
   \param void
 -----------------------------------------------------------------------------------------------------*/
-uint32_t SNTP_client_create(NX_IP  *ip_ptr)
+uint32_t Net_SNTP_client_create(NX_IP  *ip_ptr)
 {
   UINT     status;
 
@@ -195,22 +196,22 @@ uint32_t SNTP_client_create(NX_IP  *ip_ptr)
   status = SNTP_get_server_address((uint8_t *)&sntp_address);
   if (status != RES_OK)
   {
-    APPLOG("SNTP. Unable to get server address: %d", status);
+    NETLOG("SNTP. Unable to get server address: %d", status);
     return RES_ERROR;
   }
 
-  snmp_ip_ptr = ip_ptr;
+
 
   status = tx_event_flags_create(&sntp_flags, "SNTP flags");
   if (status != TX_SUCCESS)
   {
-    APPLOG("SNTP. Client event creation error %d",status);
+    NETLOG("SNTP. Client event creation error %d",status);
     goto err1;
   }
   status =  nx_sntp_client_create(&sntp_client, ip_ptr, 0,&net_packet_pool,  _Leap_second_handler, _Kiss_of_death_handler, NULL); /* no random_number_generator callback */
   if (status != NX_SUCCESS)
   {
-    APPLOG("SNTP. Client creation error %d",status);
+    NETLOG("SNTP. Client creation error %d",status);
     goto err;
   }
 
@@ -219,26 +220,27 @@ uint32_t SNTP_client_create(NX_IP  *ip_ptr)
   status = nx_sntp_client_set_local_time(&sntp_client, 0,0);
   if (status != NX_SUCCESS)
   {
-    APPLOG("SNTP. set local time error: %d", status);
+    NETLOG("SNTP. set local time error: %d", status);
     goto err;
   }
 
   status = nx_sntp_client_initialize_unicast(&sntp_client, sntp_address, ivar.sntp_poll_interval);
   if (status != NX_SUCCESS)
   {
-    APPLOG("SNTP. inialising error: %d", status);
+    NETLOG("SNTP. inialising error: %d", status);
     goto err;
   }
 
   status = nx_sntp_client_run_unicast(&sntp_client);
   if (status != NX_SUCCESS)
   {
-    APPLOG("SNTP. Run unicast error: %d", status);
+    NETLOG("SNTP. Run unicast error: %d", status);
     goto err;
   }
 
-  APPLOG("SNTP. Client created");
+  NETLOG("SNTP. Client created");
   Get_system_ticks(&sntp_timestump);
+  snmp_ip_ptr = ip_ptr;
   return RES_OK;
 
 err:
@@ -258,16 +260,16 @@ err1:
 -----------------------------------------------------------------------------------------------------*/
 uint32_t SNTP_client_delete(void)
 {
-  UINT     status;
+  volatile UINT     status;
 
   if (snmp_ip_ptr == 0) return RES_OK;
 
   status = nx_sntp_client_stop(&sntp_client);
-  APPLOG("SNTP. Stop result: %d", status);
+  NETLOG("SNTP. Stop result: %d", status);
   status = nx_sntp_client_delete(&sntp_client);
-  APPLOG("SNTP. Delete result: %d", status);
+  NETLOG("SNTP. Delete result: %d", status);
   status = tx_event_flags_delete(&sntp_flags);
-  APPLOG("SNTP. Delete flags result: %d", status);
+  NETLOG("SNTP. Delete flags result: %d", status);
   snmp_ip_ptr = 0;
   sntp_time_received = 0;
   SNTP_enable_all_server();
@@ -294,42 +296,21 @@ uint32_t Is_sntp_time_received(void)
 
   \return uint32_t
 -----------------------------------------------------------------------------------------------------*/
-void SNTP_client_controller(void)
+void Net_SNTP_client_task(NX_IP   *ip_ptr)
 {
   ULONG     status;
   ULONG     events = 0;
   char      time_str[128];
   uint32_t  curr_time;
 
-  NX_IP   *ip_ptr = NULL;
-
-  if (snmp_ip_ptr == NULL)
-  {
-    switch (g_network_type)
-    {
-    case NET_BY_WIFI_STA:
-      if (WIFI_STA_network_active_flag()) ip_ptr = wifi_sta_ip_ptr;
-      break;
-    case NET_BY_WIFI_AP:
-      if (WIFI_AP_network_active_flag())  ip_ptr = wifi_ap_ip_ptr;
-      break;
-    case NET_BY_RNDIS:
-      if (RNDIS_network_active_flag())    ip_ptr = rndis_ip_ptr;
-      break;
-    case NET_BY_ECM:
-      if (ECM_Host_network_active_flag()) ip_ptr = ecm_host_ip_ptr;
-      break;
-    default:
-      return;
-    }
-    if (SNTP_client_create(ip_ptr) != RES_OK) return;
-  }
-
 
   if (tx_event_flags_get(&sntp_flags, DEMO_SNTP_UPDATE_EVENT, TX_OR_CLEAR,&events, TX_NO_WAIT) == TX_SUCCESS)
   {
     UINT         server_status;
-    ULONG        seconds, milliseconds, microseconds, fraction;
+    ULONG        seconds;
+    volatile ULONG        milliseconds;
+    ULONG        microseconds;
+    ULONG        fraction;
     rtc_time_t   rt_time;
 
     if (events & DEMO_SNTP_UPDATE_EVENT)
@@ -348,14 +329,14 @@ void SNTP_client_controller(void)
           {
             sntp_time_received = 1;
             nx_sntp_client_utility_display_date_time(&sntp_client , time_str, 128); // Создать строку с датой временем
-            APPLOG("SNTP sec, msec: %u %u" , seconds, milliseconds);
-            APPLOG("SNTP resp: %s", time_str);
+            NETLOG("SNTP sec, msec: %u %u" , seconds, milliseconds);
+            NETLOG("SNTP resp: %s", time_str);
           }
 
           if (ivar.en_sntp_time_receiving)
           {
             Convert_NTP_to_UTC_time(seconds,&rt_time, ivar.utc_offset);
-            APPLOG("Time : %04d.%02d.%02d %02d:%02d:%02d", rt_time.tm_year+1970, rt_time.tm_mon+1, rt_time.tm_mday, rt_time.tm_hour, rt_time.tm_min, rt_time.tm_sec);
+            NETLOG("Time : %04d.%02d.%02d %02d:%02d:%02d", rt_time.tm_year+1970, rt_time.tm_mon+1, rt_time.tm_mday, rt_time.tm_hour, rt_time.tm_min, rt_time.tm_sec);
 
             rt_time.tm_year = rt_time.tm_year + 1970 - 1900;
             // Обновить время в RTC устройства
@@ -365,12 +346,12 @@ void SNTP_client_controller(void)
         }
         else
         {
-          APPLOG("SNTP. Get local time error %d", status);
+          NETLOG("SNTP. Get local time error %d", status);
         }
       }
       else
       {
-        APPLOG("SNTP. Receiving updates error %d", status);
+        NETLOG("SNTP. Receiving updates error %d", status);
       }
     }
   }

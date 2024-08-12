@@ -2,7 +2,8 @@
 // 2019.07.11
 // 23:40:58
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
+#include   "BLE_main.h"
 
 TX_EVENT_FLAGS_GROUP   app_flags;
 
@@ -11,6 +12,7 @@ uint8_t                g_cpu_id[CPU_ID_LEN];
 
 extern ssp_err_t       sce_initialize(void);
 extern const sf_crypto_instance_t g_sf_crypto;
+
 /*-----------------------------------------------------------------------------------------------------
 
 
@@ -42,7 +44,6 @@ uint32_t Clear_app_event(void)
   ULONG flags;
   return tx_event_flags_get(&app_flags, 0xFFFFFFFF, TX_AND_CLEAR,&flags, TX_NO_WAIT);
 }
-
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -76,9 +77,31 @@ uint32_t Get_app_events(uint32_t events_mask, ULONG *p_flags,  uint32_t opt, uin
 
   \param void
 -----------------------------------------------------------------------------------------------------*/
+void Public_names_modifier(void)
+{
+  char str[17];
+
+  // Имя хоста не изменяем чтобы всегда работал URL по константному имени хоста
+  // memset(str, 0, sizeof(str));
+  // strncpy(str, (char*)ivar.this_host_name, 5); // От оригинального имени из параметров берем только первые 5 симвлов
+  // strncat(str, g_cpu_id_str, 8); // Добавляем 8 первых символов от уникального номера чипа
+  // strcpy((char*)ivar.this_host_name, str);
+
+  memset(str, 0, sizeof(str));
+  strncpy(str, (char*)ivar.wifi_ap_ssid, 5);
+  strncat(str, g_cpu_id_str, 8);
+  strcpy((char*)ivar.wifi_ap_ssid, str);
+
+
+}
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param void
+-----------------------------------------------------------------------------------------------------*/
 void Main_thread(ULONG arg)
 {
-  Watchdog_refreshing_start();
+  IWDT_refreshing_start();
   ELS_soft_event_set_and_enable_interrupts();
 
   // Разрешаем запись в регистры пинов, проскольку ранее она была запрещена драйвером
@@ -99,19 +122,20 @@ void Main_thread(ULONG arg)
   SCI8_SPI_init();                      // SPI8 используется для управления часами реального времени и чипами ЦАП
   Init_RTC();
   sce_initialize();                     // Инициализация движка шифрования и генерации случайных чисел. Применяется неявно в DNS
-  g_sf_crypto.p_api->open (g_sf_crypto.p_ctrl, g_sf_crypto.p_cfg);
+  g_sf_crypto.p_api->open(g_sf_crypto.p_ctrl, g_sf_crypto.p_cfg);
   Flash_driver_bgo_init();
+
 
   if  (Init_SD_card_file_system() == RES_OK) g_file_system_ready = 1;
 
   Restore_settings(&ivar_inst, BOOTL_PARAMS);
-  Determine_network_type();
-  Generate_CRC32_table();
+  Public_names_modifier();                     // Модификация имени хоста, чтобы все имена были уникальными
+
+  Generate_CRC32_table();                   // Таблица CRC32 нужна для загрузчика образа прошивки
+  VT100_task_manager_initialization();      // Инициализируем движок VT100 терминала до того как каналы коммуникации cмогут создать задачи VT100
 
   // Фиксируем время завершения старта основного цикла
   Get_hw_timestump(&g_main_thread_start_timestump);
-
-
 
   if (Check_boot_MassStorage_mode() == RES_ERROR)
   {
@@ -132,6 +156,8 @@ void Main_thread(ULONG arg)
     }
   }
 
+  WIFi_control_init();
+  Charger_thread_create();
 
 
   Init_app_logger();
@@ -148,24 +174,16 @@ void Main_thread(ULONG arg)
   Clear_boot_MassStorage_mode();
 
 
-  Set_usb_mode();
-  if (ivar.usb_mode != USB_MODE_NONE)
-  {
-    Init_USB_stack();
-    if (Get_usb_1_mode() == USB1_INTF_VIRTUAL_COM_PORT)
-    {
-      Task_VT100_create((ULONG)Mnsdrv_get_usbfs_vcom0_driver(),0);
-    }
-  }
+  Init_USB_stack();
 
   Create_File_Logger_task();
   Thread_Net_create();
+  BLE_init();
 
   // Выключаем светодиоды
   RED_LED   = 1;
   GREEN_LED = 1;
   BLUE_LED  = 1;
-
 
   do
   {
@@ -174,17 +192,23 @@ void Main_thread(ULONG arg)
     GREEN_LED  = 1;
     Wait_ms(58);
 
-    if (WIFI_AP_network_active_flag())
+//    if (WIFI_AP_network_active_flag())
+//    {
+//      BLUE_LED  = 0;
+//    }
+//    else if (WIFI_STA_network_active_flag())
+//    {
+//      BLUE_LED  = 0;
+//    }
+//    else
+//    {
+//      BLUE_LED  = 1;
+//    }
+
+    // Периодически проверяем необходимость удаления отработавшей задачи инициализации стека BLE
+    if (BLE_init_task_state() == BLE_INIT_TASK_FINISHED)
     {
-      BLUE_LED  = 0;
-    }
-    else if (WIFI_STA_network_active_flag())
-    {
-      BLUE_LED  = 0;
-    }
-    else
-    {
-      BLUE_LED  = 1;
+      BLE_init_delete();
     }
   }while (1);
 

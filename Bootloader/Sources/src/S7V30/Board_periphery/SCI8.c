@@ -3,7 +3,7 @@
 // 15:58:11
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define     S7V30_SCI8_C
-#include   "S7V30.h"
+#include   "App.h"
 
 static IRQn_Type               sci8_rxi_int_num;
 static IRQn_Type               sci8_txi_int_num;

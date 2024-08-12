@@ -1,7 +1,6 @@
 /* generated configuration header file - do not edit */
 #ifndef NXD_DHCP_SERVER_CFG_H_
 #define NXD_DHCP_SERVER_CFG_H_
-#define NX_DHCP_SERVER_THREAD_PRIORITY             (16)
             #define NX_DHCP_PACKET_ALLOCATE_TIMEOUT            (2 * NX_IP_PERIODIC_RATE)
             #define NX_DHCP_FAST_PERIODIC_TIME_INTERVAL        (10)
             #define NX_DHCP_CLIENT_SESSION_TIMEOUT             (10 * NX_DHCP_FAST_PERIODIC_TIME_INTERVAL)

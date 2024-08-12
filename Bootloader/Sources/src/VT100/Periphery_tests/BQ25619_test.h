@@ -5,7 +5,7 @@
 void Do_BQ25619_test(uint8_t keycode);
 
 
-#endif // BQ25619_TEST_H
+#endif
 
 
 

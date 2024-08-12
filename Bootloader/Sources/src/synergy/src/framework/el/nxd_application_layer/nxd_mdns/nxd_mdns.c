@@ -12,10 +12,10 @@
 
 /**************************************************************************/
 /**************************************************************************/
+/**                                                                       */ 
+/** NetX Component                                                        */ 
 /**                                                                       */
-/** NetX Component                                                        */
-/**                                                                       */
-/**   Multicast Domain Name System (mDNS)                                 */
+/**   Multicast Domain Name System (mDNS)                                 */ 
 /**                                                                       */
 /**************************************************************************/
 /**************************************************************************/
@@ -72,7 +72,7 @@ static VOID         _nx_mdns_thread_entry(ULONG mdns_value);
 static UINT         _nx_mdns_packet_process(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UINT interface_index);
 static UINT         _nx_mdns_packet_create(NX_MDNS *mdns_ptr, NX_PACKET **packet_ptr, UCHAR type);
 static VOID         _nx_mdns_packet_send(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UINT interface_index);
-static UINT         _nx_mdns_packet_rr_add(NX_PACKET *packet_ptr, NX_MDNS_RR *rr, UINT op, UINT packet_type);
+static UINT         _nx_mdns_packet_rr_add(NX_PACKET *packet_ptr, NX_MDNS_RR *rr, UINT op, UINT packet_type); 
 static UINT         _nx_mdns_packet_rr_set(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UCHAR *data_ptr, NX_MDNS_RR *rr_ptr, UINT op, UINT interface_index);
 static UINT         _nx_mdns_packet_rr_data_set(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UCHAR *data_ptr, NX_MDNS_RR *rr_ptr, UINT op);
 #ifdef NX_MDNS_ENABLE_ADDRESS_CHECK
@@ -80,12 +80,12 @@ static UINT         _nx_mdns_packet_address_check(NX_PACKET *packet_ptr);
 #endif /* NX_MDNS_ENABLE_ADDRESS_CHECK  */
 static UINT         _nx_mdns_service_name_assemble(UCHAR *name, UCHAR *type, UCHAR *sub_type, UCHAR *domain, UCHAR *record_buffer, UINT buffer_size, UINT *type_index);
 static UINT         _nx_mdns_service_name_resolve(UCHAR *srv_name, UCHAR **name, UCHAR **type, UCHAR **domain);
-static UINT         _nx_mdns_rr_delete(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_rr);
+static UINT         _nx_mdns_rr_delete(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_rr); 
 static UINT         _nx_mdns_rr_size_get(UCHAR *resource, NX_PACKET *packet_ptr);
-static UINT         _nx_mdns_name_match(UCHAR *src, UCHAR *dst, UINT length);
+static UINT         _nx_mdns_name_match(UCHAR *src, UCHAR *dst, UINT length);  
 static UINT         _nx_mdns_name_size_calculate(UCHAR *name, NX_PACKET *packet_ptr);
 static UINT         _nx_mdns_name_string_encode(UCHAR *ptr, UCHAR *name);
-static UINT         _nx_mdns_name_string_decode(UCHAR *data, UINT start, UINT data_length, UCHAR *buffer, UINT size);
+static UINT         _nx_mdns_name_string_decode(UCHAR *data, UINT start, UINT data_length, UCHAR *buffer, UINT size); 
 static UINT         _nx_mdns_txt_string_encode(UCHAR *ptr, UCHAR *name);
 static UINT         _nx_mdns_txt_string_decode(UCHAR *data, UINT data_length, UCHAR *buffer, UINT size);
 static VOID         _nx_mdns_short_to_network_convert(UCHAR *ptr, USHORT value);
@@ -99,7 +99,7 @@ static UINT         _nx_mdns_service_interface_delete(NX_MDNS *mdns_ptr, UCHAR *
 static UINT         _nx_mdns_rr_a_aaaa_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG *address, UINT addr_length, UCHAR type, UINT interface_index);
 #endif /* !NX_DISABLE_IPV4 || NX_MDNS_ENABLE_IPV6  */
 static UINT         _nx_mdns_rr_srv_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, USHORT priority, USHORT weights, USHORT port, UCHAR *target, NX_MDNS_RR **insert_rr, UINT interface_index);
-static UINT         _nx_mdns_rr_txt_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, UCHAR *txt, NX_MDNS_RR **insert_rr, UINT interface_index);
+static UINT         _nx_mdns_rr_txt_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, UCHAR *txt, NX_MDNS_RR **insert_rr, UINT interface_index); 
 static UINT         _nx_mdns_rr_ptr_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, UCHAR *ptr_name, UCHAR is_valid, NX_MDNS_RR **insert_rr, UINT interface_index);
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
@@ -113,7 +113,9 @@ static VOID         _nx_mdns_additional_a_aaaa_find(NX_MDNS *mdns_ptr, UCHAR *na
 static VOID         _nx_mdns_probing_send(NX_MDNS *mdns_ptr, UINT interface_index);
 static VOID         _nx_mdns_announcing_send(NX_MDNS *mdns_ptr, UINT interface_index);
 static VOID         _nx_mdns_response_send(NX_MDNS *mdns_ptr, UINT interface_index);
+#ifndef NX_DISABLE_IPV4
 static VOID         _nx_mdns_ip_address_change_notify(NX_IP *ip_ptr, VOID *additional_info);
+#endif /* NX_DISABLE_IPV4 */
 #ifdef NX_MDNS_ENABLE_IPV6
 static VOID         _nx_mdns_ipv6_address_change_notify(NX_IP *ip_ptr, UINT method, UINT interface_index, UINT index, ULONG *ipv6_address);
 #endif /* NX_MDNS_ENABLE_IPV6  */
@@ -131,7 +133,7 @@ static VOID         _nx_mdns_query_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARA
 static VOID         _nx_mdns_query_thread_suspend(TX_THREAD **suspension_list_head, VOID (*suspend_cleanup)(TX_THREAD * NX_CLEANUP_PARAMETER),
                                                   NX_MDNS *mdns_ptr, NX_MDNS_RR **rr, ULONG wait_option);
 static VOID         _nx_mdns_query_thread_resume(TX_THREAD **suspension_list_head, NX_MDNS *mdns_ptr, NX_MDNS_RR *rr);
-static UINT         _nx_mdns_known_answer_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr);
+static UINT         _nx_mdns_known_answer_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr); 
 static UINT         _nx_mdns_packet_rr_process(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UCHAR *data_ptr, UINT interface_index);
 #endif /* NX_MDNS_DISABLE_CLIENT  */
 
@@ -154,51 +156,51 @@ static UCHAR        target_string_buffer[NX_MDNS_NAME_MAX + 1];
 static NXD_ADDRESS  NX_MDNS_IPV6_MULTICAST_ADDRESS;
 #endif /* NX_MDNS_ENABLE_IPV6 */
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_create                                    PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_create                                    PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS create function call    */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS create function call    */ 
+/*                                                                        */ 
 /*    Note: the name string is generated by internal logic and it is      */
 /*    always NULL-terminated.                                             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    ip_ptr                                Pointer to IP instance        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    ip_ptr                                Pointer to IP instance        */ 
 /*    priority                              The priority of mDNS Thread   */
-/*    stack_ptr                             Stack pointer for mDNS Thread */
+/*    stack_ptr                             Stack pointer for mDNS Thread */ 
 /*    stack_size                            Stack size for mDNS Thread    */
 /*    host_name                             Pointer to host name          */
-/*    local_cache_ptr                       Pointer to local cache        */
-/*    local_cache_size                      The size of local cache       */
-/*    peer_cache_ptr                        Pointer to peer cache         */
-/*    peer_cache_size                       The size of peer cache        */
+/*    local_cache_ptr                       Pointer to local cache        */ 
+/*    local_cache_size                      The size of local cache       */ 
+/*    peer_cache_ptr                        Pointer to peer cache         */ 
+/*    peer_cache_size                       The size of peer cache        */ 
 /*    probing_notify                        mDNS probing notify           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_create                       Actual mDNS create function   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_create                       Actual mDNS create function   */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -219,17 +221,17 @@ UCHAR   *ptr;
 
     /* Check for invalid input pointers.  */
     if ((!ip_ptr) || (!mdns_ptr) || (!stack_ptr) || (!packet_pool) || (!host_name))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
+    }    
 
     /* Check for invalid non pointer input. */
-    if ((ip_ptr -> nx_ip_id != NX_IP_ID) ||
+    if ((ip_ptr -> nx_ip_id != NX_IP_ID) || 
         (stack_size < TX_MINIMUM_STACK) ||
         (mdns_ptr -> nx_mdns_id == NX_MDNS_ID))
     {
         return(NX_MDNS_PARAM_ERROR);
-    }
+    }    
 
     /* Check the host name format, RFC 1033,1034,1035 recomend that host names contain only letters, digits, and hyphens RFC6763, Appendix E, Page44. */
     ptr = host_name;
@@ -248,16 +250,16 @@ UCHAR   *ptr;
     if ((sizeof("local") - 1) > NX_MDNS_DOMAIN_NAME_MAX)
     {
         return(NX_MDNS_DATA_SIZE_ERROR);
-    }
-
+    }    
+    
 #ifndef NX_MDNS_DISABLE_SERVER
-
+    
     /* Check for invalid input pointers, cache header and tail (8 bytes).  */
     if ((!local_cache_ptr) || (local_cache_size < 8))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    } 
+    
     /* Make sure record_buffer is 4-byte aligned. */
     if ((((UINT)local_cache_ptr & 0x3) != 0) ||
         ((local_cache_size & 0x3) != 0))
@@ -270,10 +272,10 @@ UCHAR   *ptr;
 
     /* Check for invalid input pointers, cache header and tail (8 bytes).  */
     if ((!peer_cache_ptr) || (peer_cache_size < 8))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    } 
+    
     /* Make sure peer cache is 4-byte aligned. */
     if ((((UINT)peer_cache_ptr & 0x3) != 0) ||
         ((peer_cache_size & 0x3) != 0))
@@ -281,7 +283,7 @@ UCHAR   *ptr;
         return(NX_MDNS_CACHE_ERROR);
     }
 #endif /* NX_MDNS_DISABLE_CLIENT */
-
+    
     /* Call actual mDNS create service.  */
     status =  _nx_mdns_create(mdns_ptr, ip_ptr, packet_pool, priority,
                               stack_ptr, stack_size, host_name,
@@ -294,71 +296,76 @@ UCHAR   *ptr;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_create                                     PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_create                                     PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function initializes the mDNS structure and associated IP      */
-/*    instance for mDNS operation. In doing so, it creates a UDP socket   */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function initializes the mDNS structure and associated IP      */ 
+/*    instance for mDNS operation. In doing so, it creates a UDP socket   */ 
 /*    for communication with the server and a mDNS processing thread      */
-/*                                                                        */
+/*                                                                        */ 
 /*    Note: the name string is generated by internal logic and it is      */
 /*    always NULL-terminated.                                             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    ip_ptr                                Pointer to IP instance        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    ip_ptr                                Pointer to IP instance        */ 
 /*    priority                              The priority of mDNS Thread   */
-/*    stack_ptr                             Stack pointer for mDNS Thread */
+/*    stack_ptr                             Stack pointer for mDNS Thread */ 
 /*    stack_size                            Stack size for mDNS Thread    */
 /*    host_name                             Pointer to host name          */
-/*    local_cache_ptr                       Pointer to local cache        */
-/*    local_cache_size                      The size of local cache       */
-/*    peer_cache_ptr                        Pointer to peer cache         */
-/*    peer_cache_size                       The size of peer cache        */
+/*    local_cache_ptr                       Pointer to local cache        */ 
+/*    local_cache_size                      The size of local cache       */ 
+/*    peer_cache_ptr                        Pointer to peer cache         */ 
+/*    peer_cache_size                       The size of peer cache        */ 
 /*    probing_notify                        mDNS probing notify           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    nx_udp_socket_create                  Create the mDNS UDP socket    */
-/*    nx_udp_socket_delete                  Delete the mDNS UDP socket    */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    nx_udp_socket_create                  Create the mDNS UDP socket    */ 
+/*    nx_udp_socket_delete                  Delete the mDNS UDP socket    */ 
 /*    nx_udp_socket_bind                    Bind the mDNS UDP socket      */
 /*    nx_udp_socket_unbind                  Unbind the mDNS UDP socket    */
 /*    nx_udp_socket_receive_notify          Register the mDNS function    */
 /*    nx_ip_address_change_notify           Register IPv4 address function*/
 /*    nxd_ipv6_address_change_notify        Register IPv6 address function*/
-/*    tx_mutex_create                       Create the mDNS mutex         */
-/*    tx_mutex_delete                       Delete the mDNS mutex         */
-/*    tx_thread_create                      Create the mDNS thread        */
-/*    tx_thread_delete                      Delete the mDNS thread        */
+/*    tx_mutex_create                       Create the mDNS mutex         */ 
+/*    tx_mutex_delete                       Delete the mDNS mutex         */ 
+/*    tx_thread_create                      Create the mDNS thread        */ 
+/*    tx_thread_delete                      Delete the mDNS thread        */  
 /*    tx_event_flags_create                 Create the ThreadX flag event */
-/*    _nx_mdns_cache_initialize             Initialize the mDNS cache     */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_cache_initialize             Initialize the mDNS cache     */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), and      */
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            used internal ip address    */
+/*                                            change notification,        */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _nx_mdns_create(NX_MDNS *mdns_ptr, NX_IP *ip_ptr, NX_PACKET_POOL *packet_pool,
@@ -372,8 +379,8 @@ UINT    status;
 UINT    host_name_size;
 
 
-    /* Check the size of the host name string. The last four characters in the
-       host_name are reserved so DNS-SD is able to append " (2)" during the conflict
+    /* Check the size of the host name string. The last four characters in the 
+       host_name are reserved so DNS-SD is able to append " (2)" during the conflict 
        resolution process. */
 #if (NX_MDNS_HOST_NAME_MAX >= NX_MDNS_LABEL_MAX)
     if (_nx_utility_string_length_check((CHAR *)host_name, &host_name_size, (NX_MDNS_LABEL_MAX - 4)))
@@ -392,10 +399,10 @@ UINT    host_name_size;
     /* Initialize the IPv6 Multicast address.  */
     memset(&NX_MDNS_IPV6_MULTICAST_ADDRESS, 0, sizeof(NXD_ADDRESS));
     NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_version = NX_IP_VERSION_V6;
-    NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[0] = 0xFF020000;
+    NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[0] = 0xFF020000;  
     NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[1] = 0x00000000;
     NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[2] = 0x00000000;
-    NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[3] = 0x000000FB;
+    NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[3] = 0x000000FB;    
 #endif /* NX_MDNS_ENABLE_IPV6 */
 
     /* Save the IP pointer.  */
@@ -403,16 +410,16 @@ UINT    host_name_size;
 
     /* Save the Packet pool.  */
     mdns_ptr -> nx_mdns_packet_pool_ptr = packet_pool;
-
-    /* Save the host name.  */
+        
+    /* Save the host name.  */  
     memcpy((char*)mdns_ptr -> nx_mdns_host_name, (const char*)host_name, (host_name_size + 1)); /* Use case of memcpy is verified. */
-
+    
     /* Set the domain name as "local" by default.  */
     memcpy((char*)mdns_ptr -> nx_mdns_domain_name, "local", sizeof("local")); /* Use case of memcpy is verified. */
 
     /* Assign the resource record change notify. */
     mdns_ptr -> nx_mdns_probing_notify = probing_notify;
-
+        
     /* Set the mDNS announcing period.  */
     mdns_ptr -> nx_mdns_announcing_period = (USHORT)NX_MDNS_ANNOUNCING_PERIOD;
 
@@ -421,13 +428,13 @@ UINT    host_name_size;
 
     /* Set the mDNS announcing period interval.  */
     mdns_ptr -> nx_mdns_announcing_period_interval = (ULONG)NX_MDNS_ANNOUNCING_PERIOD_INTERVAL;
-
+    
     /* Set the mDNS announcing count between one announcing period.  */
     mdns_ptr -> nx_mdns_announcing_count = (UCHAR)NX_MDNS_ANNOUNCING_COUNT;
 
     /* Set the mDNS announcing factor.  */
     mdns_ptr -> nx_mdns_announcing_factor = (UCHAR)NX_MDNS_ANNOUNCING_FACTOR;
-
+      
     /* Set the mDNS announcing max time.  */
     mdns_ptr -> nx_mdns_announcing_max_time = (UCHAR)NX_MDNS_ANNOUNCING_MAX_TIME;
 
@@ -435,30 +442,22 @@ UINT    host_name_size;
     _nx_mdns_created_ptr = mdns_ptr;
 
 #ifndef NX_MDNS_DISABLE_SERVER
-    /* Register IP address change callback. */
-    status = nx_ip_address_change_notify(mdns_ptr -> nx_mdns_ip_ptr, _nx_mdns_ip_address_change_notify, NX_NULL);
 
-    /* Check for error */
-    if (status)
-    {
-        return(status);
-    }
+#ifndef NX_DISABLE_IPV4
+    /* Setup the IP address change callback function. */
+    ip_ptr -> nx_ip_address_change_notify_internal = _nx_mdns_ip_address_change_notify;
+#endif /* NX_DISABLE_IPV4 */
 
 #ifdef NX_MDNS_ENABLE_IPV6
-    /* Register IPv6 address change callback. */
-    status = nxd_ipv6_address_change_notify(mdns_ptr -> nx_mdns_ip_ptr, _nx_mdns_ipv6_address_change_notify);
 
-    /* Check for error */
-    if (status)
-    {
-        return(status);
-    }
+    /* Setup the IPv6 address change callback function. */
+    ip_ptr -> nx_ipv6_address_change_notify_internal =  _nx_mdns_ipv6_address_change_notify;
 #endif /* NX_MDNS_ENABLE_IPV6  */
 #endif /* NX_MDNS_DISABLE_SERVER */
 
     /* Create the Socket and check the status */
     status = nx_udp_socket_create(mdns_ptr -> nx_mdns_ip_ptr, &(mdns_ptr -> nx_mdns_socket), "Multicast DNS",
-                                  NX_MDNS_UDP_TYPE_OF_SERVICE, NX_MDNS_UDP_FRAGMENT_OPTION,
+                                  NX_MDNS_UDP_TYPE_OF_SERVICE, NX_MDNS_UDP_FRAGMENT_OPTION, 
                                   NX_MDNS_UDP_TIME_TO_LIVE, NX_MDNS_UDP_QUEUE_DEPTH);
 
     /* Determine if it was successful.  */
@@ -466,10 +465,10 @@ UINT    host_name_size;
     {
         return(status);
     }
-
+    
     /* Bind the UDP socket to the mDNS port.  */
     status =  nx_udp_socket_bind(&(mdns_ptr -> nx_mdns_socket), NX_MDNS_UDP_PORT, TX_NO_WAIT);
-
+    
     /* Check for error */
     if (status)
     {
@@ -478,7 +477,7 @@ UINT    host_name_size;
         nx_udp_socket_delete(&(mdns_ptr -> nx_mdns_socket));
         return(status);
     }
-
+    
     /* Register UDP receive callback. */
     status = nx_udp_socket_receive_notify(&(mdns_ptr -> nx_mdns_socket), _nx_mdns_udp_receive_notify);
 
@@ -493,7 +492,7 @@ UINT    host_name_size;
     }
 
     /* Create the mDNS mutex.  */
-    status =  tx_mutex_create(&(mdns_ptr -> nx_mdns_mutex),
+    status =  tx_mutex_create(&(mdns_ptr -> nx_mdns_mutex), 
                               "mDNS Mutex", TX_NO_INHERIT);
 
     /* Determine if the semaphore creation was successful.  */
@@ -506,11 +505,11 @@ UINT    host_name_size;
 
         /* No, return error status.  */
         return(status);
-    }
+    }    
 
     /* Create the internal mDNS event flag object.  */
     status = tx_event_flags_create(&mdns_ptr -> nx_mdns_events, "mDNS Thread Events");
-
+    
     /* Determine if the event flags creation was successful.  */
     if (status)
     {
@@ -520,7 +519,7 @@ UINT    host_name_size;
         nx_udp_socket_delete(&(mdns_ptr -> nx_mdns_socket));
 
         /* Delete the mDNS mutex.  */
-        tx_mutex_delete(&(mdns_ptr -> nx_mdns_mutex));
+        tx_mutex_delete(&(mdns_ptr -> nx_mdns_mutex));     
 
         /* No, return error status.  */
         return(status);
@@ -529,7 +528,7 @@ UINT    host_name_size;
     /* Create the mDNS processing thread.  */
     status =  tx_thread_create(&(mdns_ptr -> nx_mdns_thread), "mDNS Thread",
                                _nx_mdns_thread_entry, (ULONG) mdns_ptr,
-                               stack_ptr, stack_size, priority, priority,
+                               stack_ptr, stack_size, priority, priority, 
                                1, TX_AUTO_START);
 
     /* Determine if the thread creation was successful.  */
@@ -542,17 +541,17 @@ UINT    host_name_size;
 
         /* Delete the mDNS mutex.  */
         tx_mutex_delete(&(mdns_ptr -> nx_mdns_mutex));
-
+        
         /* Delete the mDNS events.  */
-        tx_event_flags_delete(&(mdns_ptr -> nx_mdns_events));
+        tx_event_flags_delete(&(mdns_ptr -> nx_mdns_events)); 
 
         /* No, return error status.  */
         return(status);
     }
-
+    
     /* Create the timer of Resource record lifetime.  */
-    status =  tx_timer_create(&(mdns_ptr -> nx_mdns_timer), "mDNS Timer",
-                              _nx_mdns_timer_entry, (ULONG) mdns_ptr,
+    status =  tx_timer_create(&(mdns_ptr -> nx_mdns_timer), "mDNS Timer", 
+                              _nx_mdns_timer_entry, (ULONG) mdns_ptr, 
                               0xFFFFFFFF, 0, TX_NO_ACTIVATE);
 
     /* Determine if the thread creation was successful.  */
@@ -565,21 +564,21 @@ UINT    host_name_size;
 
         /* Delete the mDNS mutex.  */
         tx_mutex_delete(&(mdns_ptr -> nx_mdns_mutex));
-
+        
         /* Delete the mDNS events.  */
         tx_event_flags_delete(&(mdns_ptr -> nx_mdns_events));
 
         /* Delete the mDNS thread.  */
-        tx_thread_delete(&(mdns_ptr -> nx_mdns_thread));
+        tx_thread_delete(&(mdns_ptr -> nx_mdns_thread)); 
 
         /* No, return error status.  */
         return(status);
     }
-
-    /* Initialize the buffer.  */
-    status =  _nx_mdns_cache_initialize(mdns_ptr, local_cache_ptr, local_cache_size,
+    
+    /* Initialize the buffer.  */    
+    status =  _nx_mdns_cache_initialize(mdns_ptr, local_cache_ptr, local_cache_size, 
                                         peer_cache_ptr, peer_cache_size);
-
+    
     /* Determine if the buffer initialize was successful.  */
     if (status != NX_SUCCESS)
     {
@@ -590,63 +589,63 @@ UINT    host_name_size;
 
         /* Delete the mDNS timer.  */
         tx_timer_delete(&(mdns_ptr -> nx_mdns_timer));
-
+        
         /* Delete the mDNS mutex.  */
         tx_mutex_delete(&(mdns_ptr -> nx_mdns_mutex));
-
+        
         /* Delete the mDNS events.  */
         tx_event_flags_delete(&(mdns_ptr -> nx_mdns_events));
 
         /* Delete the mDNS thread.  */
-        tx_thread_delete(&(mdns_ptr -> nx_mdns_thread));
+        tx_thread_delete(&(mdns_ptr -> nx_mdns_thread)); 
 
         /* No, return error status.  */
         return(status);
     }
-
+    
     /* Update the mDNS structure ID.  */
     mdns_ptr -> nx_mdns_id = NX_MDNS_ID;
 
     /* The random delay of first probing for RR. */
-    mdns_ptr -> nx_mdns_first_probing_delay = (ULONG)(1 + ((ULONG)(NX_RAND()) % NX_MDNS_PROBING_TIMER_COUNT));
+    mdns_ptr -> nx_mdns_first_probing_delay = (ULONG)(1 + (((ULONG)NX_RAND()) % NX_MDNS_PROBING_TIMER_COUNT));
 
     /* Return a successful status.  */
     return(NX_SUCCESS);
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_delete                                    PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_delete                                    PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS delete function call.   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_delete                       Actual mDNS delete function   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS delete function call.   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_delete                       Actual mDNS delete function   */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -662,12 +661,12 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -680,45 +679,45 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_delete                                     PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_delete                                     PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function deletes the mDNS instance.                            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS instance.                            */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
 /*    nx_udp_socket_unbind                  Unbind the mDNS UDP socket    */
-/*    nx_udp_socket_delete                  Delete the mDNS UDP socket    */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    tx_mutex_delete                       Delete the mDNS mutex         */
-/*    tx_thread_terminate                   Terminate the mDNS thread     */
-/*    tx_thread_delete                      Delete the mDNS thread        */
-/*    tx_event_flags_delete                 Delete the mDNS events flag   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    nx_udp_socket_delete                  Delete the mDNS UDP socket    */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    tx_mutex_delete                       Delete the mDNS mutex         */ 
+/*    tx_thread_terminate                   Terminate the mDNS thread     */ 
+/*    tx_thread_delete                      Delete the mDNS thread        */  
+/*    tx_event_flags_delete                 Delete the mDNS events flag   */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -728,35 +727,35 @@ UINT    status;
 /**************************************************************************/
 UINT  _nx_mdns_delete(NX_MDNS *mdns_ptr)
 {
-
-
+    
+        
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+ 
     /* Clear the mDNS structure ID. */
     mdns_ptr -> nx_mdns_id =  0;
-
+       
     /* Set the pointer of global variable mDNS.  */
     _nx_mdns_created_ptr = NX_NULL;
-
+         
     /* Unbind the port.  */
     nx_udp_socket_unbind(&(mdns_ptr -> nx_mdns_socket));
 
     /* Delete the UDP socket.  */
     nx_udp_socket_delete(&(mdns_ptr -> nx_mdns_socket));
-
+    
     /* Terminate the mDNS processing thread.  */
     tx_thread_terminate(&(mdns_ptr -> nx_mdns_thread));
 
     /* Delete the mDNS processing thread.  */
     tx_thread_delete(&(mdns_ptr -> nx_mdns_thread));
-
+    
     /* Delete the event flags.  */
     tx_event_flags_delete(&(mdns_ptr -> nx_mdns_events));
 
     /* Delete the timer.  */
     tx_timer_delete(&(mdns_ptr -> nx_mdns_timer));
-
+       
     /* Release the mDNS mutex.  */
     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
@@ -768,41 +767,41 @@ UINT  _nx_mdns_delete(NX_MDNS *mdns_ptr)
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_cache_notify_set                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_cache_notify_set                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS cache full notify       */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS cache full notify       */ 
 /*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_full_notify                     Cache full notify function    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_notify_set             Actual cache notify           */
-/*                                            set function                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_full_notify                     Cache full notify function    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_notify_set             Actual cache notify           */  
+/*                                            set function                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -818,10 +817,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -836,39 +835,39 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_notify_set                           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_notify_set                           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function set the cache full notify function.                   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function set the cache full notify function.                   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -882,10 +881,10 @@ UINT _nx_mdns_cache_notify_set(NX_MDNS *mdns_ptr, VOID (*cache_full_notify_cb)(N
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Set the cache notify.  */
     mdns_ptr -> nx_mdns_cache_full_notify = cache_full_notify_cb;
-
+    
     /* Release the mDNS mutex.  */
     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
@@ -893,41 +892,41 @@ UINT _nx_mdns_cache_notify_set(NX_MDNS *mdns_ptr, VOID (*cache_full_notify_cb)(N
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_cache_notify_clear                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_cache_notify_clear                        PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS cache full notify       */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS cache full notify       */ 
 /*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_full_notify                     Cache full notify function    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_notify_clear           Actual cache notify           */
-/*                                            clear function              */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_full_notify                     Cache full notify function    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_notify_clear           Actual cache notify           */ 
+/*                                            clear function              */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -943,10 +942,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -961,39 +960,39 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_notify_clear                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_notify_clear                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function set the cache full notify function.                   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function set the cache full notify function.                   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1007,10 +1006,10 @@ UINT _nx_mdns_cache_notify_clear(NX_MDNS *mdns_ptr)
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Clear the cache notify.  */
     mdns_ptr -> nx_mdns_cache_full_notify = NX_NULL;
-
+    
     /* Release the mDNS mutex.  */
     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
@@ -1019,40 +1018,40 @@ UINT _nx_mdns_cache_notify_clear(NX_MDNS *mdns_ptr)
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_ignore_set                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_ignore_set                        PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS service ignore mask     */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS service ignore mask     */ 
 /*    set function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    service_mask                          The service mask              */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_ignore_set           Actual ignore set function    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    service_mask                          The service mask              */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_ignore_set           Actual ignore set function    */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1068,10 +1067,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1083,43 +1082,43 @@ UINT    status;
 
     /* Return status.  */
     return(status);
-}
+}   
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_ignore_set                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_ignore_set                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function sets the service mask to ignore the service.          */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    service_mask                          The service mask              */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the MDNS mutex            */
-/*    tx_mutex_put                          Put the MDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function sets the service mask to ignore the service.          */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    service_mask                          The service mask              */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the MDNS mutex            */ 
+/*    tx_mutex_put                          Put the MDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1133,7 +1132,7 @@ UINT _nx_mdns_service_ignore_set(NX_MDNS *mdns_ptr, ULONG service_mask)
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Set the service ignore mask.  */
     mdns_ptr -> nx_mdns_service_ignore_mask = service_mask;
 
@@ -1144,42 +1143,42 @@ UINT _nx_mdns_service_ignore_set(NX_MDNS *mdns_ptr, ULONG service_mask)
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_notify_set                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_notify_set                        PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS service notify function */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS service notify function */ 
 /*    call.                                                               */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    service_mask                          The service mask              */
-/*    service_change_notify                 Service change notify function*/
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_notify_set           Actual mDNS service notify    */
-/*                                            set function                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    service_mask                          The service mask              */ 
+/*    service_change_notify                 Service change notify function*/ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_notify_set           Actual mDNS service notify    */ 
+/*                                            set function                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1196,10 +1195,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1214,41 +1213,41 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_notify_set                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_notify_set                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function set the service mask and notify callback function.    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    service_mask                          The service mask              */
-/*    service_change_notify                 Service change notify function*/
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function set the service mask and notify callback function.    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    service_mask                          The service mask              */ 
+/*    service_change_notify                 Service change notify function*/ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1263,7 +1262,7 @@ UINT _nx_mdns_service_notify_set(NX_MDNS *mdns_ptr, ULONG service_mask,
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Set the service mask.  */
     mdns_ptr -> nx_mdns_service_notify_mask = service_mask;
 
@@ -1277,40 +1276,40 @@ UINT _nx_mdns_service_notify_set(NX_MDNS *mdns_ptr, ULONG service_mask,
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_notify_clear                      PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_notify_clear                      PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS service notify function */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS service notify function */ 
 /*    call.                                                               */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    _nx_mdns_service_notify_clear         Actual service notify         */
-/*                                            clear function              */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            clear function              */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1327,10 +1326,10 @@ UINT    status;
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
     {
-
+    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1346,39 +1345,39 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_notify_clear                       PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_notify_clear                       PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function clears the service mask and notify callback function. */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function clears the service mask and notify callback function. */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1392,7 +1391,7 @@ UINT _nx_mdns_service_notify_clear(NX_MDNS *mdns_ptr)
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Clear the service mask.  */
     mdns_ptr -> nx_mdns_service_notify_mask = 0;
 
@@ -1408,48 +1407,48 @@ UINT _nx_mdns_service_notify_clear(NX_MDNS *mdns_ptr)
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_announcement_timing_set           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_announcement_timing_set           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS announcement timing     */
-/*    set function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    t                                     Announcing period             */
-/*    p                                     Announcing count              */
-/*    k                                     Announcing factor             */
-/*    retrans_interval                      Announcing retransmission     */
-/*                                            interval                    */
-/*    interval                              Announcing period interval    */
-/*    max_time                              Announcing max time           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_announcement_timing_set                            */
-/*                                          Actual mDNS announcement      */
-/*                                            timing set function         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS announcement timing     */ 
+/*    set function call.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    t                                     Announcing period             */ 
+/*    p                                     Announcing count              */ 
+/*    k                                     Announcing factor             */ 
+/*    retrans_interval                      Announcing retransmission     */ 
+/*                                            interval                    */ 
+/*    interval                              Announcing period interval    */ 
+/*    max_time                              Announcing max time           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_announcement_timing_set                            */ 
+/*                                          Actual mDNS announcement      */ 
+/*                                            timing set function         */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1465,10 +1464,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if ((!mdns_ptr) || (!t) || (!p) || (!k) || (!period_interval) || (!max_time))
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1483,46 +1482,46 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_announcement_timing_set            PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_announcement_timing_set            PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function set the service mask and notify callback function.    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    t                                     Announcing period             */
-/*    p                                     Announcing count              */
-/*    k                                     Announcing factor             */
-/*    retrans_interval                      Announcing retransmission     */
-/*                                            interval                    */
-/*    interval                              Announcing period interval    */
-/*    max_time                              Announcing max time           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function set the service mask and notify callback function.    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    t                                     Announcing period             */ 
+/*    p                                     Announcing count              */ 
+/*    k                                     Announcing factor             */ 
+/*    retrans_interval                      Announcing retransmission     */ 
+/*                                            interval                    */ 
+/*    interval                              Announcing period interval    */ 
+/*    max_time                              Announcing max time           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1536,13 +1535,13 @@ UINT _nx_mdns_service_announcement_timing_set(NX_MDNS *mdns_ptr, UINT t, UINT p,
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Set the mDNS announcing period.  */
     mdns_ptr -> nx_mdns_announcing_period = (USHORT)t;
-
+    
     /* Set the mDNS announcing count between one announcing period.  */
     mdns_ptr -> nx_mdns_announcing_count = (UCHAR)p;
-
+    
     /* Set the mDNS announcing factor.  */
     mdns_ptr -> nx_mdns_announcing_factor = (UCHAR)k;
 
@@ -1563,39 +1562,39 @@ UINT _nx_mdns_service_announcement_timing_set(NX_MDNS *mdns_ptr, UINT t, UINT p,
 #endif /* NX_MDNS_DISABLE_SERVER  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_enable                                    PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_enable                                    PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS enable function call.   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_enable                       Actual mDNS enable function   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS enable function call.   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_enable                       Actual mDNS enable function   */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1611,10 +1610,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input or invalid server attributes. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1629,45 +1628,45 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_enable                                     PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_enable                                     PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function enables the mDNS of the physical host interface by    */
-/*    interface index.                                                    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    nx_ipv4_multicast_interface_join      Join the IPv4 Multicast group */
-/*    nxd_ipv6_multicast_interface_join     Join the IPv6 Multicast group */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function enables the mDNS of the physical host interface by    */ 
+/*    interface index.                                                    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    nx_ipv4_multicast_interface_join      Join the IPv4 Multicast group */ 
+/*    nxd_ipv6_multicast_interface_join     Join the IPv6 Multicast group */ 
 /*    _nx_mdns_host_name_register           Register the host name        */
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1677,7 +1676,7 @@ UINT    status;
 /**************************************************************************/
 UINT _nx_mdns_enable(NX_MDNS *mdns_ptr, UINT interface_index)
 {
-
+   
 UINT        status;
 
 #ifndef NX_MDNS_DISABLE_SERVER
@@ -1741,7 +1740,7 @@ NXD_IPV6_ADDRESS    *ipv6_address;
     }
 #endif /* NX_MDNS_ENABLE_IPV6  */
 
-    /* Join the group.  */
+    /* Join the group.  */  
     status = nx_ipv4_multicast_interface_join(mdns_ptr -> nx_mdns_ip_ptr, NX_MDNS_IPV4_MULTICAST_ADDRESS, interface_index);
 
     /* Check status.  */
@@ -1752,7 +1751,7 @@ NXD_IPV6_ADDRESS    *ipv6_address;
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
         return(status);
     }
-
+    
 #ifdef NX_MDNS_ENABLE_IPV6
     status = nxd_ipv6_multicast_interface_join(mdns_ptr -> nx_mdns_ip_ptr, &NX_MDNS_IPV6_MULTICAST_ADDRESS, interface_index);
 
@@ -1765,7 +1764,7 @@ NXD_IPV6_ADDRESS    *ipv6_address;
         return(status);
     }
 #endif /* NX_MDNS_ENABLE_IPV6  */
-
+    
 #ifndef NX_MDNS_DISABLE_SERVER
 
     /* Register the host name.  */
@@ -1781,12 +1780,12 @@ NXD_IPV6_ADDRESS    *ipv6_address;
     }
 
     /* Probing the all resource record wheneven a Multicast DNS responder starts up, waks up from sleep, receives an indication of a network interface "Link CHange" event.RFC6762, Section8, Page25.   */
-
+    
     /* Get the header to the local buffer. */
     head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);
+    head = (ULONG*)(*head);   
 
     /* Check the resource record.  */
     for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
@@ -1813,7 +1812,7 @@ NXD_IPV6_ADDRESS    *ipv6_address;
         /* Check the resource reocrd type.  */
         if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_PTR) ||
             (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC))
-        {
+        {            
             p -> nx_mdns_rr_state = NX_MDNS_RR_STATE_VALID;
             continue;
         }
@@ -1852,7 +1851,7 @@ NXD_IPV6_ADDRESS    *ipv6_address;
     }
 #endif /* NX_MDNS_DISABLE_SERVER */
 
-    /* Set the mdns started flag.  */
+    /* Set the mdns started flag.  */  
     mdns_ptr -> nx_mdns_started = NX_TRUE;
 
     /* Release the mDNS mutex.  */
@@ -1863,39 +1862,39 @@ NXD_IPV6_ADDRESS    *ipv6_address;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_disable                                   PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_disable                                   PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS disable function call.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_disable                      Actual mDNS disable function  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS disable function call.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_disable                      Actual mDNS disable function  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1911,10 +1910,10 @@ UINT    status;
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
-
+        
     /* Check for invalid non pointer input or invalid server attributes. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -1929,45 +1928,45 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_disable                                    PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_disable                                    PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function disables the mDNS of the physical host interface by   */ 
+/*    interface index.                                                    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    This function disables the mDNS of the physical host interface by   */
-/*    interface index.                                                    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    nx_ipv4_multicast_leave               Leave the IPv4 Multicast group*/
-/*    nxd_ipv6_multicast_interface_leave    Leave the IPv6 Multicast group*/
-/*    _nx_mdns_cache_initialize             Initialize the mDNS peer cache*/
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    nx_ipv4_multicast_leave               Leave the IPv4 Multicast group*/ 
+/*    nxd_ipv6_multicast_interface_leave    Leave the IPv6 Multicast group*/  
+/*    _nx_mdns_cache_initialize             Initialize the mDNS peer cache*/ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -1989,7 +1988,7 @@ NX_MDNS_RR  *p;
         return(NX_MDNS_PARAM_ERROR);
     }
 
-    /* Check to see if mDNS is not enabled on this interface.
+    /* Check to see if mDNS is not enabled on this interface. 
        Note: Only support one interface yet.  */
     if (mdns_ptr -> nx_mdns_interface_enabled[interface_index] == NX_FALSE)
     {
@@ -2010,7 +2009,7 @@ NX_MDNS_RR  *p;
 
     /* Leave the group.  */
     nx_ipv4_multicast_interface_leave(mdns_ptr -> nx_mdns_ip_ptr, NX_MDNS_IPV4_MULTICAST_ADDRESS, interface_index);
-
+   
 #ifdef NX_MDNS_ENABLE_IPV6
     nxd_ipv6_multicast_interface_leave(mdns_ptr -> nx_mdns_ip_ptr, &NX_MDNS_IPV6_MULTICAST_ADDRESS, interface_index);
 #endif /* NX_MDNS_ENABLE_IPV6  */
@@ -2021,7 +2020,7 @@ NX_MDNS_RR  *p;
     head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);
+    head = (ULONG*)(*head);   
 
     /* Delete all services on this interface.  */
     for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_peer_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
@@ -2039,14 +2038,14 @@ NX_MDNS_RR  *p;
         _nx_mdns_cache_delete_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_PEER, p);
     }
 #endif /* NX_MDNS_DISABLE_CLIENT */
-
+    
 #ifndef NX_MDNS_DISABLE_SERVER
 
     /* Get the local buffer head. */
     head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
 
     /* Set the pointer.  */
-    head = (ULONG*)(*head);
+    head = (ULONG*)(*head);   
 
     /* Send the Goodbye message, RFC6762, Section10.1, Page33.  */
     for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
@@ -2084,7 +2083,7 @@ NX_MDNS_RR  *p;
             /* Set the mDNS timer.  */
             _nx_mdns_timer_set(mdns_ptr, p, p -> nx_mdns_rr_timer_count);
         }
-    }
+    } 
 #endif /* NX_MDNS_DISABLE_SERVER */
 
     /* Check if all interfaces are disabled.  */
@@ -2105,40 +2104,40 @@ NX_MDNS_RR  *p;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_local_domain_set                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_local_domain_set                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS domain sets             */
-/*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    domain_name                           Domain name                   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_domain_name_set              Actual domain set function    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function checks for errors in the mDNS domain sets             */ 
+/*    function call.                                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    domain_name                           Domain name                   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    _nx_mdns_domain_name_set              Actual domain set function    */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2148,16 +2147,16 @@ NX_MDNS_RR  *p;
 /**************************************************************************/
 UINT _nxe_mdns_domain_name_set(NX_MDNS *mdns_ptr, UCHAR *domain_name)
 {
-
+    
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
     if ((!mdns_ptr) || (!domain_name))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    }    
+      
     /* Check for invalid non pointer input or invalid server attributes. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -2172,40 +2171,40 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_domain_name_set                            PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_domain_name_set                            PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function sets the mDNS domain name. By default is "local".     */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    domain_name                           Domain name                   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function sets the mDNS domain name. By default is "local".     */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    domain_name                           Domain name                   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2216,7 +2215,7 @@ UINT    status;
 /**************************************************************************/
 UINT _nx_mdns_domain_name_set(NX_MDNS *mdns_ptr, UCHAR *domain_name)
 {
-
+  
 UINT        index;
 UINT        domain_name_size;
 
@@ -2251,49 +2250,49 @@ UINT        domain_name_size;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_add                               PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_add                               PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS service add             */
-/*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  Service instance name         */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    txt                                   The txt string of the service */
-/*    ttl                                   The ttl of the service        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function checks for errors in the mDNS service add             */ 
+/*    function call.                                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  Service instance name         */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    txt                                   The txt string of the service */ 
+/*    ttl                                   The ttl of the service        */ 
 /*    priority                              The priority of target host   */
 /*    weights                               Service weight                */
 /*    port                                  The port on this target host  */
 /*    is_unique                             The RR set of the service     */
 /*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_add                  Actual service add function   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    _nx_mdns_service_add                  Actual service add function   */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2304,13 +2303,13 @@ UINT        domain_name_size;
 UINT _nxe_mdns_service_add(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, UCHAR *txt, ULONG ttl,
                            USHORT priority, USHORT weights, USHORT port, UCHAR is_unique, UINT interface_index)
 {
-
-UINT    status;
+                    
+UINT    status;  
 
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
     }
 
@@ -2320,8 +2319,8 @@ UINT    status;
         return(NX_MDNS_PARAM_ERROR);
     }
 
-    /* Check the size of the service name string. The last four characters in the
-       service name are reserved so DNS-SD is able to append " (2)" during the conflict
+    /* Check the size of the service name string. The last four characters in the 
+       service name are reserved so DNS-SD is able to append " (2)" during the conflict 
        resolution process. */
 #if (NX_MDNS_SERVICE_NAME_MAX >= NX_MDNS_LABEL_MAX)
     if (_nx_utility_string_length_check((CHAR *)name, NX_NULL, (NX_MDNS_LABEL_MAX - 4)))
@@ -2346,7 +2345,7 @@ UINT    status;
             return(NX_MDNS_DATA_SIZE_ERROR);
         }
     }
-
+    
     /* Check the txt string size.  */
     if (sub_type)
     {
@@ -2363,63 +2362,63 @@ UINT    status;
     }
 
     /* Call actual mDNS service add service.  */
-    status =  _nx_mdns_service_add(mdns_ptr, name, type, sub_type, txt, ttl, priority,
+    status =  _nx_mdns_service_add(mdns_ptr, name, type, sub_type, txt, ttl, priority, 
                                    weights, port, is_unique, interface_index);
 
     /* Return status.  */
-    return(status);
+    return(status);    
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_add                                PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_add                                PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS services, and the PTR, SRV and TXT      */
-/*    records into the local buffer.                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  Service nstance name          */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    txt                                   The txt string of the service */
-/*    ttl                                   The ttl of the service        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function adds the mDNS services, and the PTR, SRV and TXT      */ 
+/*    records into the local buffer.                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  Service nstance name          */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    txt                                   The txt string of the service */ 
+/*    ttl                                   The ttl of the service        */ 
 /*    priority                              The priority of target host   */
 /*    weights                               Service weight                */
 /*    port                                  The port on this target host  */
 /*    is_unique                             The RR set of the service     */
 /*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */  
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
-/*    _nx_mdns_rr_srv_add                   Add the SRV resource record   */
-/*    _nx_mdns_rr_txt_add                   Add the TXT resource record   */
-/*    _nx_mdns_rr_ptr_add                   Add the PTR resource record   */
-/*    _nx_mdns_rr_delete                    Delete the resource record    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_rr_srv_add                   Add the SRV resource record   */ 
+/*    _nx_mdns_rr_txt_add                   Add the TXT resource record   */ 
+/*    _nx_mdns_rr_ptr_add                   Add the PTR resource record   */ 
+/*    _nx_mdns_rr_delete                    Delete the resource record    */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2430,7 +2429,7 @@ UINT    status;
 UINT _nx_mdns_service_add(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, UCHAR *txt, ULONG ttl,
                           USHORT priority, USHORT weights, USHORT port, UCHAR is_unique, UINT interface_index)
 {
-
+  
 UINT        status;
 UINT        type_index;
 NX_MDNS_RR *srv_rr;
@@ -2488,12 +2487,12 @@ UINT         string_length;
     }
 
     /* Check whether the same service name exist.  */
-    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
-    head = (ULONG*)(*head);
+    head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache; 
+    head = (ULONG*)(*head);   
 
     /* Check the resource record.  */
     for(p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
-    {
+    {         
         if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID)
             continue;
 
@@ -2502,7 +2501,7 @@ UINT         string_length;
             continue;
 
         if (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV)
-        {
+        {  
 
             /* Compare the service name.  */
             if (!_nx_mdns_name_match(&temp_string_buffer[0], p -> nx_mdns_rr_name, string_length))
@@ -2513,12 +2512,12 @@ UINT         string_length;
 
                 return(NX_MDNS_EXIST_SAME_SERVICE);
             }
-        }
+        } 
     }
 
     /* Construct the SRV target name.  */
     status = _nx_mdns_service_name_assemble(mdns_ptr -> nx_mdns_host_name, NX_NULL, NX_NULL, mdns_ptr -> nx_mdns_domain_name, &target_string_buffer[0], NX_MDNS_NAME_MAX, NX_NULL);
-
+    
     /* Check the status.  */
     if (status)
     {
@@ -2529,8 +2528,8 @@ UINT         string_length;
     }
 
     /* Add the SRV resource records message.  */
-    status = _nx_mdns_rr_srv_add(mdns_ptr, &temp_string_buffer[0], srv_ttl, is_unique, priority, weights, port, &target_string_buffer[0], &srv_rr, interface_index);
-
+    status = _nx_mdns_rr_srv_add(mdns_ptr, &temp_string_buffer[0], srv_ttl, is_unique, priority, weights, port, &target_string_buffer[0], &srv_rr, interface_index); 
+    
     /* Check the status.  */
     if (status)
     {
@@ -2542,7 +2541,7 @@ UINT         string_length;
 
     /* Add the TXT resource records message.  */
     status = _nx_mdns_rr_txt_add(mdns_ptr, &temp_string_buffer[0], txt_ttl, is_unique, txt, &txt_rr, interface_index);
-
+    
     /* Check the status.  */
     if (status)
     {
@@ -2555,10 +2554,10 @@ UINT         string_length;
 
         return(status);
     }
-
+    
     /* Add the dns-sd PTR resource records message.  */
     status = _nx_mdns_rr_ptr_add(mdns_ptr, (UCHAR *)_nx_mdns_dns_sd, ptr_ttl, NX_MDNS_RR_SET_SHARED, &temp_string_buffer[type_index], NX_TRUE, &dns_sd_rr, interface_index);
-
+    
     /* Check the status.  */
     if (status)
     {
@@ -2567,7 +2566,7 @@ UINT         string_length;
         _nx_mdns_rr_delete(mdns_ptr, txt_rr);
 
         /* Delete the SRV records.  */
-        _nx_mdns_rr_delete(mdns_ptr, srv_rr);
+        _nx_mdns_rr_delete(mdns_ptr, srv_rr);        
 
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
@@ -2577,7 +2576,7 @@ UINT         string_length;
 
     /* Add the PTR resource records message.  */
     status = _nx_mdns_rr_ptr_add(mdns_ptr, &temp_string_buffer[type_index], ptr_ttl, NX_MDNS_RR_SET_SHARED, &temp_string_buffer[0], NX_TRUE, &ptr_rr, interface_index);
-
+    
     /* Check the status.  */
     if (status)
     {
@@ -2587,7 +2586,7 @@ UINT         string_length;
 
         /* Delete the SRV records.  */
         _nx_mdns_rr_delete(mdns_ptr, srv_rr);
-
+        
         /* Delete the DNS_SD PTR records.  */
         _nx_mdns_rr_delete(mdns_ptr, dns_sd_rr);
 
@@ -2638,8 +2637,8 @@ UINT         string_length;
 
             return(status);
         }
-    }
-
+    } 
+   
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
 
     /* Add the NSEC resource record for service.  */
@@ -2654,42 +2653,42 @@ UINT         string_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_delete                            PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_delete                            PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS service delete          */
-/*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_delete               Actual service delete function*/
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function checks for errors in the mDNS service delete          */ 
+/*    function call.                                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    _nx_mdns_service_delete               Actual service delete function*/ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2699,15 +2698,15 @@ UINT         string_length;
 /**************************************************************************/
 UINT _nxe_mdns_service_delete(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type)
 {
-
+    
 UINT    status;
 
     /* Check for invalid input pointers.  */
     if ((!mdns_ptr) || (!name) || (!type))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    }    
+    
     /* Check for invalid server attributes. */
     if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
     {
@@ -2728,41 +2727,41 @@ UINT    status;
     return(status);
 }
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_delete                             PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_delete                             PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function deletes the mDNS services.                            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_delete_internal      Actual service delete function*/
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function deletes the mDNS services.                            */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    _nx_mdns_service_delete_internal      Actual service delete function*/ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2783,14 +2782,14 @@ UINT    service_delete_success = NX_FALSE;
 
         /* Call actual mDNS service delete service.  */
         status =  _nx_mdns_service_interface_delete(mdns_ptr, name, type, sub_type, i);
-
+                    
         /* Check status.  */
         if (status == NX_MDNS_SUCCESS)
         {
             service_delete_success = NX_TRUE;
         }
     }
-
+    
     /* Check if delete service on all enabled interface.  */
     if (service_delete_success)
         return(NX_MDNS_SUCCESS);
@@ -2799,47 +2798,47 @@ UINT    service_delete_success = NX_FALSE;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_interface_delete                   PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_interface_delete                   PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function deletes the mDNS services, and remove SRV and TXT     */
-/*    records from local buffer.                                          */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */  
+/*    This function deletes the mDNS services, and remove SRV and TXT     */ 
+/*    records from local buffer.                                          */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */  
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
-/*    _nx_mdns_name_match                   Match the name string         */
-/*    _nx_mdns_rr_delete                    Delete the resource record    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_name_match                   Match the name string         */ 
+/*    _nx_mdns_rr_delete                    Delete the resource record    */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -2849,13 +2848,13 @@ UINT    service_delete_success = NX_FALSE;
 /**************************************************************************/
 UINT _nx_mdns_service_interface_delete(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, UINT interface_index)
 {
-
+  
 UINT        status;
 UINT        found;
 UINT        delete_flag;
 UINT        type_index;
 ULONG      *head;
-NX_MDNS_RR *p;
+NX_MDNS_RR *p;    
 UINT        rr_name_length;
 UINT        rr_ptr_name_length;
 
@@ -2863,14 +2862,14 @@ UINT        rr_ptr_name_length;
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     /* Initialize the parameters.  */
     type_index = 0;
     delete_flag = NX_FALSE;
 
     /* Construct the SRV name.  */
     status = _nx_mdns_service_name_assemble(name, type, NX_NULL, mdns_ptr -> nx_mdns_domain_name, &temp_string_buffer[0], NX_MDNS_NAME_MAX, &type_index);
-
+    
     /* Check the status.  */
     if (status)
     {
@@ -2885,7 +2884,7 @@ UINT        rr_ptr_name_length;
     head = (ULONG*)(*head);
 
     for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
-    {
+    {   
 
         /* Clear the found value.  */
         found = NX_FALSE;
@@ -2906,7 +2905,7 @@ UINT        rr_ptr_name_length;
 
         /* Compare the RDATA. */
         switch (p -> nx_mdns_rr_type)
-        {
+        {   
 
             case NX_MDNS_RR_TYPE_SRV:
             case NX_MDNS_RR_TYPE_TXT:
@@ -2957,7 +2956,7 @@ UINT        rr_ptr_name_length;
             case NX_MDNS_RR_TYPE_NSEC:
             {
                 if (!_nx_mdns_name_match(p -> nx_mdns_rr_name, &temp_string_buffer[0], rr_name_length))
-                {
+                {            
 
                     /* Delete this resource record directly.  */
                     _nx_mdns_cache_delete_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, p);
@@ -2986,7 +2985,7 @@ UINT        rr_ptr_name_length;
 
     /* Release the mDNS mutex.  */
     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-
+               
     if (delete_flag == NX_TRUE)
         return(NX_MDNS_SUCCESS);
     else
@@ -2996,44 +2995,44 @@ UINT        rr_ptr_name_length;
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_one_shot_query                      PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_one_shot_query                      PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS resource record query   */
-/*    add function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service                               Pointer to response service   */
-/*    timeout                               The timeour for service query */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_one_shot_query       Actual query service function */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS resource record query   */ 
+/*    add function call.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service                               Pointer to response service   */  
+/*    timeout                               The timeour for service query */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */   
+/*    _nx_mdns_service_one_shot_query       Actual query service function */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -3043,7 +3042,7 @@ UINT        rr_ptr_name_length;
 /**************************************************************************/
 UINT _nxe_mdns_service_one_shot_query(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, NX_MDNS_SERVICE *service, UINT timeout)
 {
-
+        
 UINT    status;
 
 
@@ -3058,7 +3057,7 @@ UINT    status;
     {
         return(NX_MDNS_NOT_STARTED);
     }
-
+    
     /* Check for name.  */
     if (name)
     {
@@ -3074,7 +3073,7 @@ UINT    status;
     if (_nx_utility_string_length_check((CHAR *)type, NX_NULL, NX_MDNS_TYPE_MAX))
     {
         return(NX_MDNS_DATA_SIZE_ERROR);
-    }
+    } 
 
     /* Check the sub type.  */
     if (sub_type)
@@ -3095,55 +3094,58 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_one_shot_query                     PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_one_shot_query                     PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function starts service one-shot query on all enabled          */ 
+/*    interfaces.                                                         */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
 /*                                                                        */
-/*    This function starts service one-shot query on all enabled          */
-/*    interfaces.                                                         */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service                               Pointer to response service   */
-/*    timeout                               The timeour for service query */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service                               Pointer to response service   */  
+/*    timeout                               The timeour for service query */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
 /*    _nx_mdns_service_name_resolve         Resolve the service name      */
 /*    _nx_mdns_query                        Send the One Shot query       */
-/*    _nx_mdns_service_addition_info_get    Get additional info of service*/
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_service_addition_info_get    Get additional info of service*/   
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), and      */
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            fixed compiler warnings,    */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_mdns_service_one_shot_query(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, NX_MDNS_SERVICE *service, UINT timeout)
@@ -3231,7 +3233,7 @@ UINT        name_length;
 
                     /* Release the mDNS mutex.  */
                     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-                    return (status);
+                    return (NX_MDNS_DATA_SIZE_ERROR);
                 }
                 memcpy((char *)(service -> buffer), (char*)(answer_rr -> nx_mdns_rr_name), name_length); /* Use case of memcpy is verified. */
             }
@@ -3244,7 +3246,7 @@ UINT        name_length;
 
                     /* Release the mDNS mutex.  */
                     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-                    return (status);
+                    return (NX_MDNS_DATA_SIZE_ERROR);
                 }
                 memcpy((CHAR *)(service -> buffer), (CHAR *)(answer_rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name), name_length); /* Use case of memcpy is verified. */
             }
@@ -3275,58 +3277,62 @@ UINT        name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_one_shot_query                             PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_one_shot_query                             PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS resource record into remote buffer,     */
-/*    mDNS thread send the query message.                                 */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    type                                  The resource record type      */
-/*    out_rr                                Pointer to response RR        */
-/*    one_shot                              One shot or continuous        */
-/*    wait_option                           Wait option                   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _tx_thread_system_suspend             Suspend the thread            */
-/*    _nx_mdns_query_check                  Check the query RR            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS resource record into remote buffer,     */ 
+/*    mDNS thread send the query message.                                 */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    type                                  The resource record type      */ 
+/*    out_rr                                Pointer to response RR        */ 
+/*    one_shot                              One shot or continuous        */ 
+/*    wait_option                           Wait option                   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    _tx_thread_system_suspend             Suspend the thread            */ 
+/*    _nx_mdns_query_check                  Check the query RR            */ 
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
+/*                                            into cache                  */ 
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
 /*                                            from cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_one_shot_query(NX_MDNS *mdns_ptr, UCHAR *name, USHORT type, NX_MDNS_RR **out_rr, ULONG wait_option, UINT interface_index)
@@ -3394,23 +3400,23 @@ UINT        name_length;
         temp_resource_record.nx_mdns_rr_word = (temp_resource_record.nx_mdns_rr_word | NX_MDNS_RR_FLAG_PEER);
 
         /* Set the interface index.  */
-        temp_resource_record.nx_mdns_rr_interface_index = interface_index;
+        temp_resource_record.nx_mdns_rr_interface_index = (UCHAR)interface_index;
 
         /* Add the resource record.  */
         status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_PEER, &temp_resource_record, &insert_rr, NX_NULL);
 
         /* Check for error.  */
         if (status)
-        {
+        {   
 
             /* Delete the same strings. */
             _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_PEER, temp_resource_record.nx_mdns_rr_name, 0);
             return(status);
         }
 
-        /* A multicast DNS querier should also delay the first query of the series by
+        /* A multicast DNS querier should also delay the first query of the series by 
            a randomly chosen amount in the range 20-120ms.  */
-        insert_rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (NX_RAND() % NX_MDNS_QUERY_DELAY_RANGE));
+        insert_rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_QUERY_DELAY_RANGE));
         insert_rr -> nx_mdns_rr_retransmit_lifetime = NX_MDNS_TIMER_COUNT_RANGE;
 
         /* Set the mDNS timer.  */
@@ -3445,42 +3451,42 @@ UINT        name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_continuous_query                    PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_continuous_query                    PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS resource record query   */
-/*    add function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_continuous_query     Actual mDNS query RR function */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS resource record query   */ 
+/*    add function call.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_continuous_query     Actual mDNS query RR function */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -3490,18 +3496,18 @@ UINT        name_length;
 /**************************************************************************/
 UINT _nxe_mdns_service_continuous_query(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type)
 {
-
+        
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    }  
+    
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -3525,7 +3531,7 @@ UINT    status;
 
         /* Check the name, If the name is non-null, the sub type must be null.  */
         if ((name) && (sub_type))
-        {
+        {   
             return(NX_MDNS_PARAM_ERROR);
         }
     }
@@ -3544,13 +3550,13 @@ UINT    status;
     /* Check the type.  */
     if (type)
     {
-
+          
         /* Check the type size.  */
         if (_nx_utility_string_length_check((CHAR *)type, NX_NULL, NX_MDNS_TYPE_MAX))
         {
             return(NX_MDNS_DATA_SIZE_ERROR);
-        }
-    }
+        }      
+    } 
 
     /* Check the sub type.  */
     if (sub_type)
@@ -3560,7 +3566,7 @@ UINT    status;
         if (_nx_utility_string_length_check((CHAR *)sub_type, NX_NULL, NX_MDNS_LABEL_MAX))
         {
             return(NX_MDNS_DATA_SIZE_ERROR);
-        }
+        }      
     }
 
     /* Call actual mDNS create service.  */
@@ -3571,47 +3577,47 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_continuous_query                   PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_continuous_query                   PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function starts service continuous query on all enabled        */ 
+/*    interfaces.                                                         */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
 /*                                                                        */
-/*    This function starts service continuous query on all enabled        */
-/*    interfaces.                                                         */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
 /*    _nx_mdns_service_name_resolve         Resolve the service name      */
 /*    _nx_mdns_query                        Send the One Shot query       */
-/*    _nx_mdns_service_addition_info_get    Get additional info of service*/
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_service_addition_info_get    Get additional info of service*/   
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -3691,7 +3697,7 @@ UINT        i;
 
         /* Start continuous query.  */
         status = _nx_mdns_continuous_query(mdns_ptr, query_name, query_type, i);
-
+        
         /* Check the status.  */
         if ((status == NX_SUCCESS) ||
             (status == NX_MDNS_EXIST_SAME_QUERY) ||
@@ -3711,54 +3717,58 @@ UINT        i;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_continuous_query                           PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_continuous_query                           PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function starts continuous query on specified interfaces.      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    interface_index                       The interface index           */
-/*    name                                  The resource record name      */
-/*    type                                  The resource record type      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _nx_mdns_query_check                  Check the query RR            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function starts continuous query on specified interfaces.      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    interface_index                       The interface index           */ 
+/*    name                                  The resource record name      */ 
+/*    type                                  The resource record type      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    _nx_mdns_query_check                  Check the query RR            */ 
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
+/*                                            into cache                  */ 
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
 /*                                            from cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_continuous_query(NX_MDNS *mdns_ptr, UCHAR *name, USHORT type, UINT interface_index)
@@ -3806,7 +3816,7 @@ UINT        name_length;
 
     /* Remote resource record, set the owner flag.  */
     temp_resource_record.nx_mdns_rr_word = (temp_resource_record.nx_mdns_rr_word | NX_MDNS_RR_FLAG_PEER);
-
+        
     /* Continuous query, set the query type flag.  */
     if ((type != NX_MDNS_RR_TYPE_A) &&
         (type != NX_MDNS_RR_TYPE_AAAA))
@@ -3815,7 +3825,7 @@ UINT        name_length;
     }
 
     /* Set the interface index.  */
-    temp_resource_record.nx_mdns_rr_interface_index = interface_index;
+    temp_resource_record.nx_mdns_rr_interface_index = (UCHAR)interface_index;
 
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_PEER, &temp_resource_record, &insert_rr, NX_NULL);
@@ -3829,9 +3839,9 @@ UINT        name_length;
         return(status);
     }
 
-    /* A multicast DNS querier should also delay the first query of the series by
+    /* A multicast DNS querier should also delay the first query of the series by 
         a randomly chosen amount in the range 20-120ms.  */
-    insert_rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (NX_RAND() % NX_MDNS_QUERY_DELAY_RANGE));
+    insert_rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_QUERY_DELAY_RANGE));
     insert_rr -> nx_mdns_rr_retransmit_lifetime = NX_MDNS_TIMER_COUNT_RANGE;
 
     /* Set the mDNS timer.  */
@@ -3842,42 +3852,42 @@ UINT        name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_query_stop                          PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_query_stop                          PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS resource record query   */
-/*    add function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_query_stop           Actual query RR function      */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS resource record query   */ 
+/*    add function call.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */   
+/*    _nx_mdns_service_query_stop           Actual query RR function      */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -3887,7 +3897,7 @@ UINT        name_length;
 /**************************************************************************/
 UINT _nxe_mdns_service_query_stop(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type)
 {
-
+        
 UINT    status;
 
 
@@ -3895,10 +3905,10 @@ UINT    status;
     if (!mdns_ptr)
     {
         return(NX_PTR_ERROR);
-    }
-
+    }  
+    
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -3921,46 +3931,46 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_query_stop                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_query_stop                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS resource record into peer service cache,*/
-/*    mDNS thread send the query message using continuous type.           */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS resource record into peer service cache,*/ 
+/*    mDNS thread send the query message using continuous type.           */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
-/*    _nx_mdns_name_match                   Match the name string         */
-/*    _nx_mdns_rr_delete                    Delete the resource record    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_name_match                   Match the name string         */  
+/*    _nx_mdns_rr_delete                    Delete the resource record    */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -3970,20 +3980,20 @@ UINT    status;
 /**************************************************************************/
 UINT _nx_mdns_service_query_stop(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type)
 {
-
+    
 UINT        status;
-UINT        type_index = 0;
+UINT        type_index = 0;  
 UINT        query_stop = NX_FALSE;
 ULONG       *head;
-NX_MDNS_RR  *p;
+NX_MDNS_RR  *p; 
 UINT         rr_name_length;
 
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+            
     if (type)
-    {
+    {        
         if (name)
         {
 
@@ -4013,9 +4023,9 @@ UINT         rr_name_length;
                 tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
                 return (status);
             }
-        }
+        }    
     }
-
+    
     /* Get the remote buffer head. */
     head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
 
@@ -4028,7 +4038,7 @@ UINT         rr_name_length;
         /* Return a successful status.  */
         return(NX_MDNS_CACHE_ERROR);
     }
-
+    
     /* Set the pointer.  */
     head = (ULONG*)(*head);
 
@@ -4061,7 +4071,7 @@ UINT         rr_name_length;
             }
         }
         else
-        {
+        {      
             if (name)
             {
                 if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_ALL) &&
@@ -4104,44 +4114,44 @@ UINT         rr_name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_service_lookup                              PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_service_lookup                              PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS resource record query   */
-/*    add function call.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service_index                         The index of the service      */
-/*    service                               Pointer to Service instance   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_service_lookup               Actual mDNS query RR function */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS resource record query   */ 
+/*    add function call.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service_index                         The index of the service      */ 
+/*    service                               Pointer to Service instance   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_lookup               Actual mDNS query RR function */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -4151,18 +4161,18 @@ UINT         rr_name_length;
 /**************************************************************************/
 UINT _nxe_mdns_service_lookup(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, UINT service_index, NX_MDNS_SERVICE *service)
 {
-
+        
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    }  
+    
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -4185,61 +4195,64 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_lookup                             PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_lookup                             PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS resource record into peer service cache,*/
-/*    mDNS thread send the query message using continuous type.           */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service_index                         The index of the service      */
-/*    service                               Pointer to Service instance   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    tx_time_get                           Get the time                  */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS resource record into peer service cache,*/ 
+/*    mDNS thread send the query message using continuous type.           */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service_index                         The index of the service      */ 
+/*    service                               Pointer to Service instance   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    tx_time_get                           Get the time                  */ 
 /*    _nx_mdns_service_name_assemble        Assemble the service name     */
 /*    _nx_mdns_service_name_resolve         Resolve the service name      */
 /*    _nx_mdns_service_addition_info_get    Get additional info of service*/
-/*    _nx_mdns_name_match                   Match the name string         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_name_match                   Match the name string         */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), and      */
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            fixed compiler warnings,    */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_mdns_service_lookup(NX_MDNS *mdns_ptr, UCHAR *name, UCHAR *type, UCHAR *sub_type, UINT service_index, NX_MDNS_SERVICE *service)
 {
-
+    
 UINT        status;
 UINT        type_index;
 UINT        dns_sd_flag;
@@ -4265,7 +4278,7 @@ UINT        target_string_length;
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+      
     /* Zero out the content of service */
     memset(service, 0, sizeof(NX_MDNS_SERVICE));
 
@@ -4304,7 +4317,7 @@ UINT        target_string_length;
 
             /* Release the mDNS mutex.  */
             tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-            return (status);
+            return (NX_MDNS_DATA_SIZE_ERROR);
         }
     }
 
@@ -4314,7 +4327,7 @@ UINT        target_string_length;
 
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-        return (status);
+        return (NX_MDNS_DATA_SIZE_ERROR);
     }
 
     /* Loop to search local and peer cache.  */
@@ -4346,7 +4359,7 @@ UINT        target_string_length;
         {
 
             /* Check whether the resource record is valid. */
-            if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) ||
+            if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) || 
                 (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY))
                 continue;
 
@@ -4391,7 +4404,7 @@ UINT        target_string_length;
 
                 if(type == NX_NULL)
                 {
-
+                
                     /* Set the parameters.  */
                     sub_type_flag = NX_FALSE;
                     dns_sd_flag = NX_FALSE;
@@ -4410,9 +4423,9 @@ UINT        target_string_length;
                             }
                             index = 0;
                         }
-                        else
+                        else              
                             index ++;
-                        ptr ++;
+                        ptr ++;      
                     }
                     if (!_nx_mdns_name_match(p -> nx_mdns_rr_name, (UCHAR *)_nx_mdns_dns_sd, dns_sd_length))
                     {
@@ -4430,7 +4443,7 @@ UINT        target_string_length;
 
                             /* Check whether the resource record is valid. */
                             if ((p1 == p) ||
-                                (p1 -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) ||
+                                (p1 -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) || 
                                 (p1 -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY))
                                 continue;
 
@@ -4484,7 +4497,7 @@ UINT        target_string_length;
                                 }
                                 else
                                 {
-
+                                
                                     /* Exist the PTR RR which pointer to the same service.  */
                                     if (p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name == p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name)
                                     {
@@ -4496,12 +4509,12 @@ UINT        target_string_length;
                         }
                     }
                 }
-
+            
                 /* Check the count state.  */
                 if (count == service_index)
                 {
                     /* Yes, find. */
-                    found = NX_TRUE;
+                    found = NX_TRUE;   
                     break;
                 }
                 count ++;
@@ -4529,7 +4542,7 @@ UINT        target_string_length;
         return(NX_MDNS_SUCCESS);
     }
     else
-    {
+    {        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
         return(NX_MDNS_NO_MORE_ENTRIES);
@@ -4537,40 +4550,40 @@ UINT        target_string_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_peer_cache_clear                            PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_peer_cache_clear                            PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS peer service cache      */
-/*    clear function call.                                                */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS peer service cache      */ 
+/*    clear function call.                                                */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
 /*    _nx_mdns_peer_cache_clear             Actual peer cache clear       */
-/*                                            function                    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            function                    */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -4580,18 +4593,18 @@ UINT        target_string_length;
 /**************************************************************************/
 UINT _nxe_mdns_peer_cache_clear(NX_MDNS *mdns_ptr)
 {
-
+        
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
     if (!mdns_ptr)
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
-
+    }  
+    
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -4604,40 +4617,40 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_peer_cache_clear                           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_peer_cache_clear                           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function clears the mDNS peer service cache.                   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _nx_mdns_cache_initialize             Initialize the cache          */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function clears the mDNS peer service cache.                   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    _nx_mdns_cache_initialize             Initialize the cache          */   
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -4647,13 +4660,13 @@ UINT    status;
 /**************************************************************************/
 UINT _nx_mdns_peer_cache_clear(NX_MDNS *mdns_ptr)
 {
-
+   
 UINT    status;
 
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+ 
     status = _nx_mdns_cache_initialize(mdns_ptr, NX_NULL, NX_NULL, mdns_ptr -> nx_mdns_peer_service_cache, mdns_ptr -> nx_mdns_peer_service_cache_size);
 
     /* Release the mDNS mutex.  */
@@ -4664,45 +4677,45 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nxe_mdns_host_address_get                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nxe_mdns_host_address_get                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks for errors in the mDNS host address get        */
-/*    function call.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service                               Pointer to response service   */
-/*    timeout                               The timeour for service query */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_host_address_get             Actual mDNS host address      */
-/*                                            get function                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks for errors in the mDNS host address get        */ 
+/*    function call.                                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service                               Pointer to response service   */  
+/*    timeout                               The timeour for service query */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_host_address_get             Actual mDNS host address      */ 
+/*                                            get function                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -4713,15 +4726,15 @@ UINT    status;
 /**************************************************************************/
 UINT _nxe_mdns_host_address_get(NX_MDNS *mdns_ptr, UCHAR *host_name, ULONG *ipv4_address, ULONG *ipv6_address,  UINT timeout)
 {
-
+        
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
     if ((!mdns_ptr) || (!host_name))
-    {
+    {    
         return(NX_PTR_ERROR);
-    }
+    }  
 
     /* Check for mDNS started flag.  */
     if (!mdns_ptr -> nx_mdns_started)
@@ -4737,50 +4750,50 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_host_address_get                           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_host_address_get                           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS query record into peer buffer,          */ 
+/*    mDNS thread send the query message using one-shot type.             */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
 /*                                                                        */
-/*    This function adds the mDNS query record into peer buffer,          */
-/*    mDNS thread send the query message using one-shot type.             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The name of the service       */
-/*    type                                  The type of the service       */
-/*    subtype                               The subtype of the service    */
-/*    service                               Pointer to response service   */
-/*    timeout                               The timeour for service query */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    tx_time_get                           Get the mDNS time             */
-/*    _nx_mdns_host_check                   Check the host info           */
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of the service       */ 
+/*    subtype                               The subtype of the service    */ 
+/*    service                               Pointer to response service   */  
+/*    timeout                               The timeour for service query */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */  
+/*    tx_time_get                           Get the mDNS time             */ 
+/*    _nx_mdns_host_check                   Check the host info           */  
 /*    _nx_mdns_answer_wait                  Wait the answer               */
-/*    _nx_mdns_cache_add_query              Add the query into cache      */
-/*    _nx_mdns_cache_delete_query           Delete the query from cache   */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_cache_add_query              Add the query into cache      */  
+/*    _nx_mdns_cache_delete_query           Delete the query from cache   */   
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -4793,7 +4806,7 @@ UINT _nx_mdns_host_address_get(NX_MDNS *mdns_ptr, UCHAR *host_name, ULONG *ipv4_
 {
 
 UINT                status;
-ULONG               start_time;
+ULONG               start_time; 
 ULONG               current_time;
 ULONG               elapsed_time;
 ULONG               wait_time = timeout;
@@ -4865,7 +4878,7 @@ UINT                domain_name_length;
         /* Get the query start time.  */
         wait_time = timeout;
         start_time = tx_time_get();
-
+         
         /* Get the host IPv4 address.  */
         if (ipv4_address)
         {
@@ -4931,63 +4944,63 @@ UINT                domain_name_length;
 
             /* Release the mDNS mutex.  */
             tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-            return (NX_MDNS_SUCCESS);
+            return (NX_MDNS_SUCCESS); 
         }
     }
 
     /* Release the mDNS mutex.  */
     tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
-    return (NX_MDNS_ERROR);
+    return (NX_MDNS_ERROR); 
 }
 #endif /* NX_MDNS_DISABLE_CLIENT */
 
 
-#ifndef NX_MDNS_DISABLE_SERVER
+#ifndef NX_MDNS_DISABLE_SERVER                              
 #if !defined NX_DISABLE_IPV4 || defined NX_MDNS_ENABLE_IPV6
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_a_aaaa_add                                PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_a_aaaa_add                                PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS A/AAAA resource record into local cache.*/
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    set                                   The resource record set       */
-/*    address                               The resource record address   */
-/*    insert_rr                             Pointer to insert resource    */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS A/AAAA resource record into local cache.*/ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    set                                   The resource record set       */ 
+/*    address                               The resource record address   */ 
+/*    insert_rr                             Pointer to insert resource    */ 
 /*                                            record                      */
-/*    name                                  Host name                     */
+/*    name                                  Host name                     */ 
 /*    ttl                                   The resource record ttl       */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */   
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                            into cache                  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_host_name_register           Register the host name        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5011,13 +5024,13 @@ NX_MDNS_RR  temp_resource_record;
 
     /* Set the resource record parameters.  */
     status = _nx_mdns_rr_parameter_set(mdns_ptr, name, rr_type, NX_MDNS_RR_TTL_HOST, addr_length, NX_MDNS_RR_SET_UNIQUE, type, NX_FALSE, &temp_resource_record, interface_index);
-
+      
     /* Check for error.  */
     if (status)
     {
         return(status);
     }
-
+    
     /* Add the parameters.  */
     if(rr_type == NX_MDNS_RR_TYPE_A)
     {
@@ -5033,7 +5046,7 @@ NX_MDNS_RR  temp_resource_record;
 
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, &insert_rr, NX_NULL);
-
+     
     /* Check for error.  */
     if (status)
     {
@@ -5042,60 +5055,60 @@ NX_MDNS_RR  temp_resource_record;
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
         return(status);
     }
-
+    
     /* Set the mDNS timer.  */
     _nx_mdns_timer_set(mdns_ptr, insert_rr, insert_rr -> nx_mdns_rr_timer_count);
-
+    
     /* Return a successful status.  */
     return(NX_SUCCESS);
 }
 #endif /* !NX_DISABLE_IPV4 || NX_MDNS_ENABLE_IPV6  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_ptr_add                                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_ptr_add                                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS PTR resource record into local buffer.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    ttl                                   The resource record ttl       */
-/*    set                                   The resource record set       */
-/*    ptr_name                              The domain name               */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS PTR resource record into local buffer.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    ttl                                   The resource record ttl       */ 
+/*    set                                   The resource record set       */ 
+/*    ptr_name                              The domain name               */ 
 /*    insert_rr                             Pointer to insert resource    */
-/*                                            record                      */
+/*                                            record                      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
 /*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*    _nx_mdns_timer_set                    Set the mDNS timer            */ 
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            into cache                  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5105,7 +5118,7 @@ NX_MDNS_RR  temp_resource_record;
 /**************************************************************************/
 static UINT _nx_mdns_rr_ptr_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, UCHAR *ptr_name, UCHAR is_valid, NX_MDNS_RR **insert_rr, UINT interface_index)
 {
-
+  
 UINT        status;
 NX_MDNS_RR  *ptr_rr;
 NX_MDNS_RR  temp_resource_record;
@@ -5122,26 +5135,26 @@ UINT        ptr_name_length;
 
     /* Set the resource record parameters. Rdata length: PTR name, string should include the first'.' and last '\0'.  */
     status = _nx_mdns_rr_parameter_set(mdns_ptr, name, NX_MDNS_RR_TYPE_PTR, ttl, (ptr_name_length + 2), set, NX_TRUE, is_valid, &temp_resource_record, interface_index);
-
+  
     /* Check for error.  */
     if (status)
-    {
-
+    {   
+        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
-
+    }    
+    
     /* Add the ptr name.  */
     status = _nx_mdns_cache_add_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, ptr_name, ptr_name_length,
                                        (VOID **)(&temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name),
                                        NX_FALSE, NX_TRUE);
-
+  
     /* Check for error.  */
     if (status)
-    {
-
+    {   
+        
         /* Delete the strings. */
         _nx_mdns_cache_delete_string(mdns_ptr,  NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
 
@@ -5153,22 +5166,22 @@ UINT        ptr_name_length;
 
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, &ptr_rr, NX_NULL);
-
+     
     /* Check for error.  */
     if (status)
-    {
+    {   
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name, 0);
-
+        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
+    }    
 
     /* Set the mDNS timer.  */
     _nx_mdns_timer_set(mdns_ptr, ptr_rr, ptr_rr -> nx_mdns_rr_timer_count);
@@ -5184,52 +5197,52 @@ UINT        ptr_name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_srv_add                                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_srv_add                                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS SRV resource record into local buffer.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  Service nstance name          */
-/*    ttl                                   The ttl of the service        */
-/*    set                                   The resource record set       */
-/*    priority                              The priority of target host   */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS SRV resource record into local buffer.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  Service nstance name          */ 
+/*    ttl                                   The ttl of the service        */ 
+/*    set                                   The resource record set       */ 
+/*    priority                              The priority of target host   */ 
 /*    weights                               Service weight                */
 /*    port                                  The port on this target host  */
 /*    target                                The target host               */
 /*    insert_rr                             Pointer to insert record      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
 /*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*    _nx_mdns_timer_set                    Set the mDNS timer            */ 
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            into cache                  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5237,10 +5250,10 @@ UINT        ptr_name_length;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-static UINT _nx_mdns_rr_srv_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, USHORT priority,
+static UINT _nx_mdns_rr_srv_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, USHORT priority, 
                                 USHORT weights, USHORT port, UCHAR *target, NX_MDNS_RR **insert_rr, UINT interface_index)
 {
-
+  
 UINT        status;
 NX_MDNS_RR  *srv_rr;
 NX_MDNS_RR  temp_resource_record;
@@ -5253,31 +5266,31 @@ UINT        target_length;
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+        
     /* Set the resource record parameters. Rdata length: PRIORITY, WEIGHTS, PORT, TARGET, name string should include the first'.' and last '\0'.  */
     status = _nx_mdns_rr_parameter_set(mdns_ptr, name, NX_MDNS_RR_TYPE_SRV, ttl, target_length + 8, set, NX_TRUE, NX_FALSE, &temp_resource_record, interface_index);
-
+  
     /* Check for error.  */
     if (status)
-    {
+    {   
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
-
+    }    
+    
     /* Add the name.  */
     status = _nx_mdns_cache_add_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, target, target_length,
                                        (VOID **)(&temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_target),
                                        NX_FALSE, NX_TRUE);
-
+  
     /* Check for error.  */
     if (status)
-    {
+    {   
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
-
+        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
@@ -5288,25 +5301,25 @@ UINT        target_length;
     temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_priority = priority;
     temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_weights = weights;
     temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_port = port;
-
+    
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, &srv_rr, NX_NULL);
-
+     
     /* Check for error.  */
     if (status)
-    {
+    {   
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_target, 0);
-
+        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
-
+    }    
+    
     /* Set the mDNS timer.  */
     _nx_mdns_timer_set(mdns_ptr, srv_rr, srv_rr -> nx_mdns_rr_timer_count);
 
@@ -5321,51 +5334,51 @@ UINT        target_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_txt_add                                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_txt_add                                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS TXT resource record into local buffer.  */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS TXT resource record into local buffer.  */ 
 /*    the TXT records are formatted in a "key=value" notation with ";"    */
 /*    acting as separator when more then one key is available.            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    ttl                                   The resource record ttl       */
-/*    set                                   The resource record set       */
-/*    txt                                   The txt string                */
-/*    insert_rr                             Pointer to insert record      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    ttl                                   The resource record ttl       */ 
+/*    set                                   The resource record set       */ 
+/*    txt                                   The txt string                */ 
+/*    insert_rr                             Pointer to insert record      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into the cache              */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            into the cache              */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5375,7 +5388,7 @@ UINT        target_length;
 /**************************************************************************/
 static UINT _nx_mdns_rr_txt_add(NX_MDNS *mdns_ptr, UCHAR *name, ULONG ttl, UCHAR set, UCHAR *txt, NX_MDNS_RR **insert_rr, UINT interface_index)
 {
-
+  
 UINT        status;
 NX_MDNS_RR  *txt_rr;
 NX_MDNS_RR  temp_resource_record;
@@ -5384,19 +5397,19 @@ UINT        txt_length;
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+        
     /* Set the resource record parameters.  */
     status = _nx_mdns_rr_parameter_set(mdns_ptr, name, NX_MDNS_RR_TYPE_TXT, ttl, 0, set, NX_TRUE, NX_FALSE, &temp_resource_record, interface_index);
-
+  
     /* Check for error.  */
     if (status)
-    {
+    {   
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
-
+    }    
+    
     if (txt)
     {
 
@@ -5419,7 +5432,7 @@ UINT        txt_length;
 
         /* Check for error.  */
         if (status)
-        {
+        {   
 
             /* Delete the same strings. */
             _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
@@ -5435,13 +5448,13 @@ UINT        txt_length;
         temp_resource_record.nx_mdns_rr_rdata_length = 1;
         temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_txt.nx_mdns_rr_txt_data = NX_NULL;
     }
-
+       
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, &txt_rr, NX_NULL);
-
+     
     /* Check for error.  */
     if (status)
-    {
+    {     
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr,NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
@@ -5452,13 +5465,13 @@ UINT        txt_length;
             /* Delete the same strings. */
             _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_txt.nx_mdns_rr_txt_data, 0);
         }
-
+        
         /* Release the mDNS mutex.  */
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         return(status);
-    }
-
+    }    
+    
     /* Set the mDNS timer.  */
     _nx_mdns_timer_set(mdns_ptr, txt_rr, txt_rr -> nx_mdns_rr_timer_count);
 
@@ -5474,48 +5487,48 @@ UINT        txt_length;
 
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_nsec_add                                  PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_nsec_add                                  PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS A resource record into local cache.     */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    add_a                                 Flag for adding A record      */
-/*    add_aaaa                              Flag for adding AAAA record   */
-/*    type                                  Type for host or service      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS A resource record into local cache.     */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    add_a                                 Flag for adding A record      */ 
+/*    add_aaaa                              Flag for adding AAAA record   */ 
+/*    type                                  Type for host or service      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */   
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_cache_add_string             Add the string into cache     */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
+/*    _nx_mdns_cache_add_string             Add the string into cache     */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                            into cache                  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_host_name_register           Register the host name        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5551,7 +5564,7 @@ UINT        name_length;
         /* Set the Bitmaps length.  */
         if (add_aaaa == NX_TRUE)
             bitmap_length = 4;
-        else
+        else    
             bitmap_length = 1;
     }
     else
@@ -5567,21 +5580,21 @@ UINT        name_length;
     /* Set the resource record parameters.  */
     status = _nx_mdns_rr_parameter_set(mdns_ptr, name, NX_MDNS_RR_TYPE_NSEC, NX_MDNS_RR_TTL_HOST, rdata_length,
                                        NX_MDNS_RR_SET_UNIQUE, NX_FALSE, NX_TRUE, &temp_resource_record, interface_index);
-
+      
     /* Check for error.  */
     if (status)
-    {
+    {   
         return(status);
     }
-
+              
     /* Add the next domain name.  */
     status = _nx_mdns_cache_add_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, name, name_length,
                                        (VOID **)(&temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_next_domain),
                                        NX_FALSE, NX_TRUE);
-
+                            
     /* Check for error.  */
     if (status)
-    {
+    {   
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
 
@@ -5607,13 +5620,13 @@ UINT        name_length;
             temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[3] = 8;
         }
         else if ((add_a == NX_TRUE))
-        {
+        {         
 
             /* Add the A Bit map.  */
             temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[0] = 64;
         }
         else
-        {
+        {       
 
             /* Add the AAAA Bitmap.  */
             temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[3] = 8;
@@ -5622,7 +5635,7 @@ UINT        name_length;
     else
     {
         /* Add the TXT Bitmap for service.  */
-        temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[2] =  128;
+        temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[2] =  128; 
 
         /* Add the SRV Bitmap for service.  */
         temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[4] =  64;
@@ -5631,70 +5644,73 @@ UINT        name_length;
 
     /* Add the resource record.  */
     status = _nx_mdns_cache_add_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, &insert_rr, NX_NULL);
-
+     
     /* Check for error.  */
     if (status)
-    {
+    {   
         /* Delete the same strings. */
-        _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);
+        _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_name, 0);   
 
         /* Delete the same strings. */
         _nx_mdns_cache_delete_string(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, temp_resource_record.nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_next_domain, 0);
 
         return(status);
     }
-
+    
     /* Return a successful status.  */
     return(NX_SUCCESS);
 }
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_parameter_set                           PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_parameter_set                           PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function sets the parameters of resource record.               */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    type                                  The resource record type      */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function sets the parameters of resource record.               */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    type                                  The resource record type      */  
 /*    ttl                                   The resource record ttl       */
-/*    rdata_lenth                           The resource record length    */
-/*    set                                   The resource record set       */
-/*    is_register                           Register flag                 */
-/*    is_valid                              Valid flag                    */
-/*    rr_record                             Pointer to resource record    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    rdata_lenth                           The resource record length    */  
+/*    set                                   The resource record set       */  
+/*    is_register                           Register flag                 */  
+/*    is_valid                              Valid flag                    */ 
+/*    rr_record                             Pointer to resource record    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    None                                                                */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s),          */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_rr_parameter_set(NX_MDNS *mdns_ptr, UCHAR *name, USHORT type, ULONG ttl, UINT rdata_length,
@@ -5723,12 +5739,12 @@ UINT        name_length;
         return(status);
 
     /* Set the parameters.  */
-    rr_record -> nx_mdns_rr_interface_index = interface_index;
+    rr_record -> nx_mdns_rr_interface_index = (UCHAR)interface_index;
     rr_record -> nx_mdns_rr_type = type;
     rr_record -> nx_mdns_rr_class = NX_MDNS_RR_CLASS_IN;
     rr_record -> nx_mdns_rr_ttl = ttl;
-    rr_record -> nx_mdns_rr_rdata_length = (USHORT)rdata_length;
-
+    rr_record -> nx_mdns_rr_rdata_length = (USHORT)rdata_length;  
+    
     /* Set the resource record as uniqure.  */
     if (set == NX_MDNS_RR_SET_UNIQUE)
         rr_record -> nx_mdns_rr_word = (rr_record -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_UNIQUE);
@@ -5736,7 +5752,7 @@ UINT        name_length;
     /* Check for mDNS started flag.  */
     if (mdns_ptr -> nx_mdns_started)
     {
-
+        
         /* Check the valid flag for PTR resource record.  */
         if (is_valid == NX_TRUE)
         {
@@ -5745,7 +5761,7 @@ UINT        name_length;
         }
         else
         {
-
+            
             /* The is_register value be used for A/AAAA type, the value being NX_TRUE indicates the operation is to register the host name(probing and announcing the A/AAAA). The value being NX_FALSE indicates the operation is an address change, (announcing the A/AAAA).  */
             if ((set == NX_MDNS_RR_SET_UNIQUE) && (is_register == NX_TRUE))
             {
@@ -5754,14 +5770,14 @@ UINT        name_length;
                 rr_record -> nx_mdns_rr_state = NX_MDNS_RR_STATE_PROBING;
                 rr_record -> nx_mdns_rr_timer_count = mdns_ptr -> nx_mdns_first_probing_delay;
                 rr_record -> nx_mdns_rr_retransmit_count = NX_MDNS_PROBING_RETRANSMIT_COUNT;
-            }
+            }    
             else
             {
 
                 /* Set the resource record state.  */
                 rr_record -> nx_mdns_rr_state = NX_MDNS_RR_STATE_ANNOUNCING;
                 rr_record -> nx_mdns_rr_timer_count = NX_MDNS_ANNOUNCING_TIMER_COUNT;
-                rr_record -> nx_mdns_rr_retransmit_lifetime = mdns_ptr -> nx_mdns_announcing_period;
+                rr_record -> nx_mdns_rr_retransmit_lifetime = mdns_ptr -> nx_mdns_announcing_period;                
 
                 /* Check the announcing max time.  */
                 if (mdns_ptr -> nx_mdns_announcing_max_time != NX_MDNS_ANNOUNCING_FOREVER)
@@ -5779,7 +5795,7 @@ UINT        name_length;
     }
     else
     {
-
+        
         /* Set the resource record status.  */
         rr_record -> nx_mdns_rr_state = NX_MDNS_RR_STATE_SUSPEND;
     }
@@ -5789,44 +5805,44 @@ UINT        name_length;
 #endif /* NX_MDNS_DISABLE_SERVER */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_delete                                  PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_delete                                  PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function deletes the mDNS resource record from the             */
-/*    local bufferor remote buffer according to the resource record set.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS resource record from the             */ 
+/*    local bufferor remote buffer according to the resource record set.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
 /*    record_rr                             The resource record           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
-/*                                            from cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            from cache                  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -5836,17 +5852,17 @@ UINT        name_length;
 /**************************************************************************/
 static UINT _nx_mdns_rr_delete(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_rr)
 {
-
-UINT        status = NX_MDNS_SUCCESS;
+  
+UINT        status = NX_MDNS_SUCCESS; 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
 ULONG       *head;
-NX_MDNS_RR  *p;
+NX_MDNS_RR  *p;        
 #endif /* NX_MDNS_DISABLE_CLIENT */
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
 
     /* Check for mDNS started flag.  */
     if (mdns_ptr -> nx_mdns_started)
@@ -5876,7 +5892,7 @@ NX_MDNS_RR  *p;
                 /* Set the mDNS timer.  */
                 _nx_mdns_timer_set(mdns_ptr, record_rr, record_rr -> nx_mdns_rr_timer_count);
             }
-            else
+            else            
             {
 
                 /* Delete the resource records.  */
@@ -5892,7 +5908,7 @@ NX_MDNS_RR  *p;
             if (record_rr -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY)
             {
 
-                /* Set the pointer.  */
+                /* Set the pointer.  */            
                 head = (ULONG*)mdns_ptr -> nx_mdns_peer_service_cache;
 
                 if(head)
@@ -5921,7 +5937,7 @@ NX_MDNS_RR  *p;
                                 p -> nx_mdns_rr_word = (USHORT)(p -> nx_mdns_rr_word & (~NX_MDNS_RR_FLAG_UPDATING));
                             }
 
-                            if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_UPDATING)
+                            if (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_UPDATING) 
                             {
                                 if (p -> nx_mdns_rr_retransmit_count)
                                 {
@@ -5977,39 +5993,39 @@ NX_MDNS_RR  *p;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_local_cache_clear                            PORTABLE C    */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_local_cache_clear                            PORTABLE C    */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function deletes the mDNS instance.                            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_local_cache_clear            Actual local cache clear      */
-/*                                            function                    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS instance.                            */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
+/*    _nx_mdns_local_cache_clear            Actual local cache clear      */  
+/*                                            function                    */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6019,18 +6035,18 @@ NX_MDNS_RR  *p;
 /**************************************************************************/
 UINT _nxe_mdns_local_cache_clear(NX_MDNS *mdns_ptr)
 {
-
+        
 UINT    status;
 
 
     /* Check for invalid input pointers.  */
-    if (!mdns_ptr)
-    {
+    if (!mdns_ptr) 
+    {   
         return(NX_PTR_ERROR);
-    }
-
+    }  
+    
     /* Check for invalid server attributes. */
-    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)
+    if (mdns_ptr -> nx_mdns_id != NX_MDNS_ID)        
     {
         return(NX_MDNS_PARAM_ERROR);
     }
@@ -6043,40 +6059,40 @@ UINT    status;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_local_cache_clear                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_local_cache_clear                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function clears the mDNS local cache.                          */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_timer_set                    Set the mDNS timer            */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function clears the mDNS local cache.                          */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_timer_set                    Set the mDNS timer            */ 
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
-/*                                            from cache                  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            from cache                  */  
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6089,17 +6105,17 @@ UINT _nx_mdns_local_cache_clear(NX_MDNS *mdns_ptr)
 
 UINT            status = NX_MDNS_SUCCESS;
 ULONG           *head;
-NX_MDNS_RR      *p;
+NX_MDNS_RR      *p;      
 
 
     /* Get the mDNS mutex.  */
     tx_mutex_get(&(mdns_ptr -> nx_mdns_mutex), TX_WAIT_FOREVER);
-
+    
     head = (ULONG*)mdns_ptr -> nx_mdns_local_service_cache;
     head = (ULONG*)(*head);
 
     for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
-    {
+    {   
 
         /* Delete the resource records.  */
         status = _nx_mdns_rr_delete(mdns_ptr, p);
@@ -6118,42 +6134,42 @@ NX_MDNS_RR      *p;
 #endif /* NX_MDNS_DISABLE_SERVER  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_name_resolve                       PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_name_resolve                       PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function resloves the service name, type, domain.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    srv_name                              Pointer to SRV name           */
-/*    name                                  The name of the service       */
-/*    type                                  The type of to the service    */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function resloves the service name, type, domain.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    srv_name                              Pointer to SRV name           */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of to the service    */ 
 /*    domain                                The domain                    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    mDNS component                                                      */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    mDNS component                                                      */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6163,7 +6179,7 @@ NX_MDNS_RR      *p;
 /**************************************************************************/
 static UINT _nx_mdns_service_name_resolve(UCHAR *srv_name, UCHAR **name, UCHAR **type, UCHAR **domain)
 {
-
+ 
 UINT    i;
 UINT    count;
 UINT    prepend_index;
@@ -6180,14 +6196,14 @@ UINT     protocol_length;
     append_index = 0;
     type_index = 0;
     domain_index = 0;
-
+    
     /* Set the service name pointer.  */
     pointer = srv_name;
 
     /* Service Instance name,  */
-    /* <Instance>.<sn>._tcp.<domain> :
+    /* <Instance>.<sn>._tcp.<domain> : 
        name: <Instance>
-       type: <sn>._tcp
+       type: <sn>._tcp 
        domain: <domain>.  */
     while (*srv_name != '\0')
     {
@@ -6199,7 +6215,7 @@ UINT     protocol_length;
         {
 
             /* Set the value.  */
-            i = 0;
+            i = 0;            
 
             while (nx_mdns_app_protocol[i])
             {
@@ -6216,7 +6232,7 @@ UINT     protocol_length;
 
                     /* Get the <domain> pointer.  */
                     /* EL-PC.Test._http._tcp.local
-                       type index pointer to the _http._tcp,
+                       type index pointer to the _http._tcp, 
                        domain_index pointer to the local.  */
                     domain_index = append_index;
 
@@ -6232,24 +6248,24 @@ UINT     protocol_length;
                     {
                         *name = NX_NULL;
                     }
-
+                    
                     /* Set the type pointer.  */
                     *type = pointer + type_index;
 
                     /* Set the trailing null of type.  */
                     *(pointer + domain_index -1) = '\0';
-
+                    
                     /* Set the type pointer.  */
                     *domain = pointer + domain_index;
 
                     return(NX_MDNS_SUCCESS);
                 }
                 i ++;
-            }
+            } 
 
             /* Update the '.' count.  */
             count ++;
-
+            
             /* The type index is pointer to the <sn>.  */
             if (count != 1)
             {
@@ -6257,7 +6273,7 @@ UINT     protocol_length;
                 /* Update the type index.  */
                 type_index = prepend_index;
             }
-
+            
             prepend_index = append_index;
         }
 
@@ -6268,42 +6284,42 @@ UINT     protocol_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_name_assemble                      PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_name_assemble                      PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function resloves the service name, type, domain.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    srv_name                              Pointer to SRV name           */
-/*    name                                  The name of the service       */
-/*    type                                  The type of to the service    */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function resloves the service name, type, domain.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    srv_name                              Pointer to SRV name           */ 
+/*    name                                  The name of the service       */ 
+/*    type                                  The type of to the service    */ 
 /*    domain                                The domain                    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    mDNS component                                                      */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    mDNS component                                                      */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6315,7 +6331,7 @@ UINT     protocol_length;
 /**************************************************************************/
 static UINT _nx_mdns_service_name_assemble(UCHAR *name, UCHAR *type, UCHAR *sub_type, UCHAR *domain, UCHAR *record_buffer, UINT buffer_size, UINT *type_index)
 {
-
+ 
 UINT        index;
 UINT        length;
 
@@ -6349,7 +6365,7 @@ UINT        length;
         index += length;
 
         *(record_buffer + index) = '.';
-        index ++;
+        index ++;   
     }
 
     /* Add the sub type.  */
@@ -6375,13 +6391,13 @@ UINT        length;
         memcpy((CHAR *)(record_buffer + index), (const char*)sub_type, length); /* Use case of memcpy is verified. */
         index += length;
         *(record_buffer + index) = '.';
-        index ++;
-
+        index ++;     
+        
         /* Add the key word "_sub".  */
         memcpy((CHAR *)(record_buffer + index), (const char*)"_sub", 4); /* Use case of memcpy is verified. */
         index += 4;
         *(record_buffer + index) = '.';
-        index ++;
+        index ++; 
     }
 
     /* Add the type.  */
@@ -6410,7 +6426,7 @@ UINT        length;
         memcpy((CHAR *)record_buffer + index, (const char*)type, length); /* Use case of memcpy is verified. */
         index += length;
         *(record_buffer + index) = '.';
-        index ++;
+        index ++;    
     }
 
     /* Add the domain. */
@@ -6438,43 +6454,43 @@ UINT        length;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    nx_mdns_host_name_register                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    nx_mdns_host_name_register                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function resloves the service name, type, domain.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    type                                  The type of operation         */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function resloves the service name, type, domain.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    type                                  The type of operation         */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
 /*    _nx_mdns_rr_a_aaaa_add                Add the A/AAAA resource record*/
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_enable                       Enable mDNS                   */
-/*    _nx_mdns_address_change_process       Process address change        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_address_change_process       Process address change        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6515,7 +6531,7 @@ NXD_IPV6_ADDRESS *ipv6_address_ptr;
     index += host_name_length;
 
     temp_string_buffer[index] = '.';
-    index ++;
+    index ++;    
     memcpy((CHAR *)(&temp_string_buffer[index]), (CHAR *)"local", sizeof("local")); /* Use case of memcpy is verified. The NX_MDNS_HOST_NAME_MAX is limited in nxd_mdns.h.*/
 
     /* Set the ip pointer.  */
@@ -6570,7 +6586,7 @@ NXD_IPV6_ADDRESS *ipv6_address_ptr;
                 tx_mutex_put(&(ip_ptr -> nx_ip_protection));
 
                 return(status);
-            }
+            }                   
 
             /* Set the flag.  */
             add_aaaa = NX_TRUE;
@@ -6597,39 +6613,39 @@ NXD_IPV6_ADDRESS *ipv6_address_ptr;
 #endif /* NX_MDNS_DISABLE_SERVER */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_timer_entry                                PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_timer_entry                                PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function handles waking up the mDNS helper thread to process   */
-/*    the timer event on a periodic basis.                                */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_value                            mDNS instance for a ulong     */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_event_flags_set                    Set event flags               */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    ThreadX system timer thread                                         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    the timer event on a periodic basis.                                */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_value                            mDNS instance for a ulong     */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_event_flags_set                    Set event flags               */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    ThreadX system timer thread                                         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6639,13 +6655,13 @@ NXD_IPV6_ADDRESS *ipv6_address_ptr;
 /**************************************************************************/
 static VOID _nx_mdns_timer_entry(ULONG mdns_value)
 {
-
+    
 NX_MDNS     *mdns_ptr;
 
 
     /* Setup mDNS pointer from the input value.  */
     mdns_ptr = (NX_MDNS *) mdns_value;
-
+    
     /* Set the timer event.  */
     tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_TIMER_EVENT, TX_OR);
 
@@ -6653,40 +6669,40 @@ NX_MDNS     *mdns_ptr;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_timer_set                                  PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_timer_set                                  PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function process all resource records according to the state,  */
-/*    Set the flags to send the probing, announcing, query, response and  */
-/*    goodbye mDNS message. Delete the resource record when the resource  */
-/*    record is invalid.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*    Set the flags to send the probing, announcing, query, response and  */ 
+/*    goodbye mDNS message. Delete the resource record when the resource  */ 
+/*    record is invalid.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */  
 /*    tx_timer_info_get                     Get the timer info            */
 /*    tx_timer_deactivate                   Deactivate the timer          */
 /*    tx_timer_change                       Change the timer              */
 /*    tx_timer_activate                     Activate the timer            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_enable                       Enable the mDNS               */
 /*    _nx_mdns_rr_a_aaaa_add                Add the A/AAAA resource record*/
 /*    _nx_mdns_rr_ptr_add                   Add the ptr resource record   */
@@ -6697,9 +6713,9 @@ NX_MDNS     *mdns_ptr;
 /*    _nx_mdns_query                        Send the continuous query     */
 /*    _nx_mdns_packet_process               Process mDNS packet           */
 /*    _nx_mdns_conflict_process             Process the conflict          */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -6709,7 +6725,7 @@ NX_MDNS     *mdns_ptr;
 /**************************************************************************/
 static VOID _nx_mdns_timer_set(NX_MDNS *mdns_ptr, NX_MDNS_RR  *record_rr, ULONG timer_count)
 {
-
+      
 
 TX_INTERRUPT_SAVE_AREA
 ULONG       remaining_ticks;
@@ -6718,7 +6734,7 @@ UINT        active;
 
     if (timer_count)
     {
-
+        
         /* Disable interrupt */
         TX_DISABLE
 
@@ -6761,58 +6777,62 @@ UINT        active;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_timer_event_process                        PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_timer_event_process                        PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function process all resource records according to the state,  */
-/*    Set the flags to send the probing, announcing, query, response and  */
-/*    goodbye mDNS message. Delete the resource record when the resource  */
-/*    record is invalid.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*    Set the flags to send the probing, announcing, query, response and  */ 
+/*    goodbye mDNS message. Delete the resource record when the resource  */ 
+/*    record is invalid.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    tx_event_flags_set                    Set event flags to wake mDNS  */
 /*    tx_timer_deactivate                   Deactivate the timer          */
 /*    tx_timer_change                       Change the timer              */
-/*    tx_timer_activate                     Activate the timer            */
+/*    tx_timer_activate                     Activate the timer            */ 
 /*    _nx_mdns_service_name_resolve         Resolve the service name      */
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
-/*                                            from the cache              */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            from the cache              */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s), and      */
 /*                                            verified memcpy use cases,  */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static VOID _nx_mdns_timer_event_process(NX_MDNS *mdns_ptr)
 {
-
+ 
 ULONG       event_flags = 0;
 ULONG       timer_min_count = 0xFFFFFFFF;
 ULONG       *head, *tail;
@@ -6872,7 +6892,7 @@ UINT        rr_name_length;
             {
                 if (p -> nx_mdns_rr_remaining_ticks > mdns_ptr -> nx_mdns_timer_min_count)
                 {
-                    p -> nx_mdns_rr_remaining_ticks -= mdns_ptr -> nx_mdns_timer_min_count;
+                    p -> nx_mdns_rr_remaining_ticks -= mdns_ptr -> nx_mdns_timer_min_count;                    
                 }
                 else
                 {
@@ -6881,9 +6901,9 @@ UINT        rr_name_length;
             }
 
             /* Calculate the time interval for two responses.*/
-            if (p -> nx_mdns_rr_response_interval > (UCHAR)mdns_ptr -> nx_mdns_timer_min_count)
+            if (p -> nx_mdns_rr_response_interval > mdns_ptr -> nx_mdns_timer_min_count)
             {
-                p -> nx_mdns_rr_response_interval = (UCHAR)(p -> nx_mdns_rr_response_interval - mdns_ptr -> nx_mdns_timer_min_count);
+                p -> nx_mdns_rr_response_interval = (ULONG)(p -> nx_mdns_rr_response_interval - mdns_ptr -> nx_mdns_timer_min_count);
 
                 /* Compare the timer count.and set the minimum timer count. */
                 if ((p -> nx_mdns_rr_response_interval != 0) &&
@@ -6923,7 +6943,7 @@ UINT        rr_name_length;
             {
                 p -> nx_mdns_rr_timer_count = 0;
             }
-
+            
             /* If the timer count is zero, means the timeout. */
             if (p -> nx_mdns_rr_timer_count != 0)
                 continue;
@@ -6931,7 +6951,7 @@ UINT        rr_name_length;
             /* Check the state. */
             switch (p -> nx_mdns_rr_state)
             {
-
+                
 #ifndef NX_MDNS_DISABLE_SERVER
                 case NX_MDNS_RR_STATE_PROBING:
                 {
@@ -6941,10 +6961,10 @@ UINT        rr_name_length;
                     {
 
                         /* Set the send flag.*/
-                        p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
+                        p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST; 
 
                         /* Set the probing flag.  */
-                        event_flags = event_flags | NX_MDNS_PROBING_SEND_EVENT;
+                        event_flags = event_flags | NX_MDNS_PROBING_SEND_EVENT; 
 
                         /* Set the timer count. 250ms.  */
                         p -> nx_mdns_rr_timer_count = NX_MDNS_PROBING_TIMER_COUNT;
@@ -6955,7 +6975,7 @@ UINT        rr_name_length;
                             timer_min_count = p -> nx_mdns_rr_timer_count;
                         }
                     }
-                    else
+                    else            
                     {
 
                         /* Probing complete, and move to the next step, Announcing. */
@@ -6978,7 +6998,7 @@ UINT        rr_name_length;
                             p -> nx_mdns_rr_announcing_max_time = (UCHAR)(mdns_ptr -> nx_mdns_announcing_max_time - 1);
                         else
                             p -> nx_mdns_rr_announcing_max_time = NX_MDNS_ANNOUNCING_FOREVER;
-
+                        
                         /* Yes, probing complete, add the related PTR resource records.  */
                         if (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV)
                         {
@@ -7005,7 +7025,7 @@ UINT        rr_name_length;
                             if (mdns_ptr -> nx_mdns_probing_notify)
                             {
                                 (mdns_ptr -> nx_mdns_probing_notify)(mdns_ptr, service_name, NX_MDNS_LOCAL_SERVICE_REGISTERED_SUCCESS);
-                            }
+                            }  
                         }
 
                         if (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_A)
@@ -7035,11 +7055,11 @@ UINT        rr_name_length;
                         p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
 
                         /* Set the announcing flag.  */
-                        event_flags = event_flags | NX_MDNS_ANNOUNCING_SEND_EVENT;
+                        event_flags = event_flags | NX_MDNS_ANNOUNCING_SEND_EVENT; 
 
                         /* Yes, probing complete, add the related PTR resource records and NSEC resource records. */
-                        if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) ||
-                            (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_A) ||
+                        if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) || 
+                            (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_A) || 
                             (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_AAAA))
                         {
 
@@ -7056,9 +7076,9 @@ UINT        rr_name_length;
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
                                 if ((p1 ->nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC) &&
-                                    (p1 -> nx_mdns_rr_name == p -> nx_mdns_rr_name))
+                                    (p1 -> nx_mdns_rr_name == p -> nx_mdns_rr_name)) 
                                 {
-
+                                     
                                     /* Set the send flag to send the probing. */
                                     p1 -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
                                 }
@@ -7067,7 +7087,7 @@ UINT        rr_name_length;
                                 if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) &&
                                     (p1 -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_PTR) &&
                                     (p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name == p -> nx_mdns_rr_name))
-                                {
+                                {                                            
 
                                     /* Set the send flag to send the probing. */
                                     p1 -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
@@ -7162,9 +7182,9 @@ UINT        rr_name_length;
                             timer_min_count = p -> nx_mdns_rr_timer_count;
                         }
                     }
-                    else
+                    else            
                     {
-
+                        
                         /* Check for RR delete flag.  */
                         if (p -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_DELETE)
                         {
@@ -7201,7 +7221,7 @@ UINT        rr_name_length;
                             p -> nx_mdns_rr_retransmit_count = NX_MDNS_RR_UPDATE_COUNT;
 
                             /* 50% of the record lifetime has elapsed,the querier should plan to issure a query at 80%-82% of the record lifetime */
-                            p -> nx_mdns_rr_timer_count = p -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(30 + (NX_RAND() % 3)) / 100;
+                            p -> nx_mdns_rr_timer_count = p -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(30 + (((ULONG)NX_RAND()) % 3)) / 100;
                         }
                         else
                         {
@@ -7220,23 +7240,23 @@ UINT        rr_name_length;
                     }
 
                     /* Check the send flag.  */
-                    else
+                    else 
                     {
                         if (p -> nx_mdns_rr_send_flag)
                         {
 
                             /* Set the send flag to send the response. */
-                            p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
+                            p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;     
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
                             /* Clear the NSEC additional send.  */
                             if (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC)
-                                p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send = NX_FALSE;
+                                p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send = NX_FALSE;   
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
 
                             /* mDNS Responder MUST NOT multicast a record until at least one second has elapsed since the last time that record was multicast. RFC6762, Section6, Page16.  */
                             /* Set the next response time interval.  */
-                            p -> nx_mdns_rr_response_interval = (UCHAR)(NX_MDNS_RESPONSE_INTERVAL + NX_MDNS_TIMER_COUNT_RANGE);
+                            p -> nx_mdns_rr_response_interval = (ULONG)(NX_MDNS_RESPONSE_INTERVAL + NX_MDNS_TIMER_COUNT_RANGE);
 
                             /* Compare the timer count.and set the minimum timer count. */
                             if (p -> nx_mdns_rr_response_interval < timer_min_count)
@@ -7249,25 +7269,25 @@ UINT        rr_name_length;
                         }
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
-                        else
+                        else 
                         {
                             if (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC)
-                            {
+                            {     
                                 if (p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send)
                                 {
                                     p -> nx_mdns_rr_word |= NX_MDNS_RR_FLAG_ADDITIONAL;
-                                    p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send = NX_FALSE;
+                                    p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send = NX_FALSE;   
 
                                     /* Set the announcing flag.  */
-                                    event_flags = event_flags | NX_MDNS_RESPONSE_SEND_EVENT;
+                                    event_flags = event_flags | NX_MDNS_RESPONSE_SEND_EVENT;   
                                 }
                             }
-                        }
+                        } 
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
                     }
                     break;
                 }
-
+            
 
 #ifndef NX_MDNS_DISABLE_CLIENT
                 case NX_MDNS_RR_STATE_QUERY:
@@ -7285,7 +7305,7 @@ UINT        rr_name_length;
                             p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
 
                             /* Set the query flag.  */
-                            event_flags = event_flags | NX_MDNS_QUERY_SEND_EVENT;
+                            event_flags = event_flags | NX_MDNS_QUERY_SEND_EVENT; 
                         }
 
                         /* Clear the duplicate flag.  */
@@ -7293,13 +7313,13 @@ UINT        rr_name_length;
 
                         /* Double the next timer count.   */
                         p -> nx_mdns_rr_retransmit_lifetime = p -> nx_mdns_rr_retransmit_lifetime << 1;
-
+                                                        
                         /* The interval between the first two queries MUST be at least one second. RFC6762, Section5.2, Page9.  */
                         if (p -> nx_mdns_rr_retransmit_lifetime < NX_MDNS_QUERY_MIN_TIMER_COUNT)
                         {
                             p -> nx_mdns_rr_retransmit_lifetime = NX_MDNS_QUERY_MIN_TIMER_COUNT;
                         }
-
+                        
                         /* When the interval between queries reaches or exceeds 60 minutes, a querier MAY cap the interval to a maximum of 60 minutes. RFC6762, Section5.2, Page10.  */
                         if (p -> nx_mdns_rr_retransmit_lifetime > NX_MDNS_QUERY_MAX_TIMER_COUNT)
                         {
@@ -7330,7 +7350,7 @@ UINT        rr_name_length;
                         p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
 
                         /* Set the query flag.  */
-                        event_flags = event_flags | NX_MDNS_QUERY_SEND_EVENT;
+                        event_flags = event_flags | NX_MDNS_QUERY_SEND_EVENT; 
 
                         /* Update the timer count. Client should send the updating message every 5% of ttl.   */
                         if (p -> nx_mdns_rr_retransmit_count == 1)
@@ -7344,7 +7364,7 @@ UINT        rr_name_length;
                             while(remaining_ticks > p -> nx_mdns_rr_timer_count)
                                 remaining_ticks -= p -> nx_mdns_rr_timer_count;
 
-                            p -> nx_mdns_rr_timer_count = remaining_ticks + (p -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(NX_RAND() % 3) / 100);
+                            p -> nx_mdns_rr_timer_count = remaining_ticks + (p -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(((ULONG)NX_RAND()) % 3) / 100);
                         }
 
                         /* Compare the timer count.and set the minimum timer count. */
@@ -7360,7 +7380,7 @@ UINT        rr_name_length;
                         _nx_mdns_cache_delete_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_PEER, p);
                     }
                     break;
-                }
+                }                        
 
                 case NX_MDNS_RR_STATE_DELETE:
                 case NX_MDNS_RR_STATE_POOF_DELETE:
@@ -7379,7 +7399,7 @@ UINT        rr_name_length;
             }
         }
     }
-
+    
     /* If the specified timer rate is different with the new timer min count,then update it.*/
     if (mdns_ptr -> nx_mdns_timer_min_count != timer_min_count)
     {
@@ -7394,8 +7414,8 @@ UINT        rr_name_length;
         {
 
             /* Change the timer ticks with minimum timer count.*/
-            tx_timer_change(&(mdns_ptr -> nx_mdns_timer),
-                            mdns_ptr -> nx_mdns_timer_min_count,
+            tx_timer_change(&(mdns_ptr -> nx_mdns_timer), 
+                            mdns_ptr -> nx_mdns_timer_min_count, 
                             mdns_ptr -> nx_mdns_timer_min_count);
             tx_timer_activate(&(mdns_ptr -> nx_mdns_timer));
         }
@@ -7406,38 +7426,38 @@ UINT        rr_name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_udp_receive_notify                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_udp_receive_notify                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function is the mDNS UDP receive notify callback.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    socket_ptr                            Pointer to udp socket         */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function is the mDNS UDP receive notify callback.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    socket_ptr                            Pointer to udp socket         */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    tx_event_flags_set                    Set event flags               */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    UDP receive callback                                                */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    UDP receive callback                                                */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7454,7 +7474,7 @@ static VOID _nx_mdns_udp_receive_notify(NX_UDP_SOCKET *socket_ptr)
     /* Check the mDNS.  */
     if(_nx_mdns_created_ptr)
     {
-
+        
         /* Set the receive UDP packet notify. */
         tx_event_flags_set(&(_nx_mdns_created_ptr -> nx_mdns_events), NX_MDNS_PKT_RX_EVENT, TX_OR);
     }
@@ -7463,38 +7483,39 @@ static VOID _nx_mdns_udp_receive_notify(NX_UDP_SOCKET *socket_ptr)
 }
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_ip_address_change_notify                   PORTABLE C      */
+#ifndef NX_DISABLE_IPV4
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_ip_address_change_notify                   PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function is the mDNS UDP receive notify callback.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    socket_ptr                            Pointer to udp socket         */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function is the mDNS UDP receive notify callback.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    socket_ptr                            Pointer to udp socket         */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    tx_event_flags_set                    Set event flags               */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    UDP receive callback                                                */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    UDP receive callback                                                */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7512,47 +7533,48 @@ static VOID _nx_mdns_ip_address_change_notify(NX_IP *ip_ptr, VOID *additional_in
     /* Check the mDNS.  */
     if(_nx_mdns_created_ptr)
     {
-
+        
         /* Set the address change event event. */
         tx_event_flags_set(&(_nx_mdns_created_ptr -> nx_mdns_events), NX_MDNS_ADDRESS_CHANGE_EVENT, TX_OR);
     }
 
     return;
 }
+#endif /* NX_DISABLE_IPV4 */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_ipv6_address_change_notify                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_ipv6_address_change_notify                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function is the mDNS UDP receive notify callback.              */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    socket_ptr                            Pointer to udp socket         */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function is the mDNS UDP receive notify callback.              */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    socket_ptr                            Pointer to udp socket         */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    tx_event_flags_set                    Set event flags               */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    UDP receive callback                                                */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    UDP receive callback                                                */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7573,7 +7595,7 @@ static VOID _nx_mdns_ipv6_address_change_notify(NX_IP *ip_ptr, UINT method, UINT
     /* Check the mDNS.  */
     if(_nx_mdns_created_ptr)
     {
-
+        
         /* Set the address change event. */
         tx_event_flags_set(&(_nx_mdns_created_ptr -> nx_mdns_events), NX_MDNS_ADDRESS_CHANGE_EVENT, TX_OR);
     }
@@ -7583,51 +7605,51 @@ static VOID _nx_mdns_ipv6_address_change_notify(NX_IP *ip_ptr, UINT method, UINT
 #endif /* NX_MDNS_DISABLE_SERVER  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_thread_entry                               PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_thread_entry                               PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function is the entry point for the mDNS helper thread.        */
-/*    mDNS helper thread is responsible for processing mDNS events.       */
-/*    Receive and send the mDNS packet.                                   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_value                            Pointer to mDNS instance      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function is the entry point for the mDNS helper thread.        */ 
+/*    mDNS helper thread is responsible for processing mDNS events.       */ 
+/*    Receive and send the mDNS packet.                                   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_value                            Pointer to mDNS instance      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
 /*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    tx_mutex_get                          Get the mDNS mutex            */
 /*    tx_mutex_put                          Put the mDNS mutex            */
 /*    tx_event_flags_get                    Get the mDNS events           */
 /*    nx_udp_socket_receive                 Receive the mDNS packet       */
-/*    nx_packet_release                     Release the mDNS packet       */
-/*    _nx_mdns_packet_process               Process mDNS packet           */
-/*    _nx_mdns_announcing_send              Send announcing message       */
-/*    _nx_mdns_probing_send                 Send probing message          */
-/*    _nx_mdns_query_send                   Send query message            */
-/*    _nx_mdns_response_send                Send response message         */
+/*    nx_packet_release                     Release the mDNS packet       */ 
+/*    _nx_mdns_packet_process               Process mDNS packet           */ 
+/*    _nx_mdns_announcing_send              Send announcing message       */ 
+/*    _nx_mdns_probing_send                 Send probing message          */ 
+/*    _nx_mdns_query_send                   Send query message            */ 
+/*    _nx_mdns_response_send                Send response message         */ 
 /*    _nx_mdns_timer_event_process          Process the mDNS timer event  */
 /*    _nx_mdns_address_change_process       Process the address change    */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    ThreadX Scheduler                                                   */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    ThreadX Scheduler                                                   */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7659,8 +7681,8 @@ UINT             interface_index;
         tx_mutex_put(&(mdns_ptr -> nx_mdns_mutex));
 
         /* Pickup mDNS event flags.  */
-        tx_event_flags_get(&mdns_ptr -> nx_mdns_events,
-                           NX_MDNS_ALL_EVENTS, TX_OR_CLEAR,
+        tx_event_flags_get(&mdns_ptr -> nx_mdns_events, 
+                           NX_MDNS_ALL_EVENTS, TX_OR_CLEAR, 
                            &mdns_events, TX_WAIT_FOREVER);
 
         /* Get the mDNS mutex.  */
@@ -7673,7 +7695,8 @@ UINT             interface_index;
             {
 
                 /* Receive a UDP packet.  */
-                status =  _nx_udp_socket_receive(&mdns_ptr -> nx_mdns_socket, &packet_ptr, TX_NO_WAIT);
+                status =  _nx_udp_socket_receive(&mdns_ptr -> nx_mdns_socket, 
+                                                 &packet_ptr, TX_NO_WAIT);
 
                 /* Check status.  */
                 if (status != NX_SUCCESS)
@@ -7683,12 +7706,12 @@ UINT             interface_index;
 
                 /* Discard the chained packets.  */
                 if (packet_ptr -> nx_packet_next)
-                {
+                {                    
                     nx_packet_release(packet_ptr);
                     continue;
                 }
 #endif
-
+                
                 /* Get the interface.  */
                 if (packet_ptr -> nx_packet_ip_version == NX_IP_VERSION_V4)
                 {
@@ -7719,12 +7742,11 @@ UINT             interface_index;
         for (interface_index = 0; interface_index < NX_MAX_PHYSICAL_INTERFACES; interface_index++)
         {
 
-            /* Check if this interface is enabled.
+            /* Check if this interface is enabled. 
                Exception: Goodbye message can be sent out after disable.  */
-            if ((!mdns_ptr -> nx_mdns_interface_enabled[interface_index]) && (!(mdns_events & NX_MDNS_ANNOUNCING_SEND_EVENT)))
-            {
+            if ((!mdns_ptr -> nx_mdns_interface_enabled[interface_index]) &&
+                (!(mdns_events & NX_MDNS_ANNOUNCING_SEND_EVENT)))
                 continue;
-            }
 
 #ifndef NX_MDNS_DISABLE_SERVER
 
@@ -7786,52 +7808,52 @@ UINT             interface_index;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_process                             PORTABLE C      */
-/*                                                           6.1.4        */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_process                             PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function checks the interface and the IP address of received   */
 /*    packet, then preocesses the packet.                                 */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
-/*    packet_ptr                            Pointer to mDNS packet        */
+/*    packet_ptr                            Pointer to mDNS packet        */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    nx_packet_release                     Release the mDNS packet       */
-/*    _tx_thread_system_resume              Resume thread service         */
+/*    nx_packet_release                     Release the mDNS packet       */ 
+/*    _tx_thread_system_resume              Resume thread service         */ 
 /*    _nx_mdns_timer_set                    Set the mDNS timer            */
-/*    _nx_mdns_name_string_decode           Decode the name size          */
-/*    _nx_mdns_name_size_calculate          Calculate the name size       */
-/*    _nx_mdns_rr_size_get                  Get the resource record size  */
+/*    _nx_mdns_name_string_decode           Decode the name size          */ 
+/*    _nx_mdns_name_size_calculate          Calculate the name size       */ 
+/*    _nx_mdns_rr_size_get                  Get the resource record size  */ 
 /*    _nx_mdns_conflict_process             Process the mDNS conflict     */
-/*    _nx_mdns_cache_find_resource_record   Find the mDNS resource record */
-/*    _nx_mdns_packet_address_check         Check the address and port    */
-/*    _nx_mdns_packet_rr_process            Process resource record       */
+/*    _nx_mdns_cache_find_resource_record   Find the mDNS resource record */ 
+/*    _nx_mdns_packet_address_check         Check the address and port    */ 
+/*    _nx_mdns_packet_rr_process            Process resource record       */ 
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
-/*                                            from cache                  */
-/*    nxd_udp_packet_info_extract           Extract the packet info       */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            from cache                  */ 
+/*    nxd_udp_packet_info_extract           Extract the packet info       */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -7840,14 +7862,18 @@ UINT             interface_index;
 /*  02-02-2021     Yuxin Zhou               Modified comment(s), improved */
 /*                                            packet length verification, */
 /*                                            resulting in version 6.1.4  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_packet_process(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UINT interface_index)
 {
-
+    
 USHORT              mdns_flags;
 UCHAR              *data_ptr;
-USHORT              question_count;
+USHORT              question_count; 
 USHORT              authority_count;
 USHORT              answer_count;
 UINT                index;
@@ -7883,12 +7909,12 @@ NX_MDNS_RR         *nsec_rr;
 
     /* Get the question count.  */
     question_count = NX_MDNS_GET_USHORT_DATA(packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_QDCOUNT_OFFSET);
-
+   
     /* Determine if we have any 'answers' to our DNS query. */
     answer_count = NX_MDNS_GET_USHORT_DATA(packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_ANCOUNT_OFFSET);
 
     /* Also check if there are any 'hints' from the Authoritative nameserver. */
-    authority_count = NX_MDNS_GET_USHORT_DATA(packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_NSCOUNT_OFFSET);
+    authority_count = NX_MDNS_GET_USHORT_DATA(packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_NSCOUNT_OFFSET); 
 
     /* Update the answer count. Ignore the authority count and additional count for query message.  */
     if ((mdns_flags & NX_MDNS_RESPONSE_FLAG) == NX_MDNS_RESPONSE_FLAG)
@@ -7900,7 +7926,7 @@ NX_MDNS_RR         *nsec_rr;
     }
 
     /* Skip the Header. Point at the start of the question.  */
-    data_ptr =  packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_QDSECT_OFFSET;
+    data_ptr =  packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_QDSECT_OFFSET; 
 
     /* Process all the Question Section.  */
     for (index = 0; index < question_count; index++)
@@ -7913,7 +7939,7 @@ NX_MDNS_RR         *nsec_rr;
         if ((mdns_flags & NX_MDNS_RESPONSE_FLAG) == NX_MDNS_RESPONSE_FLAG)
         {
 
-            /* Multicast DNS responses MUST NOT contain any question in the Question Section,
+            /* Multicast DNS responses MUST NOT contain any question in the Question Section, 
                Any questions in the Question Section of a received Multicast DNS response MUST be silently ignored. RFC6762, Section6, Page14.  */
             data_ptr += (_nx_mdns_name_size_calculate(data_ptr, packet_ptr) + 4);
         }
@@ -7969,7 +7995,7 @@ NX_MDNS_RR         *nsec_rr;
                 }
             }
 #endif /* NX_MDNS_DISABLE_CLIENT */
-
+            
 #ifndef NX_MDNS_DISABLE_SERVER
 
             /* Step2, mDNS Server process the normal query.  */
@@ -8000,7 +8026,7 @@ NX_MDNS_RR         *nsec_rr;
 
                     /* Check whether the same record it is. RFC6762, Section6, Page13. */
                     /* The rules: rrname must match the question name.
-                    rrtype must match the question qtype unless the qtype is "ANY" or the rrtype is "CNAME".
+                    rrtype must match the question qtype unless the qtype is "ANY" or the rrtype is "CNAME". 
                     rrclass must match the question qclass unless the qclass is "ANY". */
                     if (p -> nx_mdns_rr_name != temp_resource_record.nx_mdns_rr_name)
                         continue;
@@ -8009,7 +8035,7 @@ NX_MDNS_RR         *nsec_rr;
 
                     /* Check the NSEC type.  */
                     if (p ->nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC)
-                        nsec_rr = p;
+                        nsec_rr = p; 
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
 
                     if ((p -> nx_mdns_rr_type != temp_resource_record.nx_mdns_rr_type) &&
@@ -8037,9 +8063,9 @@ NX_MDNS_RR         *nsec_rr;
                         if (p -> nx_mdns_rr_send_flag)
                         {
 
-                            /* Set the flag to send this Resource records via multicast.
-                            Store the old flag into the top bits.
-                            Store the new flag into the low bits.
+                            /* Set the flag to send this Resource records via multicast. 
+                            Store the old flag into the top bits. 
+                            Store the new flag into the low bits.  
                             Format: 0001 0001 */
                             p -> nx_mdns_rr_send_flag = ((NX_MDNS_RR_SEND_MULTICAST << 4) | NX_MDNS_RR_SEND_MULTICAST);
                         }
@@ -8048,26 +8074,26 @@ NX_MDNS_RR         *nsec_rr;
 
                             /* Set the flag to send this Resource records via multicast.*/
                             p -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
-                        }
+                        }   
 
                         /* In the case where the query has the TC (truncated) bit set, indicating that subsequent Known-Answer packets will follow,
                            Responders SHOULD delay their responses by a random amount of time selected with uniform random distribution in the range 400-500ms. RFC6762, Section6, Page 15.  */
                         if (mdns_flags & NX_MDNS_TC_FLAG)
-                        {
-                            p -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_TC_DELAY_MIN + (NX_RAND() % NX_MDNS_RESPONSE_TC_DELAY_RANGE));
+                        {            
+                            p -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_TC_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_RESPONSE_TC_DELAY_RANGE));
                         }
                         else
                         {
 
-                            /* A mDNS responder is only required to delay its transmission as necessary to ensure an interval of at least 250ms
-                            since the last time the record was multicast on that interface.  RFC6762, Section6, Page16 */
+                            /* A mDNS responder is only required to delay its transmission as necessary to ensure an interval of at least 250ms 
+                            since the last time the record was multicast on that interface.  RFC6762, Section6, Page16 */    
                             if (authority_count)
                             {
                                 if (p -> nx_mdns_rr_response_interval > (NX_MDNS_RESPONSE_INTERVAL - NX_MDNS_RESPONSE_PROBING_TIMER_COUNT))
-                                    p -> nx_mdns_rr_response_interval = (UCHAR)(p -> nx_mdns_rr_response_interval - (NX_MDNS_RESPONSE_INTERVAL - NX_MDNS_RESPONSE_PROBING_TIMER_COUNT));
+                                    p -> nx_mdns_rr_response_interval = (ULONG)(p -> nx_mdns_rr_response_interval - (NX_MDNS_RESPONSE_INTERVAL - NX_MDNS_RESPONSE_PROBING_TIMER_COUNT));
                                 else
                                     p -> nx_mdns_rr_response_interval = 0;
-                            }
+                            }                                 
 
                             /* Check the response interval.  */
                             if (p -> nx_mdns_rr_response_interval <= NX_MDNS_TIMER_COUNT_RANGE)
@@ -8081,7 +8107,7 @@ NX_MDNS_RR         *nsec_rr;
                                 else
                                 {
                                     /* Set the timer count, delay 20-120ms.  */
-                                    p -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_SHARED_DELAY_MIN + (NX_RAND() % NX_MDNS_RESPONSE_SHARED_DELAY_RANGE));
+                                    p -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_SHARED_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_RESPONSE_SHARED_DELAY_RANGE));
                                 }
                             }
                             else
@@ -8097,8 +8123,8 @@ NX_MDNS_RR         *nsec_rr;
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
                 /* Send this NSEC response as additional answer.  */
-                if ((match_count == 0) && (nsec_rr))
-                {
+                if ((match_count == 0) && (nsec_rr)) 
+                {                     
                     nsec_rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_additional_send = NX_TRUE;
                     nsec_rr -> nx_mdns_rr_timer_count = NX_MDNS_RESPONSE_UNIQUE_DELAY;
                     _nx_mdns_timer_set(mdns_ptr, nsec_rr, nsec_rr -> nx_mdns_rr_timer_count);
@@ -8111,7 +8137,7 @@ NX_MDNS_RR         *nsec_rr;
             data_ptr += (_nx_mdns_name_size_calculate(data_ptr, packet_ptr) + 4);
         }
     }
-
+    
     /* Process all the Known-Answer records.  */
     for (index = 0; index < answer_count; index++)
     {
@@ -8128,11 +8154,11 @@ NX_MDNS_RR         *nsec_rr;
             /* Does the same rname and rdata name of resource record exist in the local buffer.  */
             if (_nx_mdns_packet_rr_set(mdns_ptr, packet_ptr, data_ptr, &temp_resource_record, NX_MDNS_RR_OP_LOCAL_SET_ANSWER, interface_index) == NX_MDNS_SUCCESS)
             {
-
+                
                 /* Find the same rname, rrtype, rrclass of resource record in local buffer.  */
                 if(_nx_mdns_cache_find_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, NX_MDNS_RR_MATCH_EXCEPT_RDATA, &rr_search) == NX_MDNS_SUCCESS)
                 {
-
+                                    
                     /* Probing state, conflict Resolution.  */
                     if ((rr_search -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_UNIQUE) &&
                         (rr_search -> nx_mdns_rr_state == NX_MDNS_RR_STATE_PROBING))
@@ -8145,7 +8171,7 @@ NX_MDNS_RR         *nsec_rr;
                         continue;
                     }
                 }
-
+                
                 /* Find the same rname, rrtype, rrclass and identical rdata of resource record in local buffer.  */
                 if(_nx_mdns_cache_find_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, NX_MDNS_RR_MATCH_ALL, &rr_search) == NX_MDNS_SUCCESS)
                 {
@@ -8153,18 +8179,18 @@ NX_MDNS_RR         *nsec_rr;
                     /* If the TTL in this record(B) is less than half the true TTL in local record(A), A MUST announce local record via multicast. RFC6762, Section6.6,Page21.  */
                     if ((temp_resource_record.nx_mdns_rr_ttl << 1) < rr_search -> nx_mdns_rr_ttl)
                     {
-
+                                            
                         /* Set the flag.  */
                         rr_search -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_MULTICAST;
 
                         /* Set the timer count, delay 20-120ms.  */
-                        rr_search -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_SHARED_DELAY_MIN + (NX_RAND() % NX_MDNS_RESPONSE_SHARED_DELAY_RANGE));
+                        rr_search -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_RESPONSE_SHARED_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_RESPONSE_SHARED_DELAY_RANGE));
 
                         /* Set the mDNS timer.  */
                         _nx_mdns_timer_set(mdns_ptr, rr_search, rr_search -> nx_mdns_rr_timer_count);
                     }
 
-                    /* Duplicate Answer Suppression, RFC6762, Section7.4,Page24.
+                    /* Duplicate Answer Suppression, RFC6762, Section7.4,Page24. 
                        The TTL in that record is not less than the TTL this host would have given. Host should not send this response again.  */
                     if (temp_resource_record.nx_mdns_rr_ttl >= rr_search -> nx_mdns_rr_ttl)
                     {
@@ -8188,11 +8214,11 @@ NX_MDNS_RR         *nsec_rr;
                     }
                 }
             }
-
+            
             /* Did the same name of resource record have existed in local buffer.  */
             if (_nx_mdns_packet_rr_set(mdns_ptr, packet_ptr, data_ptr, &temp_resource_record, NX_MDNS_RR_OP_LOCAL_SET_QUESTION, interface_index) == NX_MDNS_SUCCESS)
             {
-
+                
                 /* Find the same name, rrtype, rrclass and different rdata of resource record in local buffer.  */
                 if(_nx_mdns_cache_find_resource_record(mdns_ptr, NX_MDNS_CACHE_TYPE_LOCAL, &temp_resource_record, NX_MDNS_RR_MATCH_EXCEPT_RDATA, &rr_search) == NX_MDNS_SUCCESS)
                 {
@@ -8212,7 +8238,7 @@ NX_MDNS_RR         *nsec_rr;
 #endif /* NX_MDNS_DISABLE_SERVER */
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-            /* Step2. Add the response resource records in remote buffer.  */
+            /* Step2. Add the response resource records in remote buffer.  */  
             _nx_mdns_packet_rr_process(mdns_ptr, packet_ptr, data_ptr, interface_index);
 #endif /* NX_MDNS_DISABLE_CLIENT */
         }
@@ -8256,7 +8282,7 @@ NX_MDNS_RR         *nsec_rr;
                 }
             }
 #endif /* NX_MDNS_DISABLE_CLIENT */
-
+            
 #ifndef NX_MDNS_DISABLE_SERVER
 
             /* Step2. mDNS Server process the Known-Answer of normal query.  */
@@ -8272,7 +8298,7 @@ NX_MDNS_RR         *nsec_rr;
                         ((temp_resource_record.nx_mdns_rr_ttl << 1) >= rr_search -> nx_mdns_rr_ttl))
                     {
 
-                        /* Top four bit is zero and this resource reocrd is Known answer.
+                        /* Top four bit is zero and this resource reocrd is Known answer. 
                         Clear the send flag. */
                         rr_search -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_FLAG_CLEAR;
                     }
@@ -8290,36 +8316,36 @@ NX_MDNS_RR         *nsec_rr;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_probing_send                               PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_probing_send                               PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sends mDNS probing message.                           */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    none                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    none                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8339,7 +8365,7 @@ USHORT              answer_count = 0;
 USHORT              authority_count = 0;
 USHORT              additional_count = 0;
 UCHAR               resend_flag = NX_FALSE;
-USHORT              total_size;
+USHORT              total_size; 
 USHORT              rr_size;
 UINT                name_size;
 NX_MDNS_RR          *p1;
@@ -8391,7 +8417,7 @@ UINT                rr_name_length;
         name_size = rr_name_length + 2;
 
         /* Calculate the resource record size for question. QNAME, QTYPE, QCLASS.  */
-        rr_size = (USHORT)(name_size + 4);
+        rr_size = (USHORT)(name_size + 4); 
 
         /* Calcuate the resource record size for authority. NAME, TYPE, CLASS, TTL, RDLENGTH, RDATA.  */
         rr_size = (USHORT)(rr_size + (name_size + 10 + p -> nx_mdns_rr_rdata_length));
@@ -8422,10 +8448,10 @@ UINT                rr_name_length;
                 {
 
                     /* Set the authority answer flag.  */
-                    p1 -> nx_mdns_rr_word = p1 -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_AUTHORIY_ANSWER;
+                    p1 -> nx_mdns_rr_word = p1 -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_AUTHORIY_ANSWER; 
 
                     /* Clear the send flag.  */
-                    p1 -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_FLAG_CLEAR;
+                    p1 -> nx_mdns_rr_send_flag = NX_MDNS_RR_SEND_FLAG_CLEAR; 
                 }
                 else
                 {
@@ -8454,7 +8480,7 @@ UINT                rr_name_length;
         {
 
             /* Set the authority answer flag.  */
-            p -> nx_mdns_rr_word = p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_AUTHORIY_ANSWER;
+            p -> nx_mdns_rr_word = p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_AUTHORIY_ANSWER; 
 
             /* Update the question count.  */
             question_count ++;
@@ -8478,7 +8504,7 @@ UINT                rr_name_length;
         {
 
             /* Add the resource record into packet.  */
-            status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_PROBING);
+            status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_PROBING); 
             if (status)
                 resend_flag = NX_TRUE;
             else
@@ -8504,7 +8530,7 @@ UINT                rr_name_length;
         !authority_count &&
         !additional_count)
     {
-
+        
         /* Release the packet.  */
         nx_packet_release(packet_ptr);
         return;
@@ -8522,41 +8548,41 @@ UINT                rr_name_length;
     _nx_mdns_packet_send(mdns_ptr, packet_ptr, interface_index);
 
     /* Resend the packet.  */
-    if (resend_flag)
+    if (resend_flag)  
         tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_PROBING_SEND_EVENT, TX_OR);
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_announcing_send                            PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_announcing_send                            PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sends mDNS announcing message.                        */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8568,8 +8594,8 @@ static VOID    _nx_mdns_announcing_send(NX_MDNS *mdns_ptr, UINT interface_index)
 {
 
 UINT                status;
-NX_PACKET           *packet_ptr;
-NX_PACKET           *new_packet_ptr;
+NX_PACKET           *packet_ptr;  
+NX_PACKET           *new_packet_ptr;  
 ULONG               *head;
 NX_MDNS_RR          *p;
 USHORT              question_count = 0;
@@ -8600,15 +8626,15 @@ UCHAR               resend_flag = NX_FALSE;
         if (p -> nx_mdns_rr_interface_index != interface_index)
             continue;
 
-        if(p -> nx_mdns_rr_send_flag == 0)
+        if(p -> nx_mdns_rr_send_flag == 0) 
             continue;
 
         /* Check valid state. */
-        if(!(((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_GOODBYE) ||
-              (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING) ||
+        if(!(((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_GOODBYE) || 
+              (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING) || 
               (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID))))
             continue;
-
+             
         /* Add the resource record into packet.  */
         status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_RESPONSE);
 
@@ -8635,7 +8661,7 @@ UCHAR               resend_flag = NX_FALSE;
         !authority_count &&
         !additional_count)
     {
-
+        
         /* Release the packet.  */
         nx_packet_release(packet_ptr);
         return;
@@ -8673,43 +8699,43 @@ UCHAR               resend_flag = NX_FALSE;
     _nx_mdns_packet_send(mdns_ptr, packet_ptr, interface_index);
 
     /* Resend the packet.  */
-    if (resend_flag)
+    if (resend_flag)  
         tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_ANNOUNCING_SEND_EVENT, TX_OR);
 
     return;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_response_send                              PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_response_send                              PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sends mDNS response.                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    none                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    none                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8751,12 +8777,12 @@ UCHAR               resend_flag = NX_FALSE;
         if (p -> nx_mdns_rr_interface_index != interface_index)
             continue;
 
-        if(p -> nx_mdns_rr_send_flag == 0)
+        if(p -> nx_mdns_rr_send_flag == 0) 
             continue;
 
         /* Check valid state. */
         if ((p -> nx_mdns_rr_timer_count != 0) ||
-             !((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING) ||
+             !((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING) || 
                (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID)))
             continue;
 
@@ -8800,7 +8826,7 @@ UCHAR               resend_flag = NX_FALSE;
         {
 
             /* Add the resource record into packet.  */
-            status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_RESPONSE);
+            status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_RESPONSE);    
             if (status)
             {
                 resend_flag = NX_TRUE;
@@ -8809,10 +8835,10 @@ UCHAR               resend_flag = NX_FALSE;
             {
 
                 /* Update the additional count.  */
-                additional_count++;
+                additional_count++;  
 
                 /* Clear the additional flag.  */
-                p -> nx_mdns_rr_word = (USHORT)(p -> nx_mdns_rr_word & (~NX_MDNS_RR_FLAG_ADDITIONAL));
+                p -> nx_mdns_rr_word = (USHORT)(p -> nx_mdns_rr_word & (~NX_MDNS_RR_FLAG_ADDITIONAL)); 
             }
         }
 
@@ -8825,7 +8851,7 @@ UCHAR               resend_flag = NX_FALSE;
         !authority_count &&
         !additional_count)
     {
-
+        
         /* Release the packet.  */
         nx_packet_release(packet_ptr);
         return;
@@ -8843,43 +8869,43 @@ UCHAR               resend_flag = NX_FALSE;
     _nx_mdns_packet_send(mdns_ptr, packet_ptr, interface_index);
 
     /* Resend the packet.  */
-    if (resend_flag)
-        tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_RESPONSE_SEND_EVENT, TX_OR);
+    if (resend_flag)  
+        tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_RESPONSE_SEND_EVENT, TX_OR);   
 }
 #endif /* NX_MDNS_DISABLE_SERVER */
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_query_send                                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_query_send                                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sends mDNS query message.                             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    none                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    none                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -8924,11 +8950,11 @@ UINT                i;
         if (p -> nx_mdns_rr_interface_index != interface_index)
             continue;
 
-        if(p -> nx_mdns_rr_send_flag == 0)
+        if(p -> nx_mdns_rr_send_flag == 0) 
             continue;
 
         /* Check valid state. */
-        if(!(((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY) ||
+        if(!(((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY) || 
               (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_UPDATING))))
             continue;
 
@@ -8987,16 +9013,16 @@ UINT                i;
             {
 
                 /* Add the resource record into packet.  */
-                status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_QUERY);
+                status = _nx_mdns_packet_rr_add(packet_ptr, p, NX_MDNS_PACKET_ADD_RR_ANSWER, NX_MDNS_PACKET_QUERY); 
                 if (status)
-                {
-                    more_known_answer = NX_TRUE;
+                {                
+                    more_known_answer = NX_TRUE; 
                     resend_flag = NX_TRUE;
                 }
                 else
                 {
                     /* Update the count.  */
-                    answer_count ++;
+                    answer_count ++;    
 
                     /* Clear the additional flag.  */
                     p -> nx_mdns_rr_word = (USHORT)(p -> nx_mdns_rr_word & (~NX_MDNS_RR_FLAG_KNOWN_ANSWER));
@@ -9021,7 +9047,7 @@ UINT                i;
 
     /* Set the TC bit.  */
     if (more_known_answer)
-    {
+    {                  
         tc_bit = NX_MDNS_TC_FLAG;
          *(USHORT *)(packet_ptr -> nx_packet_prepend_ptr + NX_MDNS_FLAGS_OFFSET) |= NX_CHANGE_USHORT_ENDIAN(tc_bit);
     }
@@ -9038,51 +9064,51 @@ UINT                i;
     _nx_mdns_packet_send(mdns_ptr, packet_ptr, interface_index);
 
     /* Resend the packet.  */
-    if (resend_flag)
-        tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_QUERY_SEND_EVENT, TX_OR);
+    if (resend_flag)  
+        tx_event_flags_set(&(mdns_ptr -> nx_mdns_events), NX_MDNS_QUERY_SEND_EVENT, TX_OR);   
 }
 #endif /* NX_MDNS_DISABLE_CLIENT  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_create                              PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_create                              PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function creates the mDNS packet and add the mDNS header data. */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
-/*    packet_ptr                            Pointer to mDNS packet        */
-/*    is_query                              Query flag                    */
+/*    packet_ptr                            Pointer to mDNS packet        */ 
+/*    is_query                              Query flag                    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    nx_packet_allocate                    Allocate the mDNS packet      */
-/*    nx_packet_release                     Release the mDNS packet       */
+/*    nx_packet_allocate                    Allocate the mDNS packet      */ 
+/*    nx_packet_release                     Release the mDNS packet       */ 
 /*    _nx_mdns_short_to_network_convert     Add the data into the packet  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_announcing_send              Send announcing message       */
-/*    _nx_mdns_probing_send                 Send probing message          */
-/*    _nx_mdns_query_send                   Send query message            */
-/*    _nx_mdns_response_send                Send response message         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_announcing_send              Send announcing message       */ 
+/*    _nx_mdns_probing_send                 Send probing message          */ 
+/*    _nx_mdns_query_send                   Send query message            */ 
+/*    _nx_mdns_response_send                Send response message         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9092,14 +9118,14 @@ UINT                i;
 /**************************************************************************/
 static UINT    _nx_mdns_packet_create(NX_MDNS *mdns_ptr, NX_PACKET **packet_ptr, UCHAR is_query)
 {
-
+    
 UINT        status;
 USHORT      flags;
 
 
     /* Allocate the mDNS packet.  */
 #ifdef NX_MDNS_ENABLE_IPV6
-    status =  nx_packet_allocate(mdns_ptr -> nx_mdns_packet_pool_ptr, packet_ptr, NX_IPv6_UDP_PACKET, NX_NO_WAIT);
+    status =  nx_packet_allocate(mdns_ptr -> nx_mdns_packet_pool_ptr, packet_ptr, NX_IPv6_UDP_PACKET, NX_NO_WAIT);    
 #else
     status =  nx_packet_allocate(mdns_ptr -> nx_mdns_packet_pool_ptr, packet_ptr, NX_IPv4_UDP_PACKET, NX_NO_WAIT);
 #endif /* NX_MDNS_ENABLE_IPV6  */
@@ -9107,8 +9133,8 @@ USHORT      flags;
     /* Check for errors. */
     if (status)
     {
-
-        /* Return error.  */
+        
+        /* Return error.  */    
         return(status);
     }
 
@@ -9126,7 +9152,7 @@ USHORT      flags;
     /* Set the transaction ID.  */
     *(USHORT *)((*packet_ptr) -> nx_packet_prepend_ptr + NX_MDNS_ID_OFFSET) = 0;
 
-    /* Set the flags and Command.  */
+    /* Set the flags and Command.  */   
     if (is_query == NX_TRUE)
     {
         flags = NX_MDNS_QUERY_FLAG;
@@ -9135,14 +9161,14 @@ USHORT      flags;
     {
         flags = (NX_MDNS_RESPONSE_FLAG | NX_MDNS_AA_FLAG);
     }
-
+    
     /* Adjust for endianness. */
     NX_CHANGE_USHORT_ENDIAN(flags);
 
-    /* Set the flags and Command.  */
+    /* Set the flags and Command.  */  
     *(USHORT *)((*packet_ptr) -> nx_packet_prepend_ptr + NX_MDNS_FLAGS_OFFSET) = flags;
 
-    /* Initialize counts to 0.  */
+    /* Initialize counts to 0.  */  
     *(ULONG *)((*packet_ptr) -> nx_packet_prepend_ptr + NX_MDNS_QDCOUNT_OFFSET) = 0;
     *(ULONG *)((*packet_ptr) -> nx_packet_prepend_ptr + NX_MDNS_NSCOUNT_OFFSET) = 0;
 
@@ -9154,45 +9180,45 @@ USHORT      flags;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_send                                PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_send                                PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sends the mDNS packet.                                */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
-/*    packet_ptr                            Pointer to mDNS packet        */
+/*    packet_ptr                            Pointer to mDNS packet        */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    nx_packet_copy                        Copy the mDNS packet          */
-/*    nx_packet_release                     Release the mDNS packet       */
+/*    nx_packet_copy                        Copy the mDNS packet          */ 
+/*    nx_packet_release                     Release the mDNS packet       */ 
 /*    nx_udp_socket_send                    Send the udp packet           */
 /*    nxd_udp_socket_send                   Send the udp packet           */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_announcing_send              Send announcing message       */
-/*    _nx_mdns_probing_send                 Send probing message          */
-/*    _nx_mdns_query_send                   Send query message            */
-/*    _nx_mdns_response_send                Send response message         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_announcing_send              Send announcing message       */ 
+/*    _nx_mdns_probing_send                 Send probing message          */ 
+/*    _nx_mdns_query_send                   Send query message            */ 
+/*    _nx_mdns_response_send                Send response message         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9236,7 +9262,7 @@ UINT                address_index = mdns_ptr -> nx_mdns_ipv6_address_index[inter
 #ifndef NX_DISABLE_IPV4
     /* Send the IPv4 mDNS message.  */
     status =  nx_udp_socket_source_send(&mdns_ptr -> nx_mdns_socket, packet_ptr, NX_MDNS_IPV4_MULTICAST_ADDRESS, NX_MDNS_UDP_PORT, interface_index);
-
+    
     /* If an error is detected, the packet was not sent and we have to release the packet. */
     if (status != NX_SUCCESS)
     {
@@ -9258,7 +9284,7 @@ UINT                address_index = mdns_ptr -> nx_mdns_ipv6_address_index[inter
 
         /* Send the IPv6 mDNS message.  */
         status =  nxd_udp_socket_source_send(&mdns_ptr -> nx_mdns_socket, new_packet_ptr, &NX_MDNS_IPV6_MULTICAST_ADDRESS, NX_MDNS_UDP_PORT, address_index);
-
+    
         /* If an error is detected, the packet was not sent and we have to release the packet. */
         if (status != NX_SUCCESS)
         {
@@ -9271,47 +9297,47 @@ UINT                address_index = mdns_ptr -> nx_mdns_ipv6_address_index[inter
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_add                              PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_add                              PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function adds the mDNS resource record into the packet.        */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
 /*    packet_ptr                            Pointer to mDNS packet        */
 /*    rr                                    Pointer to mDNS record        */
 /*    op                                    RR adding Operation           */
 /*    packet_type                           Packet type                   */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_name_string_encode           Encode the name string        */
+/*    _nx_mdns_name_string_encode           Encode the name string        */ 
 /*    _nx_mdns_short_to_network_convert     Convert and add the data      */
 /*    _nx_mdns_txt_string_encode            Encode the txt string         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_announcing_send              Send announcing message       */
-/*    _nx_mdns_probing_send                 Send probing message          */
-/*    _nx_mdns_query_send                   Send query message            */
-/*    _nx_mdns_response_send                Send response message         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_announcing_send              Send announcing message       */ 
+/*    _nx_mdns_probing_send                 Send probing message          */ 
+/*    _nx_mdns_query_send                   Send query message            */ 
+/*    _nx_mdns_response_send                Send response message         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9374,7 +9400,7 @@ UINT        rr_name_length;
     /* Check whether set the resource record send flag. */
     else
     {
-
+        
         /* Calcuate the resource record size. NAME, TYPE, CLASS, TTL, RDLENGTH, RDATA.  */
         rr_size = (USHORT)(rr_name_length + 2 + 10 + rr -> nx_mdns_rr_rdata_length);
 
@@ -9392,7 +9418,7 @@ UINT        rr_name_length;
         /* Add the type and class.  */
         _nx_mdns_short_to_network_convert(data_ptr + index, rr -> nx_mdns_rr_type);
         index = (USHORT)(index + 2);
-
+        
         /* Add the class.  */
         if ((!(rr -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_PEER)) &&
             (rr -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_UNIQUE))
@@ -9401,11 +9427,11 @@ UINT        rr_name_length;
         }
         else
         {
-
+            
             _nx_mdns_short_to_network_convert(data_ptr + index, rr -> nx_mdns_rr_class);
         }
         index = (USHORT)(index + 2);
-
+        
         /* Add the ttl.  */
         /* Check the resource record owner.  */
         if (rr -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_PEER)
@@ -9425,11 +9451,11 @@ UINT        rr_name_length;
             }
         }
         index = (USHORT)(index + 4);
-
+    
         /* Compare the RDATA. */
         switch (rr -> nx_mdns_rr_type)
         {
-
+            
             case NX_MDNS_RR_TYPE_A:
             {
 
@@ -9485,11 +9511,11 @@ UINT        rr_name_length;
                 rdata_length_index = index;
                 index = (USHORT)(index + 2);
 
-                /* Add the prority.  */
+                /* Add the prority.  */                    
                 _nx_mdns_short_to_network_convert(data_ptr + index, rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_priority);
                 index = (USHORT)(index + 2);
 
-                /* Add the weights.  */
+                /* Add the weights.  */                    
                 _nx_mdns_short_to_network_convert(data_ptr + index, rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_weights);
                 index = (USHORT)(index + 2);
 
@@ -9505,14 +9531,14 @@ UINT        rr_name_length;
                 _nx_mdns_short_to_network_convert(data_ptr + rdata_length_index, (USHORT)(size + 6));
 
                 break;
-            }
+            } 
             case NX_MDNS_RR_TYPE_TXT:
             {
 
                 /* Record the rdata length index then skip the rdata length.  */
                 rdata_length_index = index;
                 index = (USHORT)(index + 2);
-
+                
                 if (rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_txt.nx_mdns_rr_txt_data)
                 {
 
@@ -9574,7 +9600,7 @@ UINT        rr_name_length;
                 rdata_length_index = index;
                 index = (USHORT)(index + 2);
 
-                /* Add the preference.  */
+                /* Add the preference.  */                    
                 _nx_mdns_short_to_network_convert(data_ptr + index, rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_mx.nx_mdns_rr_mx_preference);
                 index = (USHORT)(index + 2);
 
@@ -9600,12 +9626,12 @@ UINT        rr_name_length;
                 /* Encode and add the next domain name.  */
                 size = (USHORT)_nx_mdns_name_string_encode(data_ptr + index, rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_next_domain);
                 index = (USHORT)(index + size);
-
-                /* Add the window block.  */
+                                         
+                /* Add the window block.  */ 
                 *(data_ptr + index) = rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_window_block;
                 index++;
-
-                /* Add the bitmap length.  */
+                
+                /* Add the bitmap length.  */   
                 *(data_ptr + index) = rr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap_length;
                 index++;
 
@@ -9620,55 +9646,55 @@ UINT        rr_name_length;
             }
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
         }
-    }
+    }        
 
     /* Update the append pointer and packet length.  */
     packet_ptr -> nx_packet_append_ptr += index;
-    packet_ptr -> nx_packet_length += index;
+    packet_ptr -> nx_packet_length += index;    
 
-    return(NX_MDNS_SUCCESS);
+    return(NX_MDNS_SUCCESS);    
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_set                              PORTABLE C      */
-/*                                                           6.1.4        */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_set                              PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function sets the resource record info from packet.            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance.     */
-/*    packet_ptr                            Pointer to the packet.        */
-/*    data_ptr                              Pointer to the data.          */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance.     */ 
+/*    packet_ptr                            Pointer to the packet.        */ 
+/*    data_ptr                              Pointer to the data.          */  
 /*    rr_ptr                                Pointer to the record         */
-/*    op                                    Operation:                    */
-/*                                            set question or set answer. */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_name_string_decode           Decode the name string        */
-/*    _nx_mdns_cache_add_string             Add the name string           */
+/*    op                                    Operation:                    */ 
+/*                                            set question or set answer. */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */  
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_string_decode           Decode the name string        */ 
+/*    _nx_mdns_cache_add_string             Add the name string           */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9680,6 +9706,9 @@ UINT        rr_name_length;
 /*  02-02-2021     Yuxin Zhou               Modified comment(s), improved */
 /*                                            packet length verification, */
 /*                                            resulting in version 6.1.4  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), improved */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_packet_rr_set(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UCHAR *data_ptr, NX_MDNS_RR *rr_ptr, UINT op, UINT interface_index)
@@ -9718,10 +9747,10 @@ UINT            temp_string_length;
     }
 
     /* Set the interface.  */
-    rr_ptr -> nx_mdns_rr_interface_index = interface_index;
+    rr_ptr -> nx_mdns_rr_interface_index = (UCHAR)interface_index;
 
     /* Process the name string.  */
-    if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr,
+    if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr, 
                                     (UINT)(data_ptr - packet_ptr -> nx_packet_prepend_ptr),
                                     packet_ptr -> nx_packet_length,
                                     temp_string_buffer, NX_MDNS_NAME_MAX))
@@ -9788,47 +9817,47 @@ UINT            temp_string_length;
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_process                          PORTABLE C      */
-/*                                                           6.1.4        */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_process                          PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function processes the resource record of packet, and add the  */
-/*    record into peer cache.                                             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance.     */
-/*    packet_ptr                            Pointer to the packet.        */
-/*    data_ptr                              Pointer to the data.          */
+/*    record into peer cache.                                             */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance.     */ 
+/*    packet_ptr                            Pointer to the packet.        */ 
+/*    data_ptr                              Pointer to the data.          */ 
 /*    insert_ptr                            Pointer to the insert record  */
-/*    op                                    Operation: add answer, set    */
-/*                                            question or set answer.     */
-/*    cache_ptr                             The record buffer.            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_name_string_decode           Decode the name string        */
-/*    _nx_mdns_cache_add_string             Add the name string           */
+/*    op                                    Operation: add answer, set    */ 
+/*                                            question or set answer.     */ 
+/*    cache_ptr                             The record buffer.            */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */  
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_string_decode           Decode the name string        */ 
+/*    _nx_mdns_cache_add_string             Add the name string           */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -9841,6 +9870,10 @@ UINT            temp_string_length;
 /*  02-02-2021     Yuxin Zhou               Modified comment(s), improved */
 /*                                            packet length verification, */
 /*                                            resulting in version 6.1.4  */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            fixed the issue of timer,   */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_packet_rr_process(NX_MDNS *mdns_ptr, NX_PACKET *packet_ptr, UCHAR *data_ptr, UINT interface_index)
@@ -9869,7 +9902,7 @@ UINT            rr_name_length;
     memset(&rr_ptr, 0, sizeof(NX_MDNS_RR));
 
     /* Process the name string.  */
-    if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr,
+    if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr, 
                                     (UINT)(data_ptr - packet_ptr -> nx_packet_prepend_ptr),
                                     packet_ptr -> nx_packet_length,
                                     temp_string_buffer, NX_MDNS_NAME_MAX))
@@ -9889,7 +9922,7 @@ UINT            rr_name_length;
         }
     }
     else
-    {
+    {        
         return(NX_MDNS_ERROR);
     }
 
@@ -9908,7 +9941,7 @@ UINT            rr_name_length;
 
     /* Set the resource record class.  */
     rr_ptr.nx_mdns_rr_class = record_class & NX_MDNS_TOP_BIT_MASK;
-
+    
     /* Remote RR, set the RR owner flag.*/
     rr_ptr.nx_mdns_rr_word |= NX_MDNS_RR_FLAG_PEER;
 
@@ -9919,7 +9952,7 @@ UINT            rr_name_length;
     }
 
     /* Set the interface index.  */
-    rr_ptr.nx_mdns_rr_interface_index = interface_index;
+    rr_ptr.nx_mdns_rr_interface_index = (UCHAR)interface_index;
 
     /* Set the rdata information for answer record.  */
     status = _nx_mdns_packet_rr_data_set(mdns_ptr, packet_ptr, data_ptr, &rr_ptr, NX_MDNS_RR_OP_PEER_ADD_ANSWER);
@@ -9998,7 +10031,7 @@ UINT            rr_name_length;
 
         /* Update the timer count. The querier should not include records in the Known-Answer list whose remaining TTL is less than half of their original TTL.  */
         insert_ptr -> nx_mdns_rr_timer_count = insert_ptr -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * 50 / 100;
-
+                    
         /* Record the remaining ticks of resource record. */
         if (insert_ptr -> nx_mdns_rr_ttl >= NX_MDNS_RR_MAX_TTL)
         {
@@ -10060,14 +10093,14 @@ UINT            rr_name_length;
             else
             {
 
-                /* There is no need for the querier to continue issuing a stream of queries when a mDNS response
-                    is received containing a unique answer.  mDNS querier should send the next query at 80%-82% of the
+                /* There is no need for the querier to continue issuing a stream of queries when a mDNS response 
+                    is received containing a unique answer.  mDNS querier should send the next query at 80%-82% of the 
                     record's TTL. RFC6762, Section5.2,Page11.  */
                 if ((insert_ptr -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_UNIQUE) && (insert_ptr -> nx_mdns_rr_ttl))
                 {
 
                     /* Set the timer count. */
-                    p -> nx_mdns_rr_timer_count = insert_ptr -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(80 + (NX_RAND() % 3)) / 100;
+                    p -> nx_mdns_rr_timer_count = insert_ptr -> nx_mdns_rr_ttl * NX_IP_PERIODIC_RATE * (ULONG)(80 + (((ULONG)NX_RAND()) % 3)) / 100;
 
                     /* Set the mDNS timer.  */
                     _nx_mdns_timer_set(mdns_ptr, p, p -> nx_mdns_rr_timer_count);
@@ -10105,48 +10138,48 @@ UINT            rr_name_length;
 #endif /* NX_MDNS_DISABLE_CLIENT  */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_data_set                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_data_set                         PORTABLE C      */ 
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function processes the packet, and sets the data of            */
-/*    resource record.                                                    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance.     */
-/*    packet_ptr                            Pointer to the packet.        */
-/*    data_ptr                              Pointer to the data.          */
+/*    resource record.                                                    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance.     */ 
+/*    packet_ptr                            Pointer to the packet.        */ 
+/*    data_ptr                              Pointer to the data.          */ 
 /*    rr_ptr                                Pointer to the record         */
-/*    op                                    Operation:                    */
-/*                                            set answer in local cache.  */
-/*                                            or add answer in peer cache.*/
-/*    cache_ptr                             The record buffer.            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_name_string_decode           Decode the name string        */
-/*    _nx_mdns_cache_add_string             Add the name string           */
+/*    op                                    Operation:                    */ 
+/*                                            set answer in local cache.  */ 
+/*                                            or add answer in peer cache.*/ 
+/*    cache_ptr                             The record buffer.            */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */  
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_string_decode           Decode the name string        */ 
+/*    _nx_mdns_cache_add_string             Add the name string           */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10314,7 +10347,7 @@ UINT            temp_string_length;
             continue_process = NX_TRUE;
             break;
         }
-        case NX_MDNS_RR_TYPE_PTR:
+        case NX_MDNS_RR_TYPE_PTR: 
 #ifdef NX_MDNS_ENABLE_EXTENDED_RR_TYPES
         case NX_MDNS_RR_TYPE_CNAME:
         case NX_MDNS_RR_TYPE_NS:
@@ -10357,7 +10390,7 @@ UINT            temp_string_length;
     {
 
         /* Process the target/domain name string.  */
-        if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr,
+        if (_nx_mdns_name_string_decode(packet_ptr -> nx_packet_prepend_ptr, 
                                        (UINT)(data_ptr - packet_ptr -> nx_packet_prepend_ptr),
                                         packet_ptr -> nx_packet_length,
                                        temp_string_buffer, NX_MDNS_NAME_MAX))
@@ -10392,38 +10425,38 @@ UINT            temp_string_length;
 
 
 #ifdef NX_MDNS_ENABLE_ADDRESS_CHECK
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_packet_address_check                       PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_address_check                       PORTABLE C      */ 
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function checks the IP address and port of received packet.    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    packet_ptr                            Pointer to mDNS packet        */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    packet_ptr                            Pointer to mDNS packet        */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
 /*    none                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_process               Process mDNS packet           */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10543,9 +10576,9 @@ NX_IPV6_HEADER     *ipv6_header;
 
             /* Local link check, Multicast Address or (I & M) == (P & M).  */
             if ((des_address.nxd_ip_address.v4 != NX_MDNS_IPV4_MULTICAST_ADDRESS) &&
-                (packet_ptr -> nx_packet_ip_interface -> nx_interface_ip_address & packet_ptr ->nx_packet_ip_interface -> nx_interface_ip_network_mask) !=
+                (packet_ptr -> nx_packet_ip_interface -> nx_interface_ip_address & packet_ptr ->nx_packet_ip_interface -> nx_interface_ip_network_mask) != 
                 (src_address.nxd_ip_address.v4 & packet_ptr -> nx_packet_ip_interface -> nx_interface_ip_network_mask))
-            {
+            {            
                 return (NX_MDNS_NOT_LOCAL_LINK);
             }
         }
@@ -10562,7 +10595,7 @@ NX_IPV6_HEADER     *ipv6_header;
                 (des_address.nxd_ip_address.v6[1] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[1]) ||
                 (des_address.nxd_ip_address.v6[2] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[2]) ||
                 (des_address.nxd_ip_address.v6[3] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[3]))
-            {
+            {                
                 return (NX_MDNS_DEST_ADDRESS_ERROR);
             }
         }
@@ -10596,7 +10629,7 @@ NX_IPV6_HEADER     *ipv6_header;
                 (des_address.nxd_ip_address.v6[1] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[1]) ||
                 (des_address.nxd_ip_address.v6[2] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[2]) ||
                 (des_address.nxd_ip_address.v6[3] != NX_MDNS_IPV6_MULTICAST_ADDRESS.nxd_ip_address.v6[3]))
-            {
+            {                
                 return (NX_MDNS_DEST_ADDRESS_ERROR);
             }
         }
@@ -10615,41 +10648,41 @@ NX_IPV6_HEADER     *ipv6_header;
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_address_change_process                     PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_address_change_process                     PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function process the address change event.                     */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    nx_packet_copy                        Copy the mDNS packet          */
-/*    nx_packet_release                     Release the mDNS packet       */
+/*    nx_packet_copy                        Copy the mDNS packet          */ 
+/*    nx_packet_release                     Release the mDNS packet       */ 
 /*    nx_udp_socket_send                    Send the udp packet           */
 /*    nxd_udp_socket_send                   Send the udp packet           */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_thread_entry                 Processing thread for mDNS    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10699,7 +10732,7 @@ UINT        i;
                     (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_AAAA))
                 {
 
-                    /* Send the "goodbye " announcement with RR TTL zero. RFC6762, Section8.4, Page31.  */
+                    /* Send the "goodbye " announcement with RR TTL zero. RFC6762, Section8.4, Page31.  */     
                     p -> nx_mdns_rr_state = NX_MDNS_RR_STATE_GOODBYE;
 
                     /* Clear the retransmit count.  */
@@ -10707,7 +10740,7 @@ UINT        i;
 
                     /* Set the timer count. 250ms.  */
                     p -> nx_mdns_rr_timer_count = NX_MDNS_GOODBYE_TIMER_COUNT;
-
+                
                     /* Set the delete flag.  */
                     p -> nx_mdns_rr_word = (p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_DELETE);
 
@@ -10728,42 +10761,42 @@ UINT        i;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_conflict_process                           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_conflict_process                           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function process the mDNS conflict. RFC6762, Section9, Page31  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
 /*    record_rr                             The resource record           */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_add_string             Add the string                */
-/*    _nx_mdns_cache_delete_string          Delete the string             */
+/*    _nx_mdns_cache_add_string             Add the string                */ 
+/*    _nx_mdns_cache_delete_string          Delete the string             */ 
 /*    _nx_mdns_srv_name_resolve             Reslove the service name      */
 /*    nx_mdns_rr_change_notify              Resource record notify        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -10775,7 +10808,7 @@ UINT        i;
 /**************************************************************************/
 static UINT _nx_mdns_conflict_process(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_rr)
 {
-
+    
 UINT        status;
 UCHAR       *old_name;
 UCHAR       *name;
@@ -10783,7 +10816,7 @@ UCHAR       *type = NX_NULL;
 UCHAR       *domain = NX_NULL;
 UINT        i;
 ULONG       *head;
-NX_MDNS_RR  *p;
+NX_MDNS_RR  *p; 
 UCHAR       is_host_type;
 UINT        temp_string_length;
 UINT        rr_name_length;
@@ -10809,7 +10842,7 @@ UINT        rr_name_length;
         /* Store the service name.  */
         memcpy((CHAR *)&target_string_buffer[0], (const char*)(record_rr -> nx_mdns_rr_name), rr_name_length + 1); /* Use case of memcpy is verified. */
 
-        /* Get Name, Type, Domain.  */
+        /* Get Name, Type, Domain.  */                    
         _nx_mdns_service_name_resolve(&target_string_buffer[0], &name, &type, &domain);
     }
     else if((record_rr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_A) ||
@@ -10822,7 +10855,7 @@ UINT        rr_name_length;
     {
 
         /* This is an unsupported or unknown type. */
-        return(NX_MDNS_UNSUPPORTED_TYPE);
+        return(NX_MDNS_UNSUPPORTED_TYPE); 
     }
 
     /* Check the conflict count.  */
@@ -10968,42 +11001,42 @@ UINT        rr_name_length;
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_change_notify_process              PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_change_notify_process              PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function processes the mDNS service change operation, when the */
-/*    service information change, notify the application.                 */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    record_rr                             The resource record           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function processes the mDNS service change operation, when the */ 
+/*    service information change, notify the application.                 */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    record_rr                             The resource record           */ 
 /*    is_present                            The service type              */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11017,8 +11050,8 @@ static VOID _nx_mdns_service_change_notify_process(NX_MDNS *mdns_ptr, NX_MDNS_RR
 
 UINT            notify_status = 0;
 ULONG           *head;
-NX_MDNS_RR      *p;
-NX_MDNS_SERVICE temp_service;
+NX_MDNS_RR      *p; 
+NX_MDNS_SERVICE temp_service; 
 UINT            rr_name_length;
 
 
@@ -11041,7 +11074,7 @@ UINT            rr_name_length;
             {
 
                 /* Check whether the resource record is valid. */
-                if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) ||
+                if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) || 
                     (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY))
                     continue;
 
@@ -11098,12 +11131,12 @@ UINT            rr_name_length;
                 notify_status = NX_MDNS_PEER_SERVICE_DELETED;
             }
             break;
-        }
+        }        
         default:
         {
 
             /* This is an unsupported or unknown type. */
-            return;
+            return; 
         }
     }
 
@@ -11130,48 +11163,48 @@ UINT            rr_name_length;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_addition_info_get                  PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_addition_info_get                  PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds the mDNS resource record into remote buffer,     */
-/*    mDNS thread send the query message using continuous type.           */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The service instance          */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS resource record into remote buffer,     */ 
+/*    mDNS thread send the query message using continuous type.           */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The service instance          */ 
 /*    type                                  The service type              */
 /*    domain                                The domain name               */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*    _nx_mdns_query_check                  Check the query RR            */
-/*    _nx_mdns_cache_add_string             Add the string into buffer    */
-/*    _nx_mdns_cache_delete_string          Delete the string from buffer */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*    _nx_mdns_query_check                  Check the query RR            */ 
+/*    _nx_mdns_cache_add_string             Add the string into buffer    */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from buffer */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                            into buffer                 */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                            into buffer                 */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11182,9 +11215,9 @@ UINT            rr_name_length;
 /**************************************************************************/
 static UINT _nx_mdns_service_addition_info_get(NX_MDNS *mdns_ptr, UCHAR *srv_name, NX_MDNS_SERVICE *service, UINT interface_index)
 {
-
+    
 UINT        index = 0;
-ULONG       current_time;
+ULONG       current_time; 
 ULONG       *head, *tail;
 UCHAR       i;
 NX_MDNS_RR  *p;
@@ -11201,7 +11234,7 @@ UINT        temp_length;
 
     /* Get the current time.  */
     current_time = tx_time_get();
-
+                                 
     for(i = 0; i < 2; i++)
     {
 
@@ -11222,7 +11255,7 @@ UINT        temp_length;
             continue;
 #endif /* NX_MDNS_DISABLE_CLIENT  */
         }
-
+          
         if(head == NX_NULL)
             continue;
 
@@ -11234,7 +11267,7 @@ UINT        temp_length;
         {
 
             /* Check whether the resource record is valid. */
-            if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) ||
+            if ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID) || 
                 (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY))
                 continue;
 
@@ -11284,16 +11317,16 @@ UINT        temp_length;
 
                         /* Set the IPv4 address.  */
                         service -> service_ipv4 = p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_a.nx_mdns_rr_a_address;
-                    }
+                    } 
 
                     /* Find the "AAAA" records.  */
                     if ((p1 -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_AAAA) &&
                         (p1 -> nx_mdns_rr_name == p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_target))
-                    {
+                    {                    
                         if (index < NX_MDNS_IPV6_ADDRESS_COUNT)
                         {
 
-                            /* Set the IPv6 address.  */
+                            /* Set the IPv6 address.  */                        
                             service -> service_ipv6[index][0] = p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_aaaa.nx_mdns_rr_aaaa_address[0];
                             service -> service_ipv6[index][1] = p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_aaaa.nx_mdns_rr_aaaa_address[1];
                             service -> service_ipv6[index][2] = p1 -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_aaaa.nx_mdns_rr_aaaa_address[2];
@@ -11302,7 +11335,7 @@ UINT        temp_length;
                         }
                     }
                 }
-            }
+            } 
 
             /* Check the type and name. */
             if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_TXT) &&
@@ -11340,45 +11373,45 @@ UINT        temp_length;
 #endif /* NX_MDNS_DISABLE_CLIENT */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_initialize                         PORTABLE C       */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_initialize                         PORTABLE C       */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function initializes the mDNS remote buffer and local buffer.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
 /*                                                                        */
-/*    This function initializes the mDNS remote buffer and local buffer.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    local_cache_ptr                       Pointer to local cache        */
-/*    local_cache_size                      The size of local cache       */
-/*    peer_cache_ptr                        Pointer to peer cache         */
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    local_cache_ptr                       Pointer to local cache        */ 
+/*    local_cache_size                      The size of local cache       */ 
+/*    peer_cache_ptr                        Pointer to peer cache         */ 
 /*    peer_cache_size                       The size of peer cache        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
 /*                                                                        */
-/*  OUTPUT                                                                */
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_create                       Initialize the mDNS structure */
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_create                       Initialize the mDNS structure */ 
 /*    _nx_mdns_disable                      Disable the mDNS function     */
 /*    _nx_mdns_peer_cache_clear             Clear the peer cache          */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11386,10 +11419,10 @@ UINT        temp_length;
 /*                                            resulting in version 6.1    */
 /*                                                                        */
 /**************************************************************************/
-UINT _nx_mdns_cache_initialize(NX_MDNS *mdns_ptr, VOID *local_cache_ptr, UINT local_cache_size,
+UINT _nx_mdns_cache_initialize(NX_MDNS *mdns_ptr, VOID *local_cache_ptr, UINT local_cache_size, 
                                VOID *peer_cache_ptr, UINT peer_cache_size)
 {
-
+        
 ULONG *head;
 ULONG *tail;
 
@@ -11415,7 +11448,7 @@ ULONG *tail;
         mdns_ptr -> nx_mdns_local_service_cache_size = local_cache_size;
 
         /* Clear the count.  */
-        mdns_ptr -> nx_mdns_local_rr_count = 0;
+        mdns_ptr -> nx_mdns_local_rr_count = 0;    
         mdns_ptr -> nx_mdns_local_string_count = 0;
         mdns_ptr -> nx_mdns_local_string_bytes = 0;
     }
@@ -11423,7 +11456,7 @@ ULONG *tail;
     NX_PARAMETER_NOT_USED(local_cache_ptr);
     NX_PARAMETER_NOT_USED(local_cache_size);
 #endif /* NX_MDNS_DISABLE_SERVER */
-
+    
 #ifndef NX_MDNS_DISABLE_CLIENT
     /* Check the cache.  */
     if (peer_cache_ptr)
@@ -11442,10 +11475,10 @@ ULONG *tail;
 
         /* Record the info.  */
         mdns_ptr -> nx_mdns_peer_service_cache = (UCHAR*)peer_cache_ptr;
-        mdns_ptr -> nx_mdns_peer_service_cache_size = peer_cache_size;
+        mdns_ptr -> nx_mdns_peer_service_cache_size = peer_cache_size; 
 
         /* Clear the count.  */
-        mdns_ptr -> nx_mdns_peer_rr_count = 0;
+        mdns_ptr -> nx_mdns_peer_rr_count = 0;    
         mdns_ptr -> nx_mdns_peer_string_count = 0;
         mdns_ptr -> nx_mdns_peer_string_bytes = 0;
     }
@@ -11458,39 +11491,39 @@ ULONG *tail;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_add_resource_record                  PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_add_resource_record                  PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds the mDNS  resource record into record buffer.    */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    record_ptr                            Pointer to resource record    */ 
+/*    insert_rr                             Pointer to insert resource    */ 
+/*                                            record                      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    This function adds the mDNS  resource record into record buffer.    */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_type                            Cache type: local or peer     */
-/*    record_ptr                            Pointer to resource record    */
-/*    insert_rr                             Pointer to insert resource    */
-/*                                            record                      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_find_resource_record   Find the resource record      */
-/*    _nx_mdns_cache_delete_string          Delete the string from buffer */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*    _nx_mdns_cache_find_resource_record   Find the resource record      */ 
+/*    _nx_mdns_cache_delete_string          Delete the string from buffer */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_rr_a_aaaa_add                Add A/AAAA resource record    */
 /*    _nx_mdns_rr_ptr_add                   Add PTR resource record       */
 /*    _nx_mdns_rr_srv_add                   Add SRV resource record       */
@@ -11498,9 +11531,9 @@ ULONG *tail;
 /*    _nx_mdns_query                        Send query                    */
 /*    _nx_mdns_cache_delete_rr_string       Delete the rr string          */
 /*    _nx_mdns_packet_rr_process            Process resource record       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11549,7 +11582,7 @@ ULONG       min_elapsed_time;
 
         /* Copy other informations of record_ptr into insert_rr resource record.  */
         memcpy(rr, record_ptr, sizeof(NX_MDNS_RR)); /* Use case of memcpy is verified. */
-
+        
         /* Special process for _services._dns-sd._udp.local which pointer to same service type.  */
         if ((rr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_PTR) &&
             (!_nx_mdns_name_match(rr -> nx_mdns_rr_name, (UCHAR *)_nx_mdns_dns_sd, rr_name_length)))
@@ -11604,7 +11637,7 @@ ULONG       min_elapsed_time;
         if(p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_INVALID)
         {
             rr = p;
-            break;
+            break; 
         }
     }
 
@@ -11612,15 +11645,15 @@ ULONG       min_elapsed_time;
     {
 
         /* Check whether the cache is full. */
-        if((head + (sizeof(NX_MDNS_RR) >> 2)) > tail)
+        if((head + (sizeof(NX_MDNS_RR) >> 2)) > tail) 
         {
             if (cache_type == NX_MDNS_CACHE_TYPE_LOCAL)
             {
-                return(NX_MDNS_CACHE_ERROR);
+                return(NX_MDNS_CACHE_ERROR); 
             }
             else
             {
-
+                
 #ifndef NX_MDNS_DISABLE_CLIENT
                 /* Find an aging resource reocrd and repalce it.  */
                 for(p = (NX_MDNS_RR*)((ULONG*)cache_ptr + 1); p < (NX_MDNS_RR*)head; p++)
@@ -11642,7 +11675,7 @@ ULONG       min_elapsed_time;
 
                 if (rr)
                 {
-
+                    
                     /* Delete this record.  */
                     _nx_mdns_cache_delete_resource_record(mdns_ptr, cache_type, rr);
 
@@ -11706,44 +11739,44 @@ ULONG       min_elapsed_time;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_delete_resource_record               PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_delete_resource_record               PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS resource record from record buffer.  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance.     */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    record_ptr                            Pointer to resource record.   */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    This function deletes the mDNS resource record from record buffer.  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance.     */
-/*    cache_type                            Cache type: local or peer     */
-/*    record_ptr                            Pointer to resource record.   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_delete_string          Delete the string from buffer */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*    _nx_mdns_cache_delete_string          Delete the string from buffer */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_rr_delete                    Delete the resource record    */
 /*    _nx_mdns_query                        Send the one-shot query       */
 /*    _nx_mdns_timer_event_process          Process the timer event       */
 /*    _nx_mdns_packet_process               Process mDNS packet           */
 /*    _nx_mdns_cache_delete_rr_string       Delete the rr string          */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11760,7 +11793,7 @@ ULONG       *head;
 
     /* Delete the resource record strings. */
     _nx_mdns_cache_delete_rr_string(mdns_ptr, cache_type, record_ptr);
-
+    
     /* Zero out the record. */
     memset(record_ptr, 0, sizeof(NX_MDNS_RR));
 
@@ -11788,7 +11821,7 @@ ULONG       *head;
     {
         return(NX_MDNS_CACHE_ERROR);
     }
-
+    
     /* Get head. */
     head = (ULONG*)cache_ptr;
     head = (ULONG*)(*head);
@@ -11805,47 +11838,47 @@ ULONG       *head;
         *((ULONG*)cache_ptr) = (ULONG)(record_ptr + 1);
     }
 
-    return(NX_MDNS_SUCCESS);
+    return(NX_MDNS_SUCCESS);    
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_find_resource_record                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_find_resource_record                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function finds the mDNS resource record in record buffer.      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance.     */
-/*    cache_type                            Cache type: local or peer     */
-/*    record_ptr                            Resource record.              */
-/*    match_type                            Match type.                   */
-/*    search_rr                             The search resource record.   */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function finds the mDNS resource record in record buffer.      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance.     */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    record_ptr                            Resource record.              */ 
+/*    match_type                            Match type.                   */ 
+/*    search_rr                             The search resource record.   */  
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */  
 /*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -11890,7 +11923,7 @@ UINT        same_rdata;
 
         /* Check whether the same record it is. RFC6762, Section6, Page13. */
         /* The rules: rrname must match the question name.
-                      rrtype must match the question qtype unless the qtype is "ANY" or the rrtype is "CNAME".
+                      rrtype must match the question qtype unless the qtype is "ANY" or the rrtype is "CNAME". 
                       rrclass must match the question qclass unless the qclass is "ANY". */
         if (p -> nx_mdns_rr_name != record_ptr -> nx_mdns_rr_name)
             continue;
@@ -11903,7 +11936,7 @@ UINT        same_rdata;
                 (p -> nx_mdns_rr_type != NX_MDNS_RR_TYPE_CNAME))
                 continue;
         }
-
+        
         /* Check the RR class, Ignore the top bit.  */
         if ((p -> nx_mdns_rr_class != (record_ptr -> nx_mdns_rr_class & NX_MDNS_TOP_BIT_MASK)) &&
             ((record_ptr -> nx_mdns_rr_class & NX_MDNS_TOP_BIT_MASK) != NX_MDNS_RR_CLASS_ALL))
@@ -11984,7 +12017,7 @@ UINT        same_rdata;
                         same_rdata = NX_TRUE;
                     }
                     break;
-                }
+                }                            
 #endif /* NX_MDNS_ENABLE_EXTENDED_RR_TYPES  */
 
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
@@ -11994,9 +12027,9 @@ UINT        same_rdata;
                         (p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_window_block == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_window_block) &&
                         (p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap_length == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap_length) &&
                         (!memcmp(&(p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[0]),
-                                 &(record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[0]),
-                                 record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap_length)))
-                    {
+                                 &(record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap[0]), 
+                                 record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_nsec.nx_mdns_rr_nsec_bitmap_length))) 
+                    {     
                         same_rdata = NX_TRUE;
                     }
                     break;
@@ -12006,7 +12039,7 @@ UINT        same_rdata;
                 {
 
                     /* This is an unsupported or unknown type. */
-                    return(NX_MDNS_UNSUPPORTED_TYPE);
+                    return(NX_MDNS_UNSUPPORTED_TYPE); 
                 }
             }
 
@@ -12025,45 +12058,45 @@ UINT        same_rdata;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_add_string                           PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_add_string                           PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function adds or finds the mDNS string in the record buffer.   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_type                            Cache type: local or peer     */
-/*    memory_ptr                            Pointer to the string         */
-/*    memory_size                           The size of string.           */
-/*    insert_rr                             Pointer to insert string.     */
-/*    find_string                           If set, just find the existed */
-/*                                            string, otherwise, insert   */
-/*                                            this string if it does not  */
-/*                                            exist.                      */
-/*    add_name                              If set, use name match        */
-/*                                            to check the string,        */
-/*                                            otherwise, use memcmp.      */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function adds or finds the mDNS string in the record buffer.   */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    memory_ptr                            Pointer to the string         */ 
+/*    memory_size                           The size of string.           */ 
+/*    insert_rr                             Pointer to insert string.     */ 
+/*    find_string                           If set, just find the existed */ 
+/*                                            string, otherwise, insert   */ 
+/*                                            this string if it does not  */ 
+/*                                            exist.                      */ 
+/*    add_name                              If set, use name match        */ 
+/*                                            to check the string,        */ 
+/*                                            otherwise, use memcmp.      */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
 /*    none                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_rr_a_aaaa_add                Add A/AAAA resource record    */
 /*    _nx_mdns_rr_ptr_add                   Add PTR resource record       */
 /*    _nx_mdns_rr_srv_add                   Add SRV resource record       */
@@ -12071,9 +12104,9 @@ UINT        same_rdata;
 /*    _nx_mdns_query                        Send query                    */
 /*    _nx_mdns_conflict_process             Process the conflict          */
 /*    _nx_mdns_packet_rr_process            Process resource record       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12110,7 +12143,7 @@ UCHAR   *p, *available, *start;
 
     /* Check cache pointer and cache size.  */
     if ((cache_ptr == NX_NULL) || (cache_size == 0))
-    {
+    {            
         return(NX_MDNS_ERROR);
     }
 
@@ -12122,13 +12155,13 @@ UCHAR   *p, *available, *start;
     head = (ULONG*)(*head);
 
     /* Calculate the amount of memory needed to store this string, including CNT and LEN fields. */
-
+    
     /* Make the length 4 bytes align. */
     memory_len = memory_size;
-
+    
     /* Add the length of CNT and LEN fields.  */
     memory_len = ((memory_len & 0xFFFFFFFC) + 8) & 0xFFFFFFFF;
-
+    
     available = (UCHAR*)tail;
     while(p > (UCHAR*)tail)
     {
@@ -12181,7 +12214,7 @@ UCHAR   *p, *available, *start;
     if(available == (UCHAR*)tail)
     {
 
-        /* Make sure the service cache still has room to add this string
+        /* Make sure the service cache still has room to add this string 
            (without overwriting the RR area.) */
         if(((UCHAR*)tail - memory_len) < (UCHAR*)head )
         {
@@ -12209,13 +12242,13 @@ UCHAR   *p, *available, *start;
                 else
                 {
                     (mdns_ptr -> nx_mdns_cache_full_notify)(mdns_ptr, NX_MDNS_CACHE_STATE_FULL, cache_type);
-                }
+                }                
             }
 
             /* The buffer is full. */
             return(NX_MDNS_CACHE_ERROR);
         }
-
+        
         /* Update TAIL. */
         *((ULONG*)cache_ptr + (cache_size >> 2) - 1) = (ULONG)(available - memory_len);
 
@@ -12239,8 +12272,8 @@ UCHAR   *p, *available, *start;
 
     /* Set end character 0. */
     *(available - memory_len + memory_size) = 0;
-
-
+    
+    
     /* Check the type.  */
     if (cache_type == NX_MDNS_CACHE_TYPE_LOCAL)
     {
@@ -12251,7 +12284,7 @@ UCHAR   *p, *available, *start;
     }
     else
     {
-
+        
         /* Increase the count and bytes.  */
         mdns_ptr -> nx_mdns_peer_string_count ++;
         mdns_ptr -> nx_mdns_peer_string_bytes += memory_len;
@@ -12264,37 +12297,37 @@ UCHAR   *p, *available, *start;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_delete_string                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_delete_string                        PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS string from the record buffer.       */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    string_ptr                            Pointer to the string         */ 
+/*    string_len                            The length of string          */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    This function deletes the mDNS string from the record buffer.       */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_type                            Cache type: local or peer     */
-/*    string_ptr                            Pointer to the string         */
-/*    string_len                            The length of string          */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_rr_a_aaaa_add                Add A/AAAA resource record    */
 /*    _nx_mdns_rr_ptr_add                   Add PTR resource record       */
 /*    _nx_mdns_rr_srv_add                   Add SRV resource record       */
@@ -12304,9 +12337,9 @@ UCHAR   *p, *available, *start;
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
 /*    _nx_mdns_packet_rr_process            Process resource record       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12338,7 +12371,7 @@ USHORT  cnt;
 
     /* Check cache pointer and cache size.  */
     if ((cache_ptr == NX_NULL) || (cache_size == 0))
-    {
+    {            
         return(NX_MDNS_ERROR);
     }
 
@@ -12390,7 +12423,7 @@ USHORT  cnt;
     if(cnt == 0)
     {
         memset(string_ptr, 0, string_len - 2);
-
+        
         /* Check the type.  */
         if (cache_type == NX_MDNS_CACHE_TYPE_LOCAL)
         {
@@ -12401,7 +12434,7 @@ USHORT  cnt;
         }
         else
         {
-
+            
             /* Increase the count and bytes.  */
             mdns_ptr -> nx_mdns_peer_string_count --;
             mdns_ptr -> nx_mdns_peer_string_bytes -= string_len;
@@ -12411,10 +12444,10 @@ USHORT  cnt;
         if(string_ptr == tail)
         {
             tail = end;
-
+        
             while((end < ((ULONG*)cache_ptr + (cache_size >> 2) - 1)))
             {
-
+                
                 /* Set the string pt and string length.  */
                 string_ptr = end;
 
@@ -12427,24 +12460,24 @@ USHORT  cnt;
                 /* Check the string length.  */
                 if(string_len == 0)
                 {
-
+                    
                     /* This slot is cleared. */
                     while(*((ULONG*)string_ptr) == 0)
                         string_ptr = (UCHAR*)string_ptr + 4;
-
+                    
                     end = (ULONG*)string_ptr + 1;
                     cnt = *((USHORT*)string_ptr);
                 }
                 else
                 {
-
+                    
                     /* Make the length 4 bytes align and add the length of CNT and LEN fields.  */
                     string_len = ((string_len & 0xFFFFFFFC) + 8) & 0xFFFFFFFF;
-
+                    
                     end = (ULONG*)((UCHAR*)string_ptr + string_len);
                     cnt = *((USHORT*)((UCHAR*)end - 4));
                 }
-
+                
                 /* Check whether this slot is never referenced. */
                 if(cnt == 0)
                     tail = end;
@@ -12459,41 +12492,41 @@ USHORT  cnt;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_cache_delete_rr_string                     PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_cache_delete_rr_string                     PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function deletes the mDNS string from the record buffer.       */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    cache_type                            Cache type: local or peer     */ 
+/*    string_ptr                            Pointer to the string         */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
 /*                                                                        */
-/*    This function deletes the mDNS string from the record buffer.       */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    cache_type                            Cache type: local or peer     */
-/*    string_ptr                            Pointer to the string         */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _nx_mdns_cache_delete_string          Delete the string from cache  */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*    _nx_mdns_cache_delete_string          Delete the string from cache  */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_cache_add_resource_record    Add the resource record       */
 /*    _nx_mdns_cache_delete_resource_record Delete the resource record    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12510,7 +12543,7 @@ VOID _nx_mdns_cache_delete_rr_string(NX_MDNS *mdns_ptr, UINT cache_type, NX_MDNS
     /* Check if need to release the rdata string.  */
     if (record_rr -> nx_mdns_rr_state != NX_MDNS_RR_STATE_QUERY)
     {
-
+        
         if (((record_rr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) ||
              (record_rr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_TXT) ||
              (record_rr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_PTR)
@@ -12536,39 +12569,39 @@ VOID _nx_mdns_cache_delete_rr_string(NX_MDNS *mdns_ptr, UINT cache_type, NX_MDNS
 
 
 #ifndef NX_MDNS_DISABLE_SERVER
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_additional_resource_record_find            PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_additional_resource_record_find            PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function find the mDNS additional resource record.             */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function find the mDNS additional resource record.             */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
 /*    record_ptr                            Pointer to record instance    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_response_send                Send response message         */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_response_send                Send response message         */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12578,7 +12611,7 @@ VOID _nx_mdns_cache_delete_rr_string(NX_MDNS *mdns_ptr, UINT cache_type, NX_MDNS
 /**************************************************************************/
 UINT _nx_mdns_additional_resource_record_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr)
 {
-
+    
 ULONG           *head;
 NX_MDNS_RR      *p;
 
@@ -12587,25 +12620,25 @@ NX_MDNS_RR      *p;
 
     /* Find the additional resource records according to the type.  */
     switch (record_ptr -> nx_mdns_rr_type )
-    {
-
+    {   
+        
         case NX_MDNS_RR_TYPE_A:
         case NX_MDNS_RR_TYPE_AAAA:
         {
-
+            
             /* Recommends AAAA records in the additional section when responding
                to rrtype "A" queries, and vice versa. RFC6762, Section19, Page51.  */
             _nx_mdns_additional_a_aaaa_find(mdns_ptr, record_ptr -> nx_mdns_rr_name, record_ptr -> nx_mdns_rr_interface_index);
 
             break;
-        }
+        }        
 
         case NX_MDNS_RR_TYPE_PTR:
         {
 
             /* Find the additional resource record.  */
             for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
-            {
+            {   
 
                 /* Check the interface.  */
                 if (p -> nx_mdns_rr_interface_index != record_ptr -> nx_mdns_rr_interface_index)
@@ -12617,7 +12650,7 @@ NX_MDNS_RR      *p;
 
                 /* The SRV records named in the PTR rdata */
                 if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV) &&
-                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name) &&
+                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name) && 
                     ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID) ||
                      (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING)) &&
                     (p -> nx_mdns_rr_send_flag == NX_MDNS_RR_SEND_FLAG_CLEAR) &&
@@ -12629,18 +12662,18 @@ NX_MDNS_RR      *p;
 
                     /* All address records (type "A" and "AAAA") named in the SRV rdata */
                     _nx_mdns_additional_a_aaaa_find(mdns_ptr, p -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_target, record_ptr -> nx_mdns_rr_interface_index);
-                }
+                } 
 
                 /* The TXT records named in the PTR rdata */
                 if (((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_TXT) ||
                      (p ->nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC)) &&
-                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name) &&
+                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_ptr.nx_mdns_rr_ptr_name) && 
                     ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID) ||
                      (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING)) &&
                     (p -> nx_mdns_rr_send_flag == NX_MDNS_RR_SEND_FLAG_CLEAR) &&
                     (!(p -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_ANSWER)))
                 {
-
+                    
                     /* Set the flag to add this resource records into additional records.  */
                     p -> nx_mdns_rr_word = p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_ADDITIONAL;
                 }
@@ -12648,11 +12681,11 @@ NX_MDNS_RR      *p;
 
             break;
         }
-
+            
         case NX_MDNS_RR_TYPE_SRV:
         case NX_MDNS_RR_TYPE_TXT:
         {
-
+                    
 #ifdef NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES
             /* Find the additional resource record.  */
             for (p = (NX_MDNS_RR*)((UCHAR*)mdns_ptr -> nx_mdns_local_service_cache + sizeof(ULONG)); (ULONG*)p < head; p++)
@@ -12664,7 +12697,7 @@ NX_MDNS_RR      *p;
 
                 /* The NSEC records named same as SRV/TXT name.  */
                 if ((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC) &&
-                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_name) &&
+                    (p -> nx_mdns_rr_name == record_ptr -> nx_mdns_rr_name) && 
                     ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID) ||
                      (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING)) &&
                     (p -> nx_mdns_rr_send_flag == NX_MDNS_RR_SEND_FLAG_CLEAR) &&
@@ -12673,10 +12706,10 @@ NX_MDNS_RR      *p;
 
                     /* Set the flag to add this resource records into additional records.  */
                     p -> nx_mdns_rr_word = p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_ADDITIONAL;
-                }
+                } 
             }
 #endif /* NX_MDNS_ENABLE_SERVER_NEGATIVE_RESPONSES  */
-
+                                                
             /* All address records (type "A" and "AAAA") named in the SRV rdata */
             if (record_ptr -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_SRV)
                 _nx_mdns_additional_a_aaaa_find(mdns_ptr, record_ptr -> nx_mdns_rr_rdata.nx_mdns_rr_rdata_srv.nx_mdns_rr_srv_target, record_ptr -> nx_mdns_rr_interface_index);
@@ -12688,40 +12721,40 @@ NX_MDNS_RR      *p;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_additional_a_aaaa_find                     PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_additional_a_aaaa_find                     PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function find the mDNS additional A/AAAA resource record.      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function find the mDNS additional A/AAAA resource record.      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
 /*    record_ptr                            Pointer to record instance    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_additional_resource_record_find                            */
-/*                                          Find additional record        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_additional_resource_record_find                            */ 
+/*                                          Find additional record        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12731,7 +12764,7 @@ NX_MDNS_RR      *p;
 /**************************************************************************/
 static VOID _nx_mdns_additional_a_aaaa_find(NX_MDNS *mdns_ptr, UCHAR *name, UINT interface_index)
 {
-
+    
 ULONG           *head;
 NX_MDNS_RR      *p;
 
@@ -12751,7 +12784,7 @@ NX_MDNS_RR      *p;
         if (((p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_A) ||
              (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_AAAA ||
              (p -> nx_mdns_rr_type == NX_MDNS_RR_TYPE_NSEC))) &&
-            (p -> nx_mdns_rr_name == name) &&
+            (p -> nx_mdns_rr_name == name) && 
             ((p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_VALID) ||
             (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_ANNOUNCING)) &&
             (p -> nx_mdns_rr_send_flag == NX_MDNS_RR_SEND_FLAG_CLEAR) &&
@@ -12760,47 +12793,47 @@ NX_MDNS_RR      *p;
 
             /* Set the flag to add this resource records into additional records.  */
             p -> nx_mdns_rr_word = p -> nx_mdns_rr_word | NX_MDNS_RR_FLAG_ADDITIONAL;
-        }
+        }             
     }
 }
 #endif /* NX_MDNS_DISABLE_SERVER */
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_known_answer_find                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_known_answer_find                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function finds the mDNS known answer.                          */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function finds the mDNS known answer.                          */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
 /*    mdns_ptr                              Pointer to mDNS instance      */
 /*    record_ptr                            Pointer to record instance    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_query_send                   Send query message            */
-/*    _nx_mdns_packet_process               Process mDNS packet           */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_query_send                   Send query message            */ 
+/*    _nx_mdns_packet_process               Process mDNS packet           */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -12810,7 +12843,7 @@ NX_MDNS_RR      *p;
 /**************************************************************************/
 static UINT _nx_mdns_known_answer_find(NX_MDNS *mdns_ptr, NX_MDNS_RR *record_ptr)
 {
-
+   
 UINT            status = NX_MDNS_NO_KNOWN_ANSWER;
 ULONG           *head, *tail;
 NX_MDNS_RR      *p;
@@ -12882,53 +12915,56 @@ UINT            cache_count = 1;
 
 
 #ifndef NX_MDNS_DISABLE_CLIENT
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_query_check                                PORTABLE C      */
-/*                                                           6.1          */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_query_check                                PORTABLE C      */ 
+/*                                                           6.1.11       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function checks whether mDNS querier already has one Unique    */
-/*    record in the local buffer/remote buffer or one same query in the   */
-/*    remote buffer.                                                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    name                                  The resource record name      */
-/*    type                                  The resource record type      */
-/*    interface_index                       The interface index           */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function checks whether mDNS querier already has one Unique    */ 
+/*    record in the local buffer/remote buffer or one same query in the   */ 
+/*    remote buffer.                                                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    name                                  The resource record name      */ 
+/*    type                                  The resource record type      */ 
+/*    interface_index                       The interface index           */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */   
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_query                        Send the query                */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
 /*  09-30-2020     Yuxin Zhou               Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  04-25-2022     Yuxin Zhou               Modified comment(s), and      */
+/*                                            corrected the random value, */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 static UINT _nx_mdns_query_check(NX_MDNS *mdns_ptr, UCHAR *name, USHORT type, UINT one_shot, NX_MDNS_RR **search_rr, UINT interface_index)
 {
-
+    
 ULONG       *head;
 NX_MDNS_RR  *p;
 UCHAR       i;
@@ -12966,12 +13002,12 @@ UINT        name_length;
                     continue;
 
                 if (!_nx_mdns_name_match(p -> nx_mdns_rr_name, name, name_length))
-                {
+                {    
                     if ((p -> nx_mdns_rr_type == type) && (p -> nx_mdns_rr_state == NX_MDNS_RR_STATE_QUERY))
                     {
 
                         /* Set the query.  */
-                        same_query = NX_TRUE;
+                        same_query = NX_TRUE; 
 
                         /* Record the RR potiner.  */
                         rr = p;
@@ -12979,7 +13015,7 @@ UINT        name_length;
 
                     /* Check the rr type.  */
                     if (p -> nx_mdns_rr_type  == NX_MDNS_RR_TYPE_SRV)
-                        srv_flag = NX_TRUE;
+                        srv_flag = NX_TRUE;       
                     if (p -> nx_mdns_rr_type  == NX_MDNS_RR_TYPE_TXT)
                         txt_flag = NX_TRUE;
 
@@ -12993,7 +13029,7 @@ UINT        name_length;
                         if (one_shot == NX_TRUE)
                             return(NX_MDNS_EXIST_SHARED_RR);
 
-                        if (p -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_UNIQUE)
+                        if (p -> nx_mdns_rr_word & NX_MDNS_RR_FLAG_UNIQUE) 
                             return(NX_MDNS_EXIST_UNIQUE_RR);
                     }
                 }
@@ -13005,58 +13041,58 @@ UINT        name_length;
     if (same_query == NX_TRUE)
     {
 
-        /* A multicast DNS querier should also delay the first query of the series by
+        /* A multicast DNS querier should also delay the first query of the series by 
            a randomly chosen amount in the range 20-120ms.  */
-        rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (NX_RAND() % NX_MDNS_QUERY_DELAY_RANGE));
+        rr -> nx_mdns_rr_timer_count = (ULONG)(NX_MDNS_QUERY_DELAY_MIN + (((ULONG)NX_RAND()) % NX_MDNS_QUERY_DELAY_RANGE));
         rr -> nx_mdns_rr_retransmit_lifetime = NX_MDNS_TIMER_COUNT_RANGE;
 
         /* Set the mDNS timer.  */
-        _nx_mdns_timer_set(mdns_ptr, rr, rr -> nx_mdns_rr_timer_count);
+        _nx_mdns_timer_set(mdns_ptr, rr, rr -> nx_mdns_rr_timer_count);    
 
         return (NX_MDNS_EXIST_SAME_QUERY);
-    }
+    }         
 
     /* Return a successful status.  */
     return(NX_SUCCESS);
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_query_cleanup                              PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_query_cleanup                              PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function processes mDNS One-shot query timeout and thread      */
-/*    terminate actions that require the mDNS data structures to be       */
-/*    cleaned up.                                                         */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    thread_ptr                            Pointer to suspended thread's */
-/*                                            control block               */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _tx_thread_system_resume              Resume thread service         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _tx_thread_timeout                    Thread timeout processing     */
-/*    _tx_thread_terminate                  Thread terminate processing   */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function processes mDNS One-shot query timeout and thread      */ 
+/*    terminate actions that require the mDNS data structures to be       */ 
+/*    cleaned up.                                                         */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    thread_ptr                            Pointer to suspended thread's */ 
+/*                                            control block               */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _tx_thread_system_resume              Resume thread service         */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _tx_thread_timeout                    Thread timeout processing     */ 
+/*    _tx_thread_terminate                  Thread terminate processing   */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13069,11 +13105,11 @@ VOID  _nx_mdns_query_cleanup(TX_THREAD *thread_ptr NX_CLEANUP_PARAMETER)
 
 TX_INTERRUPT_SAVE_AREA
 
-NX_MDNS     *mdns_ptr;
+NX_MDNS     *mdns_ptr;                
 
-
+   
     NX_CLEANUP_EXTENSION
-
+ 
     /* Setup pointer to UDP socket control block.  */
     mdns_ptr =  (NX_MDNS *) thread_ptr -> tx_thread_suspend_control_block;
 
@@ -13112,8 +13148,8 @@ NX_MDNS     *mdns_ptr;
             /* Update the links of the adjacent threads.  */
             (thread_ptr -> tx_thread_suspended_next) -> tx_thread_suspended_previous = thread_ptr -> tx_thread_suspended_previous;
             (thread_ptr -> tx_thread_suspended_previous) -> tx_thread_suspended_next = thread_ptr -> tx_thread_suspended_next;
-        }
-
+        } 
+ 
         /* Decrement the suspension count.  */
         mdns_ptr -> nx_mdns_rr_receive_suspended_count--;
 
@@ -13134,8 +13170,8 @@ NX_MDNS     *mdns_ptr;
             /* Restore interrupts.  */
             TX_RESTORE
 
-            /* Resume the thread!  Check for preemption even though we are executing
-               from the system timer thread right now which normally executes at the
+            /* Resume the thread!  Check for preemption even though we are executing 
+               from the system timer thread right now which normally executes at the 
                highest priority.  */
             _tx_thread_system_resume(thread_ptr);
 
@@ -13261,41 +13297,41 @@ TX_THREAD *thread_ptr;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_query_thread_resume                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_query_thread_resume                        PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
 /*    This function resumes a thread suspended on a mDNS Client query     */
 /*    service.                                                            */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    thread_ptr                            Pointer to suspended thread's */
-/*                                            control block               */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    _tx_thread_system_resume              Resume thread service         */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _tx_thread_timeout                    Thread timeout processing     */
-/*    _tx_thread_terminate                  Thread terminate processing   */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    thread_ptr                            Pointer to suspended thread's */ 
+/*                                            control block               */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    _tx_thread_system_resume              Resume thread service         */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _tx_thread_timeout                    Thread timeout processing     */ 
+/*    _tx_thread_terminate                  Thread terminate processing   */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13343,7 +13379,7 @@ TX_THREAD *thread_ptr;
             /* Update the links of the adjacent threads.  */
             (thread_ptr -> tx_thread_suspended_next) -> tx_thread_suspended_previous = thread_ptr -> tx_thread_suspended_previous;
             (thread_ptr -> tx_thread_suspended_previous) -> tx_thread_suspended_next = thread_ptr -> tx_thread_suspended_next;
-        }
+        } 
 
         /* Decrement the suspension count.  */
         mdns_ptr -> nx_mdns_rr_receive_suspended_count--;
@@ -13378,42 +13414,42 @@ TX_THREAD *thread_ptr;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_service_mask_match                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_service_mask_match                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function matchs the mDNS service mask to listen the service    */
-/*    and notify the application, or ignore the service.                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    mdns_ptr                              Pointer to mDNS instance      */
-/*    service_type                          Pointer to Service type       */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function matchs the mDNS service mask to listen the service    */ 
+/*    and notify the application, or ignore the service.                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    mdns_ptr                              Pointer to mDNS instance      */ 
+/*    service_type                          Pointer to Service type       */ 
 /*    service_mask                          The Service mask              */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    tx_mutex_get                          Get the mDNS mutex            */
-/*    tx_mutex_put                          Put the mDNS mutex            */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    Application Code                                                    */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    tx_mutex_get                          Get the mDNS mutex            */ 
+/*    tx_mutex_put                          Put the mDNS mutex            */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    Application Code                                                    */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13423,7 +13459,7 @@ TX_THREAD *thread_ptr;
 /**************************************************************************/
 static UINT _nx_mdns_service_mask_match(NX_MDNS *mdns_ptr, UCHAR *service_type, ULONG service_mask)
 {
-
+   
 UINT        i;
 UINT        found;
 ULONG       mask;
@@ -13454,7 +13490,7 @@ UINT        type_length;
             break;
         }
         i ++;
-    }
+    } 
 
     /* Check the result.  */
     if (found)
@@ -13473,40 +13509,40 @@ UINT        type_length;
 #endif /* NX_MDNS_DISABLE_CLIENT */
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_name_match                                 PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_match                                 PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function name string match, the lowercase letters "a" to "z"   */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function name string match, the lowercase letters "a" to "z"   */ 
 /*    match their uppercase equivalents "A" to "Z".                       */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    ptr                                   Pointer to destination        */
-/*    name                                  Source name string            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_add                Add the RR into packet        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    ptr                                   Pointer to destination        */ 
+/*    name                                  Source name string            */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_add                Add the RR into packet        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13518,7 +13554,7 @@ static UINT  _nx_mdns_name_match(UCHAR *src, UCHAR *dst, UINT length)
 {
 
 UINT    index = 0;
-
+   
 
     /* Check the name.  */
     while (*dst != '\0')
@@ -13552,41 +13588,41 @@ UINT    index = 0;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_txt_string_encode                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_txt_string_encode                          PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function encodes the txt string and adds the txt string into   */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function encodes the txt string and adds the txt string into   */ 
 /*    packet.the TXT records are formatted in a "key=value" notation      */
 /*    with ";" acting as separator when more then one key is available.   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    ptr                                   Pointer to destination        */
-/*    name                                  Source name string            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    _nx_mdns_packet_rr_add                Add the RR into packet        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    ptr                                   Pointer to destination        */ 
+/*    name                                  Source name string            */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    _nx_mdns_packet_rr_add                Add the RR into packet        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13611,12 +13647,12 @@ UINT    count =  1;
     /* Move through string, copying bytes and updating length.
        Whenever a "." is found, start a new string by updating the
        pointer to the length and setting the length to zero.  */
-    while (*txt)
+    while (*txt) 
     {
 
         /* Is a dot been found?  */
         if (*txt == ';')
-        {
+        { 
 
 
             /* Yes, setup a new length pointer. */
@@ -13645,44 +13681,44 @@ UINT    count =  1;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_txt_string_decode                          PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_txt_string_decode                          PORTABLE C      */ 
 /*                                                           6.1.3        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function decode the txt string and adds the txt string into    */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function decode the txt string and adds the txt string into    */ 
 /*    buffer.the TXT records are formatted in a "key=value"  notation     */
 /*    with ";" acting as separator when more then one key is available.   */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    data                                  Pointer to buffer to decode   */
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    data                                  Pointer to buffer to decode   */ 
 /*    data_length                           The length of data            */
-/*    buffer                                Pointer to decoded data       */
-/*    size                                  Size of data buffer to decode */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    status                                Completion status             */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
+/*    buffer                                Pointer to decoded data       */ 
+/*    size                                  Size of data buffer to decode */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    status                                Completion status             */  
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
 /*    _nx_mdns_packet_process               Process mDNS packet           */
-/*    _nx_mdns_packet_rr_process            Process resource record       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    _nx_mdns_packet_rr_process            Process resource record       */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13695,7 +13731,7 @@ UINT    count =  1;
 /**************************************************************************/
 static UINT _nx_mdns_txt_string_decode(UCHAR *data, UINT data_length, UCHAR *buffer, UINT size)
 {
-
+    
 
     /* Check the buffer size.  */
     if (data_length >= size)
@@ -13721,7 +13757,7 @@ static UINT _nx_mdns_txt_string_decode(UCHAR *data, UINT data_length, UCHAR *buf
                 labelSize--;
                 data_length--;
             }
-
+      
             /* Now add the ';' */
             *buffer++ =  ';';
             data_length--;
@@ -13738,7 +13774,7 @@ static UINT _nx_mdns_txt_string_decode(UCHAR *data, UINT data_length, UCHAR *buf
 
         buffer--;
     }
-
+    
     /* Null terminate name.  */
     *buffer =  '\0';
 
@@ -13747,38 +13783,38 @@ static UINT _nx_mdns_txt_string_decode(UCHAR *data, UINT data_length, UCHAR *buf
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_name_size_calculate                        PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_size_calculate                        PORTABLE C      */ 
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function calculates the size of the name.                      */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    name                                  Pointer to the name           */
-/*    packet_ptr                            Pointer to received packet    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    UINT                                  Size of name                  */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function calculates the size of the name.                      */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    name                                  Pointer to the name           */ 
+/*    packet_ptr                            Pointer to received packet    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    UINT                                  Size of name                  */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13835,42 +13871,42 @@ UINT size =  0;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_name_string_encode                         PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_string_encode                         PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function converts a string containing the name as a list of    */
-/*    labels separated by dots to the encoded list of labels specified    */
-/*    in RFC1035 for DNS servers. This conversion doesn't handle          */
-/*    compression and doesn't check on the lengths of the labels or the   */
-/*    entire name.                                                        */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    ptr                                   Pointer to destination        */
-/*    name                                  Source name string            */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    count                                 Count of characters encoded   */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function converts a string containing the name as a list of    */ 
+/*    labels separated by dots to the encoded list of labels specified    */ 
+/*    in RFC1035 for DNS servers. This conversion doesn't handle          */ 
+/*    compression and doesn't check on the lengths of the labels or the   */ 
+/*    entire name.                                                        */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    ptr                                   Pointer to destination        */ 
+/*    name                                  Source name string            */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    count                                 Count of characters encoded   */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13895,12 +13931,12 @@ UINT    count =  1;
     /* Move through string, copying bytes and updating length.
        Whenever a "." is found, start a new string by updating the
        pointer to the length and setting the length to zero.  */
-    while (*name)
+    while (*name) 
     {
 
         /* Is a dot been found?  */
         if (*name == '.')
-        {
+        { 
 
             /* Yes, setup a new length pointer. */
             length =  ptr++;
@@ -13934,43 +13970,43 @@ UINT    count =  1;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_name_string_decode                       PORTABLE C        */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_name_string_decode                       PORTABLE C        */ 
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function converts from the encoded list of labels as specified */
-/*    in RFC 1035 to a string containing the name as a list of labels     */
-/*    separated by dots.                                                  */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    data                                  Pointer to buffer to decode   */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function converts from the encoded list of labels as specified */ 
+/*    in RFC 1035 to a string containing the name as a list of labels     */ 
+/*    separated by dots.                                                  */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    data                                  Pointer to buffer to decode   */ 
 /*    start                                 Location of start of data     */
 /*    data_length                           Length of data buffer         */
-/*    buffer                                Pointer to decoded data       */
-/*    size                                  Size of data buffer to decode */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    Size of decoded data                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*    buffer                                Pointer to decoded data       */ 
+/*    size                                  Size of data buffer to decode */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    Size of decoded data                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -13995,8 +14031,8 @@ UINT    offset;
 UINT    pointer_count = 0;
 UINT    labelSize;
 
-
-    /* As long as there is space in the buffer and we haven't
+  
+    /* As long as there is space in the buffer and we haven't 
        found a zero terminating label */
     while (1)
     {
@@ -14029,7 +14065,7 @@ UINT    labelSize;
                 length++;
                 labelSize--;
             }
-
+      
             /* Now add the '.' */
             *buffer++ =  '.';
             length++;
@@ -14081,7 +14117,7 @@ UINT    labelSize;
         buffer--;
         length --;
     }
-
+    
     /* Null terminate name.  */
     *buffer =  '\0';
 
@@ -14090,37 +14126,37 @@ UINT    labelSize;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_rr_size_get                                PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_rr_size_get                                PORTABLE C      */ 
 /*                                                           6.1.4        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function gets the size of resource record.                     */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    resource                              Pointer to the resource       */
-/*    packet_ptr                            Pointer to received packet    */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    size of data                                                        */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function gets the size of resource record.                     */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    resource                              Pointer to the resource       */ 
+/*    packet_ptr                            Pointer to received packet    */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    size of data                                                        */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -14137,7 +14173,7 @@ static UINT  _nx_mdns_rr_size_get(UCHAR *resource, NX_PACKET *packet_ptr)
 UINT    name_size;
 UINT    data_size;
 
-    /* Resource size is
+    /* Resource size is 
         name size + data size + 2 bytes for type, 2 for class, 4 for time to live and 2 for data length
         i.e. name size + data size + 10 bytes overhead.
     */
@@ -14154,40 +14190,40 @@ UINT    data_size;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_short_to_network_convert                   PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_short_to_network_convert                   PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function converts an unsigned short to network byte order,     */
-/*    which is big endian.                                                */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    ptr                                   Pointer to the destination    */
-/*    value                                 Source value                  */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    DNS component                                                       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function converts an unsigned short to network byte order,     */ 
+/*    which is big endian.                                                */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    ptr                                   Pointer to the destination    */ 
+/*    value                                 Source value                  */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    DNS component                                                       */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -14197,46 +14233,46 @@ UINT    data_size;
 /**************************************************************************/
 static void  _nx_mdns_short_to_network_convert(UCHAR *ptr, USHORT value)
 {
-
+    
     *ptr++ =  (UCHAR)(value >> 8);
     *ptr   =  (UCHAR)value;
 }
 
 
-/**************************************************************************/
-/*                                                                        */
-/*  FUNCTION                                               RELEASE        */
-/*                                                                        */
-/*    _nx_mdns_long_to_network_convert                    PORTABLE C      */
+/**************************************************************************/ 
+/*                                                                        */ 
+/*  FUNCTION                                               RELEASE        */ 
+/*                                                                        */ 
+/*    _nx_mdns_long_to_network_convert                    PORTABLE C      */ 
 /*                                                           6.1          */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Yuxin Zhou, Microsoft Corporation                                   */
 /*                                                                        */
-/*  DESCRIPTION                                                           */
-/*                                                                        */
-/*    This function converts an unsigned long to network format, which    */
-/*    big endian.                                                         */
-/*                                                                        */
-/*  INPUT                                                                 */
-/*                                                                        */
-/*    ptr                                   Pointer to the destination    */
-/*    value                                 Source value                  */
-/*                                                                        */
-/*  OUTPUT                                                                */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLS                                                                 */
-/*                                                                        */
-/*    None                                                                */
-/*                                                                        */
-/*  CALLED BY                                                             */
-/*                                                                        */
-/*    DNS component                                                       */
-/*                                                                        */
-/*  RELEASE HISTORY                                                       */
-/*                                                                        */
+/*  DESCRIPTION                                                           */ 
+/*                                                                        */ 
+/*    This function converts an unsigned long to network format, which    */ 
+/*    big endian.                                                         */ 
+/*                                                                        */ 
+/*  INPUT                                                                 */ 
+/*                                                                        */ 
+/*    ptr                                   Pointer to the destination    */ 
+/*    value                                 Source value                  */ 
+/*                                                                        */ 
+/*  OUTPUT                                                                */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLS                                                                 */ 
+/*                                                                        */ 
+/*    None                                                                */ 
+/*                                                                        */ 
+/*  CALLED BY                                                             */ 
+/*                                                                        */ 
+/*    DNS component                                                       */ 
+/*                                                                        */ 
+/*  RELEASE HISTORY                                                       */ 
+/*                                                                        */ 
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  05-19-2020     Yuxin Zhou               Initial Version 6.0           */
@@ -14246,7 +14282,7 @@ static void  _nx_mdns_short_to_network_convert(UCHAR *ptr, USHORT value)
 /**************************************************************************/
 static void _nx_mdns_long_to_network_convert(UCHAR *ptr, ULONG value)
 {
-
+  
     *ptr++ =  (UCHAR)(value >> 24);
     *ptr++ =  (UCHAR)(value >> 16);
     *ptr++ =  (UCHAR)(value >> 8);

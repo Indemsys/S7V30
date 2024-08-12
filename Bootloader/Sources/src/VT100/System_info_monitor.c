@@ -2,8 +2,10 @@
 // 2019.06.06
 // 11:51:26
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
+extern uint32_t  Get_board_pin_count(void);
+extern void      Get_board_pin_conf_str(uint32_t pin_num, char *dstr);
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -143,9 +145,6 @@ static void Print_registered_interrupts(void)
 
 }
 
-extern uint32_t  S7V30_get_board_pin_count(void);
-extern void      S7V30_get_board_pin_conf_str(uint32_t pin_num, char *dstr);
-
 /*-----------------------------------------------------------------------------------------------------
 
 
@@ -155,13 +154,13 @@ static void Print_pins_state(void)
   GET_MCBL;
   uint32_t i;
   char tmp_str[200];
-  uint32_t sz = S7V30_get_board_pin_count();
+  uint32_t sz = Get_board_pin_count();
 
   MPRINTF("\r\n", 10);
 
   for (i=0; i < sz; i++)
   {
-    S7V30_get_board_pin_conf_str(i, tmp_str);
+    Get_board_pin_conf_str(i, tmp_str);
     MPRINTF(tmp_str, 10);
     MPRINTF("\r\n", 10);
   }
@@ -173,7 +172,7 @@ static void Print_pins_state(void)
 
   \param keycode
 -----------------------------------------------------------------------------------------------------*/
-void Do_S7V30_System_info(uint8_t keycode)
+void Do_system_info(uint8_t keycode)
 {
   uint8_t                   b;
   T_sys_timestump           st_t;
@@ -193,13 +192,6 @@ void Do_S7V30_System_info(uint8_t keycode)
 
   g_fmi.p_api->productInfoGet(&p_product_info);
   MPRINTF("Product header     = %d %d %d %d %d\r\n", p_product_info->header.contents, p_product_info->header.variant, p_product_info->header.count, p_product_info->header.minor, p_product_info->header.major);
-  //  memset(str,0, 32);
-  //  memcpy(str, p_product_info->product_name,16);
-  //  MPRINTF("Product name       = %s");
-  //  memset(str,0, 32);
-  //  memcpy(str, p_product_info->product_marking,16);
-  //  MPRINTF("  Product marking  = %s\r\n");
-
 
   MPRINTF("Max frequency      = %d MHz\r\n", p_product_info->max_freq);
   MPRINTF("Chip pin count     = %d\r\n", p_product_info->pin_count);
@@ -297,6 +289,9 @@ void Do_S7V30_System_info(uint8_t keycode)
     case SETT_WRONG_CHECK:
       MPRINTF("Boot loader settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
       break;
+    case SETT_IS_BLANK:
+      MPRINTF("Boot loader settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
+      break;
     }
   }
 
@@ -306,16 +301,19 @@ void Do_S7V30_System_info(uint8_t keycode)
     switch (sstate.area_state[i])
     {
     case SETT_OK:
-      MPRINTF("Module main settings area %d Ok. Start cond.=%d. Size=%d bytes, Write cnt =%d\r\n", i, sstate.area_start_condition[i], sstate.area_sz[i], sstate.area_wr_cnt[i]);
+      MPRINTF("Platform main settings area %d Ok. Start cond.=%d. Size=%d bytes, Write cnt =%d\r\n", i, sstate.area_start_condition[i], sstate.area_sz[i], sstate.area_wr_cnt[i]);
       break;
     case SETT_WRONG_SIZE:
-      MPRINTF("Module main settings area %d Error. Start cond.=%d. Wrong size=%d bytes.\r\n", i,  sstate.area_start_condition[i], sstate.area_sz[i]);
+      MPRINTF("Platform main settings area %d Error. Start cond.=%d. Wrong size=%d bytes.\r\n", i,  sstate.area_start_condition[i], sstate.area_sz[i]);
       break;
     case SETT_WRONG_CRC:
-      MPRINTF("Module main settings area %d Error. Start cond.=%d. Wrong CRC. Size=%d bytes.\r\n", i,  sstate.area_start_condition[i], sstate.area_sz[i]);
+      MPRINTF("Platform main settings area %d Error. Start cond.=%d. Wrong CRC. Size=%d bytes.\r\n", i,  sstate.area_start_condition[i], sstate.area_sz[i]);
       break;
     case SETT_WRONG_CHECK:
-      MPRINTF("Module main settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
+      MPRINTF("Platform main settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
+      break;
+    case SETT_IS_BLANK:
+      MPRINTF("Platform main settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
       break;
     }
   }
@@ -336,6 +334,9 @@ void Do_S7V30_System_info(uint8_t keycode)
       break;
     case SETT_WRONG_CHECK:
       MPRINTF("Application settings area %d Error. Start cond.=%d. Check fault.\r\n",  sstate.area_start_condition[i], i);
+      break;
+    case SETT_IS_BLANK:
+      MPRINTF("Application settings area %d Error. Area is blank.\r\n",  sstate.area_start_condition[i]);
       break;
     }
   }
@@ -367,6 +368,27 @@ void Do_S7V30_System_info(uint8_t keycode)
         MPRINTF("\r\nPress any key to continue.\r\n");
         WAIT_CHAR(&b,  ms_to_ticks(100000));
         Print_System_info_header();
+        break;
+      case 'S':
+      case 's':
+        {
+          uint32_t res;
+
+          MPRINTF("\r\nSerializing params schema. Please wait....", PARAMS_SCHEMA_FILE_NAME);
+          res = ParamsSchema_serialize_to_file(&ivar_inst,PARAMS_SCHEMA_FILE_NAME);
+          if (res==RES_OK)
+          {
+            MPRINTF(VT100_CLR_LINE"\r Settings serialized to file %s successfully.\r\n", PARAMS_SCHEMA_FILE_NAME);
+          }
+          else
+          {
+            MPRINTF(VT100_CLR_LINE"\r Settings serialization to file %s error.\r\n", PARAMS_SCHEMA_FILE_NAME);
+          }
+          MPRINTF(" Press any key to continue.\r\n");
+          WAIT_CHAR(&b,  ms_to_ticks(100000));
+          Print_System_info_header();
+
+        }
         break;
       case 'Z':
         Reset_settings_wr_counters();

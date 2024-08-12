@@ -14,7 +14,7 @@
 
 
 
-uint32_t SCI_Find_best_divider(uint32_t  baud, uint8_t *cks, uint8_t *N, uint8_t *M);
+uint32_t SCI_Find_best_divider(uint32_t  baud, uint8_t *brme, uint8_t *abcse,  uint8_t *cks, uint8_t *N, uint8_t *M);
 void     Get_CPU_UID(char *suid, uint8_t *uid, uint32_t suid_len);
 void     Reset_SoC(void);
 

@@ -2,7 +2,7 @@
 // 2018.09.03
 // 23:06:41
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 #include <stdarg.h>
 
 #define INI_STR_SIZE 512
@@ -11,15 +11,15 @@
 const uint32_t  df_params_addr[PARAMS_TYPES_NUM][2] =
 {
   {  DATAFLASH_APP_PARAMS_1_ADDR     , DATAFLASH_APP_PARAMS_2_ADDR     },
-  {  DATAFLASH_MODULE_PARAMS_1_ADDR  , DATAFLASH_MODULE_PARAMS_2_ADDR  },
+  {  DATAFLASH_PLATF_PARAMS_1_ADDR  , DATAFLASH_PLATF_PARAMS_2_ADDR  },
   {  DATAFLASH_BOOTL_PARAMS_1_ADDR   , DATAFLASH_BOOTL_PARAMS_2_ADDR   }
 };
 
 
-char  *ini_fname[PARAMS_TYPES_NUM]        = { PARAMS_APP_INI_FILE_NAME        , PARAMS_MOD_INI_FILE_NAME        , PARAMS_BOOTL_INI_FILE_NAME       };
-char  *ini_used_fname[PARAMS_TYPES_NUM]   = { PARAMS_APP_USED_INI_FILE_NAME   , PARAMS_MOD_USED_INI_FILE_NAME   , PARAMS_BOOTL_USED_INI_FILE_NAME  };
-char  *json_fname[PARAMS_TYPES_NUM]       = { PARAMS_APP_JSON_FILE_NAME       , PARAMS_MOD_JSON_FILE_NAME       , PARAMS_BOOTL_JSON_FILE_NAME      };
-char  *json_compr_fname[PARAMS_TYPES_NUM] = { PARAMS_APP_COMPR_JSON_FILE_NAME , PARAMS_MOD_COMPR_JSON_FILE_NAME , PARAMS_BOOTL_COMPR_JSON_FILE_NAME};
+char  *ini_fname[PARAMS_TYPES_NUM]        = { PARAMS_APP_INI_FILE_NAME        , PARAMS_MODULE_INI_FILE_NAME        , PARAMS_BOOTL_INI_FILE_NAME       };
+char  *ini_used_fname[PARAMS_TYPES_NUM]   = { PARAMS_APP_USED_INI_FILE_NAME   , PARAMS_MODULE_USED_INI_FILE_NAME   , PARAMS_BOOTL_USED_INI_FILE_NAME  };
+char  *json_fname[PARAMS_TYPES_NUM]       = { PARAMS_APP_JSON_FILE_NAME       , PARAMS_MODULE_JSON_FILE_NAME       , PARAMS_BOOTL_JSON_FILE_NAME      };
+char  *json_compr_fname[PARAMS_TYPES_NUM] = { PARAMS_APP_COMPR_JSON_FILE_NAME , PARAMS_MODULE_COMPR_JSON_FILE_NAME , PARAMS_BOOTL_COMPR_JSON_FILE_NAME};
 
 uint32_t   g_setting_wr_counters[PARAMS_TYPES_NUM][2]; // Счетчики количества записей в каждую область
 uint32_t   g_setting_start_condition[PARAMS_TYPES_NUM][2];  // Регистры ошибок каждой области
@@ -52,7 +52,7 @@ void Return_def_params(const T_NV_parameters_instance *p_pars)
   // Загрузить параметры значениями по умолчанию
   for (i = 0; i < p_pars->items_num; i++)
   {
-    pp =&p_pars->items_array[i];
+    pp = &p_pars->items_array[i];
 
     if ((pp->attr & VAL_NOINIT) == 0)
     {
@@ -312,12 +312,12 @@ uint32_t Save_settings_to_INI_file(const T_NV_parameters_instance *p_pars, uint8
     return RES_ERROR;
   }
 
-  n =0;
+  n = 0;
   name      = 0;
   prev_name = 0;
   for (i = 0; i < p_pars->items_num; i++)
   {
-    pp =&p_pars->items_array[i];
+    pp = &p_pars->items_array[i];
 
     if ((pp->attr & 1) == 0) // сохраняем только если параметр для записи
     {
@@ -462,7 +462,7 @@ static uint32_t Save_settings_buf_to_DataFlash(uint8_t *buf, uint32_t buf_sz, ui
 
   if ((buf_sz > (DATAFLASH_PARAMS_AREA_SIZE - DATAFLASH_SUPLIMENT_AREA_SIZE)) || (buf_sz < 8)) goto EXIT_ON_ERROR;
   csz = buf_sz;
-  if ((csz & 0x3) != 0) csz =(csz & 0xFFFFFFFC)+ 4; // Выравниваем размер буфера данных по 4
+  if ((csz & 0x3) != 0) csz = (csz & 0xFFFFFFFC) + 4; // Выравниваем размер буфера данных по 4
 
   tmp_buf_sz = csz + DATAFLASH_SUPLIMENT_AREA_SIZE; // Добавляем размер буфера данных, номер записи и CRC
 
@@ -483,8 +483,8 @@ static uint32_t Save_settings_buf_to_DataFlash(uint8_t *buf, uint32_t buf_sz, ui
   g_setting_wr_counters[ptype][0]++;
   memcpy(&tmp_buf[4],&g_setting_wr_counters[ptype][0], 4);
   crc = Get_CRC16_of_block(tmp_buf,tmp_buf_sz - 4, 0xFFFF);
-  memcpy(&tmp_buf[8+csz],&crc, 2);
-  memcpy(&tmp_buf[10+csz],&crc, 2);
+  memcpy(&tmp_buf[8 + csz],&crc, 2);
+  memcpy(&tmp_buf[10 + csz],&crc, 2);
 
   if (DataFlash_bgo_WriteArea(df_params_addr[ptype][0], tmp_buf, tmp_buf_sz) != RES_OK) goto EXIT_ON_ERROR;
   err_step = 5;
@@ -495,8 +495,8 @@ static uint32_t Save_settings_buf_to_DataFlash(uint8_t *buf, uint32_t buf_sz, ui
   g_setting_wr_counters[ptype][1]++;
   memcpy(&tmp_buf[4],&g_setting_wr_counters[ptype][1], 4);
   crc = Get_CRC16_of_block(tmp_buf,tmp_buf_sz - 4, 0xFFFF);
-  memcpy(&tmp_buf[8+csz],&crc, 2);
-  memcpy(&tmp_buf[10+csz],&crc, 2);
+  memcpy(&tmp_buf[8 + csz],&crc, 2);
+  memcpy(&tmp_buf[10 + csz],&crc, 2);
 
   if (DataFlash_bgo_WriteArea(df_params_addr[ptype][1], tmp_buf, tmp_buf_sz) != RES_OK) goto EXIT_ON_ERROR;
 
@@ -507,6 +507,7 @@ EXIT_ON_ERROR:
   return err_step;
 
 }
+
 /*-----------------------------------------------------------------------------------------------------
   Запись утстановок в JSON файл опционально с компрессией.
   Если имя файла не задано, то приеняется имена по умолчанию
@@ -558,7 +559,7 @@ uint32_t Save_settings_to(const T_NV_parameters_instance *p_pars, uint8_t media_
     buf = compessed_data_ptr;
     buf_sz = compessed_data_sz;
     buf[buf_sz] = crc & 0xFF;
-    buf[buf_sz+1] =(crc >> 8) & 0xFF;
+    buf[buf_sz + 1] = (crc >> 8) & 0xFF;
     buf_sz += 2;
   }
   else
@@ -604,7 +605,8 @@ uint32_t Restore_settings_from_JSON_file(const T_NV_parameters_instance  *p_pars
   uint32_t   data_buf_sz;
   uint8_t   *decompessed_data_ptr = NULL;
   uint32_t   decompessed_data_sz;
-  FX_FILE    *pf = NULL;;
+  FX_FILE    *pf = NULL;
+
   uint32_t   res;
   uint32_t   actual_sz;
   uint8_t    compressed = 0;
@@ -646,16 +648,16 @@ uint32_t Restore_settings_from_JSON_file(const T_NV_parameters_instance  *p_pars
   if (compressed)
   {
     // Проверка контрольной суммы
-    uint16_t crc = Get_CRC16_of_block(data_buf,data_buf_sz-2, 0xFFFF);
-    uint16_t ecrc = data_buf[data_buf_sz-2] +(data_buf[data_buf_sz-1]<<8);
+    uint16_t crc = Get_CRC16_of_block(data_buf,data_buf_sz - 2, 0xFFFF);
+    uint16_t ecrc = data_buf[data_buf_sz - 2] + (data_buf[data_buf_sz - 1] << 8);
     if (crc != ecrc) goto EXIT_ON_ERROR; // Выход если не совпала контрольная сумма
 
-    decompessed_data_sz = data_buf[0] +(data_buf[1]<<8)+(data_buf[2]<<16)+(data_buf[3]<<24);
+    decompessed_data_sz = data_buf[0] + (data_buf[1] << 8) + (data_buf[2] << 16) + (data_buf[3] << 24);
     if (decompessed_data_sz > 65536) goto EXIT_ON_ERROR; // Выход если после декомпрессии объем данных слишком большой
-    decompessed_data_ptr = App_malloc_pending(decompessed_data_sz+1,10);
+    decompessed_data_ptr = App_malloc_pending(decompessed_data_sz + 1,10);
     if (decompessed_data_ptr == NULL) goto EXIT_ON_ERROR;
     // Декомпрессия
-    if (Decompress_mem_to_mem(COMPR_ALG_SIXPACK, data_buf, data_buf_sz-2, decompessed_data_ptr, decompessed_data_sz) != decompessed_data_sz) goto EXIT_ON_ERROR;
+    if (Decompress_mem_to_mem(COMPR_ALG_SIXPACK, data_buf, data_buf_sz - 2, decompessed_data_ptr, decompessed_data_sz) != decompessed_data_sz) goto EXIT_ON_ERROR;
 
     App_free(data_buf);
     data_buf = 0;
@@ -720,7 +722,7 @@ static uint32_t Restore_settings_from_DataFlash(const T_NV_parameters_instance  
 
   done = 0;
   // Проходим по всем областям в поисках годной
-  for (uint32_t i=0; i < 2; i++)
+  for (uint32_t i = 0; i < 2; i++)
   {
     g_setting_start_condition[ptype][i] = 0;
     flash_addr = df_params_addr[ptype][i];
@@ -750,7 +752,7 @@ static uint32_t Restore_settings_from_DataFlash(const T_NV_parameters_instance  
         memcpy(&decompessed_data_sz,&buf[8], 4);
         if (decompessed_data_sz < 65536)
         {
-          decompessed_data_ptr = App_malloc_pending(decompessed_data_sz+1,10);
+          decompessed_data_ptr = App_malloc_pending(decompessed_data_sz + 1,10);
           if (decompessed_data_ptr != NULL)
           {
             // Декомпрессия
@@ -823,46 +825,57 @@ uint32_t Check_settings_in_DataFlash(uint8_t ptype, T_settings_state *sstate)
   if (ptype >= PARAMS_TYPES_NUM) return RES_ERROR;
 
 
-  for (uint32_t i=0;i<2;i++)
+  for (uint32_t i = 0; i < 2; i++)
   {
     sstate->area_start_condition[i] = g_setting_start_condition[ptype][i];
 
     flash_addr = df_params_addr[ptype][i];
-    // Читаем из  DataFlash размер блока данных
-    DataFlash_bgo_ReadArea(flash_addr ,(uint8_t *)&sz  ,  4);
-    DataFlash_bgo_ReadArea(flash_addr+4 ,(uint8_t *)&sstate->area_wr_cnt[i]  ,  4);
 
-    if ((sz > (DATAFLASH_PARAMS_AREA_SIZE - DATAFLASH_SUPLIMENT_AREA_SIZE)) || (sz < 8))
+    if (DataFlash_bgo_BlankCheck(flash_addr, 8)== RES_OK)
     {
-      sstate->area_sz[i] = sz;
-      sstate->area_state[i] = SETT_WRONG_SIZE; // Ошибка - неправильный размер данных
+      sstate->area_sz[i]     = sz;
+      sstate->area_state[i]  = SETT_IS_BLANK;
+      sstate->area_wr_cnt[i] = 0;
     }
     else
     {
-      buf_sz = sz + 8;
-      sstate->area_sz[i] = buf_sz;
-      buf = App_malloc_pending(buf_sz,10);
-      if (buf != NULL)
+
+      // Читаем из  DataFlash размер блока данных
+      DataFlash_bgo_ReadArea(flash_addr ,(uint8_t *)&sz  ,  4);
+      DataFlash_bgo_ReadArea(flash_addr + 4 ,(uint8_t *)&sstate->area_wr_cnt[i]  ,  4);
+
+      if ((sz > (DATAFLASH_PARAMS_AREA_SIZE - DATAFLASH_SUPLIMENT_AREA_SIZE)) || (sz < 8))
       {
-        // Читаем данные
-        DataFlash_bgo_ReadArea(flash_addr  ,(uint8_t *)buf  ,  buf_sz);
-        // Читаем записанную контрольную сумму
-        DataFlash_bgo_ReadArea(flash_addr + 8 + sz,(uint8_t *)&crc1  ,  4);
-        // Расчитываем фактическую контрольную сумму
-        crc2 = Get_CRC16_of_block(buf, buf_sz, 0xFFFF);
-        if (crc1 != crc2)
-        {
-           sstate->area_state[i] = SETT_WRONG_CRC;
-        }
-        else
-        {
-          sstate->area_state[i] = SETT_OK;
-        }
-        App_free(buf);
+        sstate->area_sz[i] = sz;
+        sstate->area_state[i] = SETT_WRONG_SIZE; // Ошибка - неправильный размер данных
       }
       else
       {
-        sstate->area_state[i] = SETT_WRONG_CHECK;
+        buf_sz = sz + 8;
+        sstate->area_sz[i] = buf_sz;
+        buf = App_malloc_pending(buf_sz,10);
+        if (buf != NULL)
+        {
+          // Читаем данные
+          DataFlash_bgo_ReadArea(flash_addr  ,(uint8_t *)buf  ,  buf_sz);
+          // Читаем записанную контрольную сумму
+          DataFlash_bgo_ReadArea(flash_addr + 8 + sz,(uint8_t *)&crc1  ,  4);
+          // Расчитываем фактическую контрольную сумму
+          crc2 = Get_CRC16_of_block(buf, buf_sz, 0xFFFF);
+          if (crc1 != crc2)
+          {
+            sstate->area_state[i] = SETT_WRONG_CRC;
+          }
+          else
+          {
+            sstate->area_state[i] = SETT_OK;
+          }
+          App_free(buf);
+        }
+        else
+        {
+          sstate->area_state[i] = SETT_WRONG_CHECK;
+        }
       }
     }
   }
@@ -875,11 +888,11 @@ uint32_t Check_settings_in_DataFlash(uint8_t ptype, T_settings_state *sstate)
 -----------------------------------------------------------------------------------------------------*/
 void Reset_settings_wr_counters(void)
 {
-  for (uint32_t i=0;i<PARAMS_TYPES_NUM;i++)
+  for (uint32_t i = 0; i < PARAMS_TYPES_NUM; i++)
   {
-    for (uint32_t j=0;j<2;j++)
+    for (uint32_t j = 0; j < 2; j++)
     {
-        g_setting_wr_counters[i][j] = 0;
+      g_setting_wr_counters[i][j] = 0;
     }
   }
 }
@@ -949,6 +962,61 @@ uint32_t Delete_app_settings_file(uint8_t ptype)
   return RES_OK;
 }
 
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param buf
+  \param buf_sz
+  \param ptype
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Save_buf_to_DataFlash(uint32_t start_addr,  uint8_t *buf, uint32_t buf_sz)
+{
+  uint8_t   *tmp_buf = 0;
+  uint32_t   norm_sz;
+
+  // Выравниваем размер буфера данных по 64, поскольку минимальный стрираемый блок имеет размер 64 байта
+  norm_sz = buf_sz;
+  if ((norm_sz & 0x3F) != 0) norm_sz = (norm_sz & 0xFFFFFFC0) + 64;
+
+  // Стираем область памяти куда будем программировать данные
+  if (DataFlash_bgo_EraseArea(start_addr,norm_sz) != RES_OK) goto EXIT_ON_ERROR;
+
+  // Выравниваем размер буфера данных по 4, поскольку минимальный программируемый блок имеет размер 4 байта
+  norm_sz = buf_sz;
+  if ((norm_sz & 0x3) != 0) norm_sz = (norm_sz & 0xFFFFFFFC) + 4;
+
+  // Выделяем буфер во внутренней RAM куда перепишем целевые данные и откуда будем программировать
+  tmp_buf = App_malloc_pending(norm_sz,10);
+  if (tmp_buf == NULL) goto EXIT_ON_ERROR;
+  memset(tmp_buf+buf_sz, 0xFF, norm_sz-buf_sz); // Избыточное пространство заполняем 0xFF
+  memcpy(tmp_buf, buf, buf_sz);
+
+  if (DataFlash_bgo_WriteArea(start_addr, tmp_buf, norm_sz) != RES_OK) goto EXIT_ON_ERROR;
+
+  App_free(tmp_buf);
+  return RES_OK;
+EXIT_ON_ERROR:
+  App_free(tmp_buf);
+  return RES_ERROR;
+
+}
+
+/*-----------------------------------------------------------------------------------------------------
+
+
+  \param start_addr
+  \param buf
+  \param buf_sz
+
+  \return uint32_t
+-----------------------------------------------------------------------------------------------------*/
+uint32_t Restore_buf_from_DataFlash(uint32_t start_addr,  uint8_t *buf, uint32_t buf_sz)
+{
+  return DataFlash_bgo_ReadArea(start_addr, buf , buf_sz);
+}
 
 
 

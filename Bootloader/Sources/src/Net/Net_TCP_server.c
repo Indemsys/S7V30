@@ -1,4 +1,5 @@
-#include    "S7V30.h"
+#include    "App.h"
+#include   "Net.h"
 
 extern  TX_THREAD           *_tx_thread_current_ptr;
 extern  volatile ULONG      _tx_thread_system_state;

@@ -1,0 +1,173 @@
+@charset "utf-8";
+body {
+  margin: 5px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+header, footer {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  padding: 5px;
+}
+.header_panel {
+  display: flex;
+  margin: 5px 1px 5px 1px;
+  padding: 2px;
+  background-color: #fafeff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  flex-shrink: 1;
+  flex-grow: 0;
+  width: 95%;
+  max-width: 800px;  
+}
+
+.footer_panel {
+  display: flex;
+  margin: 5px 1px 5px 1px;
+  padding: 2px;
+  background-color: #fafeff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  flex-shrink: 1;
+  flex-grow: 0;
+  width: 95%;
+  max-width: 800px;  
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: scroll;
+  padding: 5px;
+  align-items: center;
+}
+
+.panel {
+  margin: 3px 1px 3px 1px;
+  padding: 2px;
+  background-color: #fafeff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  flex-shrink: 1;
+  flex-grow: 0;
+  width: 95%;
+  max-width: 800px;
+}
+
+.menu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  background-color: #1e3a8a;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  border-radius: 0 10px 10px 0;
+}
+.menu a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+.menu a:hover {
+  background-color: #3b82f6;
+}
+.menu .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  border-radius: 10px;
+}
+.cmd_btn {
+  flex-grow: 0;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 10px 10px 10px;;
+  margin: 2px 2px 2px 2px;
+  border: none;
+  z-index: 1;
+  border-radius: 10px;
+}
+.cmd_btn:hover {
+  background-color: #3b82f6;
+}
+.menu_container {
+  max-width: 800px;
+  margin: 10px;
+  padding: 2px;
+  background-color: #ecf0f1;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr;
+  gap: 1px; /* Отступы между элементами сетки */
+}
+.grid > div {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Light gray color with low opacity */
+  padding: 2px; /* Optional: to add some spacing inside each grid item */
+}
+h2, h3, p {
+  color: #1e3a8a;
+}
+figure {
+  margin: 0;
+}
+.itemc {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #1e3a8a; /* Темно-синий цвет */
+}
+.itemv {
+  font-size: 0.8em;
+  font-weight: normal;
+  color: #1e3a8a; /* Темно-синий цвет */
+}
+div#CPU_ID {
+  font-family: monospace;
+  font-size: medium;
+}
+div#ProductName {
+  color: #bd0606;
+  font-size: x-large;
+}
+#progressBar {
+    height: 20px;
+    background-color: #007BFF; /* Stylish blue color */
+    width: 0%;
+    text-align: center;
+    color: white;
+    line-height: 20px;
+    border-radius: 10px; /* Rounded corners for the progress bar itself */
+    transition: width 0.4s ease-in-out;
+}
+#progressBarContainer {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 20px;
+}
+
+
+input[type="file"] {
+    display: none; /* Hide the default file input */
+}

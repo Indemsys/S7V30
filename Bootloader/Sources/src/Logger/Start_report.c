@@ -2,7 +2,7 @@
 // 2023-02-06
 // 17:23:49
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#include   "S7V30.h"
+#include   "App.h"
 
 /*-----------------------------------------------------------------------------------------------------
 
@@ -14,6 +14,8 @@ void System_start_report(void)
   uint32_t err;
 
   fmi_unique_id_t uid;
+  APPLOG("##############################################################");
+  APPLOG("S7V30 Bootloader");
   APPLOG("##############################################################");
 
 
@@ -104,6 +106,28 @@ void System_start_report(void)
     APPLOG("Cold start");
   }
 
+  {
+    T_sd_unlock_status *p_st;
+    p_st = s7_Get_sd_status();
+
+    if (p_st->lock_detected == 0)
+    {
+      APPLOG("SD card is not locked");
+    }
+    else
+    {
+      if (p_st->unlock_executed != 0)
+      {
+        APPLOG("SD card is locked. Unlocked successfully");
+      }
+      else
+      {
+        APPLOG("SD card is locked. Unlock failed");
+      }
+    }
+  }
+
+
   if (g_file_system_ready == 0)
   {
     APPLOG("File system on SD card missing.");
@@ -124,16 +148,16 @@ void System_start_report(void)
   switch (r->settings_source)
   {
   case RESTORED_DEFAULT_SETTINGS:
-    APPLOG("Restored module default parameters.");
+    APPLOG("Restored default parameters.");
     break;
   case RESTORED_SETTINGS_FROM_DATAFLASH:
-    APPLOG("Module parameters restored from internal Flash memory.");
+    APPLOG("Parameters restored from internal Flash memory.");
     break;
   case RESTORED_SETTINGS_FROM_JSON_FILE:
-    APPLOG("Module parameters restored from JSON file on SD card.");
+    APPLOG("Parameters restored from JSON file on SD card.");
     break;
   case RESTORED_SETTINGS_FROM_INI_FILE:
-    APPLOG("Module parameters restored from INI file on SD card.");
+    APPLOG("Parameters restored from INI file on SD card.");
     break;
   }
 
@@ -142,10 +166,10 @@ void System_start_report(void)
   case SAVED_TO_DATAFLASH_NONE:
     break;
   case SAVED_TO_DATAFLASH_OK:
-    APPLOG("Module parameters saved to internal flash memory.");
+    APPLOG("Parameters saved to internal flash memory.");
     break;
   case SAVED_TO_DATAFLASH_ERROR:
-    APPLOG("Module parameters saving to internal flash memory error.");
+    APPLOG("Parameters saving to internal flash memory error.");
     break;
   }
 

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><!-- InstanceBegin template="/Templates/main_template.dwt" codeOutsideHTMLIsLocked="false" -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- InstanceBeginEditable name="doctitle" -->
+    <title>Device State</title>
+    <!-- InstanceEndEditable -->
+    <link href="Styles.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="GenScript.js"></script>
+
+  <!-- InstanceBeginEditable name="head" -->
+	  
+	  
+  <!-- InstanceEndEditable -->
+  </head>
+	
+  <body>
+    <div id="Main_menu" class="menu" style="left: 0;">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+      <a href="index.html">Home</a>
+      <a href="ModParams.html">Module Parameters</a>
+      <a href="Upload.html">Firmware upload</a>
+      <a href="Time_Sync.html">Time synchronization</a>
+      <a href="WiFi_scan.html">Scanning WiFi access points</a>
+      <a href="Logs.html">Logs</a>
+      <a href="#" onclick="Reset_device()">Reset device</a>
+    </div>
+
+    <header>
+      <div class="header_panel">
+        <button id="open_btn" class="cmd_btn" onclick="Open_menu()">&#9776; Menu</button>
+        <div style="display:flex; flex-direction:row; place-content: flex-end; flex: auto;">  
+        <!-- InstanceBeginEditable name="HeaderRegion" -->
+      <div style="align-content: center;flex-grow: inherit; text-align: left; padding-left: 10px"> Device State </div>
+      
+      <!-- InstanceEndEditable -->
+        </div>  
+      </div>  
+    </header>
+    
+    <div class="content">	 
+  <!-- InstanceBeginEditable name="body" -->
+    
+    <div class="panel">
+      <div class="grid">
+          <div class="itemc">Product name</div><div class="itemv" id="ProductName">Loading...</div>
+          <div class="itemc">Hardware Version</div><div class="itemv" id="HW_ver"> Loading...</div>
+          <div class="itemc">Software Version</div><div class="itemv" id="SW_ver"> Loading...</div>
+          <div class="itemc">Compile date time</div><div class="itemv" id="CompileDateTime">Loading...</div>
+          <div class="itemc">CPU ID</div><div class="itemv" id="CPU_ID">           Loading...</div>
+      </div>
+   </div>
+
+    <div class="panel">
+      <div class="grid">
+          <div class="itemc">Up time</div><div class="itemv" id="up_time">         Loading...</div>
+          <div class="itemc">CPU load level</div><div class="itemv" id="cpu_usage">Loading...</div>
+          <div class="itemc">Device time</div><div class="itemv" id="local_time">  Loading...</div>
+          <div class="itemc">RAM free space</div><div class="itemv" id="ram_free">Loading...</div>
+          <div class="itemc">SDRAM free space</div><div class="itemv" id="sdram_free">Loading...</div>
+      </div>
+    </div>
+  
+    <div class="panel">
+        <div class="grid">
+          <div class="itemc" style ="grid-column: span 2; text-align: center;color: #bd0606;">Device WiFi Access Point </div>
+          <div class="itemc">IP address</div><div class="itemv" id="ap_ip_address">   Loading...</div>
+          <div class="itemc">MAC adress</div><div class="itemv" id="ap_mac_address"> Loading...</div>
+          <div class="itemc">Remote MAC address</div><div class="itemv" id="ap_rem_mac_address"> Loading...</div>
+      </div>
+    </div>
+    <div class="panel">
+        <div class="grid">
+          <div class="itemc" style ="grid-column: span 2;text-align: center;color: #bd0606;">Device WiFi Station </div>
+          <div class="itemc">IP address</div><div class="itemv" id="sta_ip_address">   Loading...</div>
+          <div class="itemc">MAC adress</div><div class="itemv" id="sta_mac_address"> Loading...</div>
+          <div class="itemc">Remote MAC address</div><div class="itemv" id="sta_rem_mac_address"> Loading...</div>
+          <div class="itemc">AP SSID</div><div class="itemv" id="sta_ssid"> Loading...</div>
+      </div>
+    </div>
+    <div class="panel">
+        <div class="grid">
+          <div class="itemc" style ="grid-column: span 2;text-align: center;color: #bd0606;">Device USB-Ethernet </div>
+          <div class="itemc">Type</div><div class="itemv" id="usb_ip_type">   Loading...</div>
+          <div class="itemc">IP adress</div><div class="itemv" id="usb_ip_address"> Loading...</div>
+          <div class="itemc">MAC address</div><div class="itemv" id="usb_mac_address"> Loading...</div>
+      </div>
+    </div>
+    <div class="panel">
+        <div class="grid">
+          <div class="itemc">Gateway IP address</div><div class="itemv" id="gateway_ip_address">   Loading...</div>
+      </div>
+    </div>
+	 
+	  
+  <!-- InstanceEndEditable -->
+    </div> 
+	  
+  <footer>
+    <div class="footer_panel">
+      <p style="margin: 2px;" id="footer_text">---</p>
+    </div>  
+  </footer>
+<!-- InstanceBeginEditable name="script" -->
+    <script>
+      async function Post_device_status()
+      {
+        try
+        {
+          const response = await fetch('post_status', {method: 'POST'});
+          const data = await response.json();
+
+          document.getElementById('up_time').innerText = data.up_time + " s";
+          document.getElementById('cpu_usage').innerText = data.cpu_usage + " %";
+          document.getElementById('local_time').innerText = data.local_time;
+
+          document.getElementById('ap_ip_address').innerText = data.ap_ip_address;
+          document.getElementById('ap_mac_address').innerText = data.ap_mac_address;
+          document.getElementById('ap_rem_mac_address').innerText = data.ap_rem_mac_address;
+
+          document.getElementById('sta_ip_address').innerText = data.sta_ip_address;
+          document.getElementById('sta_mac_address').innerText = data.sta_mac_address;
+          document.getElementById('sta_rem_mac_address').innerText = data.sta_rem_mac_address;
+          document.getElementById('sta_ssid').innerText = data.sta_ssid;
+
+          document.getElementById('usb_ip_type').innerText = data.usb_ip_type;
+          document.getElementById('usb_ip_address').innerText = data.usb_ip_address;
+          document.getElementById('usb_mac_address').innerText = data.usb_mac_address;
+
+          document.getElementById('gateway_ip_address').innerText = data.gateway_ip_address;
+
+          document.getElementById('ram_free').innerText = data.ram_free + " bytes";
+          document.getElementById('sdram_free').innerText = data.sdram_free + " bytes";
+
+        } catch (error)
+        {
+          console.error('Error fetching data:', error);
+        }
+      }
+
+      function Fill_Fields()
+      {
+        document.getElementById('ProductName').innerText = productName;
+        document.getElementById('SW_ver').innerText = SW_ver;
+        document.getElementById('HW_ver').innerText = HW_ver;
+        document.getElementById('CompileDateTime').innerText = CompDate + " " + CompTime;
+        document.getElementById('CPU_ID').innerText = insertSpaceEveryEightChars(CPU_ID);
+      };
+      Fields_filler = Fill_Fields;
+      Post_device_status();
+      setInterval(Post_device_status, 1000);
+
+    </script>
+<!-- InstanceEndEditable -->
+  <script>
+      // Событие перед закрытием или обновлением страницы
+      window.addEventListener('beforeunload', function() {localStorage.removeItem('deviceData');});
+      window.onload = Check_And_Load_Data;
+    </script>
+  </body>
+<!-- InstanceEnd --></html>

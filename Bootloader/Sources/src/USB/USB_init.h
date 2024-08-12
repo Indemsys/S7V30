@@ -13,26 +13,20 @@
 #define USB2_INTF_VIRTUAL_COM_PORT                1
 #define USB2_INTF_MASS_STORAGE_DEVICE             2
 
+typedef void (*T_cdc_acm_evt_callback)(void *);
+
 typedef struct
 {
-    uint8_t                inserted;
     ULONG                  idVendor;
     ULONG                  idProduct;
     ULONG                  dev_state;
     ULONG                  interface_id;
     ULONG                  interface_num;
-    UX_HOST_CLASS_CDC_ECM *ecm_class_ptr;
 
 } T_usb_app_info;
 
 
 extern T_usb_app_info             g_uinf;
-
-extern VOID ux_cdc_device1_instance_activate(VOID *cdc_instance);
-extern VOID ux_cdc_device1_instance_deactivate(VOID *cdc_instance);
-extern VOID ux_cdc_device0_instance_activate(VOID *cdc_instance);
-extern VOID ux_cdc_device0_instance_deactivate(VOID *cdc_instance);
-
 
 
 void    Init_USB_stack(void);

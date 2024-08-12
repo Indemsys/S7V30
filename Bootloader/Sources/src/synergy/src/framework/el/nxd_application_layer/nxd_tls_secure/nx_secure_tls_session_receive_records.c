@@ -133,8 +133,7 @@ UCHAR          handshake_finished = NX_FALSE;
         /* Receive a packet over the TCP connection. */
         status =  nx_tcp_socket_receive(tcp_socket, &packet_ptr, wait_option);
 
-
-        if (status != NX_SUCCESS)
+        if (status != NX_SUCCESS)  
         {
             return(status);
         }

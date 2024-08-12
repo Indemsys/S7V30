@@ -27,20 +27,21 @@
 #include "nx_secure_dtls.h"
 #endif /* NX_SECURE_ENABLE_DTLS */
 
+#ifndef NX_SECURE_DISABLE_X509
 static UCHAR handshake_hash[64 + 34 + 32]; /* We concatenate MD5 and SHA-1 hashes into this buffer, OR SHA-256. */
 static UCHAR _nx_secure_padded_signature[600];
 
 #if (NX_SECURE_TLS_TLS_1_2_ENABLED)
 static const UCHAR _NX_SECURE_OID_SHA256[] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05, 0x00, 0x04, 0x20};
 #endif
-
+#endif
 
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _nx_secure_tls_send_certificate_verify              PORTABLE C      */
-/*                                                           6.1.11       */
+/*                                                           6.2.1        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Timothy Stapko, Microsoft Corporation                               */
@@ -101,11 +102,19 @@ static const UCHAR _NX_SECURE_OID_SHA256[] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09
 /*  04-25-2022     Zhen Kong                Modified comment(s), removed  */
 /*                                            unreachable code and branch,*/
 /*                                            resulting in version 6.1.11 */
+/*  10-31-2022     Yanwu Cai                Modified comment(s),          */
+/*                                            updated parameters list,    */
+/*                                            resulting in version 6.2.0  */
+/*  03-08-2023     Yanwu Cai                Modified comment(s),          */
+/*                                            fixed compiler errors when  */
+/*                                            x509 is disabled,           */
+/*                                            resulting in version 6.2.1  */
 /*                                                                        */
 /**************************************************************************/
 UINT _nx_secure_tls_send_certificate_verify(NX_SECURE_TLS_SESSION *tls_session,
                                             NX_PACKET *send_packet)
 {
+#ifndef NX_SECURE_DISABLE_X509
 UINT                       length = 0;
 UINT                       data_size = 0;
 USHORT                     signature_algorithm;
@@ -236,7 +245,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
     }
 
 #if (NX_SECURE_TLS_TLS_1_3_ENABLED)
-    if(tls_session->nx_secure_tls_1_3)
+    if(tls_session -> nx_secure_tls_1_3)
     {
         /* TLS 1.3 certificate verify uses a different scheme. The signature is calculated over
            a concatenation of the following (RFC 8446):
@@ -246,7 +255,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
               -  The content to be signed
          */
 
-         UCHAR *transcript_hash = tls_session->nx_secure_tls_key_material.nx_secure_tls_transcript_hashes[NX_SECURE_TLS_TRANSCRIPT_IDX_CERTIFICATE];
+         UCHAR *transcript_hash = tls_session -> nx_secure_tls_key_material.nx_secure_tls_transcript_hashes[NX_SECURE_TLS_TRANSCRIPT_IDX_CERTIFICATE];
 
          /* Set octet padding bytes. */
          NX_SECURE_MEMSET(&handshake_hash[0], 0x20, 64);
@@ -377,7 +386,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
 
         /* Generate a hash of all sent and received handshake messages to this point (not a Finished hash!). */
         /* Copy over the handshake hash state into a local structure to do the intermediate calculation. */
-        NX_SECURE_HASH_METADATA_CLONE(tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_scratch,
+        NX_SECURE_HASH_METADATA_CLONE(tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_scratch, /*  lgtm[cpp/banned-api-usage-required-any] */
                                       tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_sha256_metadata,
                                       tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_sha256_metadata_size); /* Use case of memcpy is verified. */
 
@@ -407,7 +416,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
         if (status != NX_CRYPTO_SUCCESS)
         {
             return(status);
-        }                                                     
+        }
     }
 
 #endif
@@ -457,7 +466,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
         if (status != NX_CRYPTO_SUCCESS)
         {
             return(status);
-        }                                                     
+        }
 
         NX_SECURE_HASH_METADATA_CLONE(tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_scratch,
                                       tls_session -> nx_secure_tls_handshake_hash.nx_secure_tls_handshake_hash_sha1_metadata,
@@ -489,7 +498,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
         if (status != NX_CRYPTO_SUCCESS)
         {
             return(status);
-        }                                                     
+        }
     }
 #endif
 
@@ -574,10 +583,10 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
             working_ptr = &_nx_secure_padded_signature[data_size - signature_length];
 
             /* Copy in the DER encoding. */
-            NX_SECURE_MEMCPY(&working_ptr[0], _NX_SECURE_OID_SHA256, 19); /* Use case of memcpy is verified. */
+            NX_SECURE_MEMCPY(&working_ptr[0], _NX_SECURE_OID_SHA256, 19); /* Use case of memcpy is verified.  lgtm[cpp/banned-api-usage-required-any] */
 
             /* Now put the data into the padded buffer - must be at the end. */
-            NX_SECURE_MEMCPY(&working_ptr[19], handshake_hash, 32); /* Use case of memcpy is verified. */
+            NX_SECURE_MEMCPY(&working_ptr[19], handshake_hash, 32); /* Use case of memcpy is verified.  lgtm[cpp/banned-api-usage-required-any] */
         }
 #endif
 
@@ -618,7 +627,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
 #endif
 
 #ifdef NX_SECURE_KEY_CLEAR
-        /* At this point, the handshake_hash has been copied into _nx_secure_padded_signature and 
+        /* At this point, the handshake_hash has been copied into _nx_secure_padded_signature and
         is no longer needed so we can clear it here. */
         NX_SECURE_MEMSET(handshake_hash, 0, sizeof(handshake_hash));
 #endif /* NX_SECURE_KEY_CLEAR  */
@@ -655,9 +664,9 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
             {
 #ifdef NX_SECURE_KEY_CLEAR
                 NX_SECURE_MEMSET(_nx_secure_padded_signature, 0, sizeof(_nx_secure_padded_signature));
-#endif /* NX_SECURE_KEY_CLEAR  */                
+#endif /* NX_SECURE_KEY_CLEAR  */
                 return(status);
-            }                                                     
+            }
         }
         else
         {
@@ -677,9 +686,9 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
                 {
 #ifdef NX_SECURE_KEY_CLEAR
                     NX_SECURE_MEMSET(_nx_secure_padded_signature, 0, sizeof(_nx_secure_padded_signature));
-#endif /* NX_SECURE_KEY_CLEAR  */                    
+#endif /* NX_SECURE_KEY_CLEAR  */
                     return(status);
-                }                                                     
+                }
             }
 
             if (public_cipher_method -> nx_crypto_operation != NX_NULL)
@@ -703,9 +712,9 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
                 {
 #ifdef NX_SECURE_KEY_CLEAR
                     NX_SECURE_MEMSET(_nx_secure_padded_signature, 0, sizeof(_nx_secure_padded_signature));
-#endif /* NX_SECURE_KEY_CLEAR  */                    
+#endif /* NX_SECURE_KEY_CLEAR  */
                     return(status);
-                }                                                     
+                }
             }
 
             if (public_cipher_method -> nx_crypto_cleanup)
@@ -716,9 +725,9 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
                 {
 #ifdef NX_SECURE_KEY_CLEAR
                     NX_SECURE_MEMSET(_nx_secure_padded_signature, 0, sizeof(_nx_secure_padded_signature));
-#endif /* NX_SECURE_KEY_CLEAR  */                    
+#endif /* NX_SECURE_KEY_CLEAR  */
                     return(status);
-                }                                                     
+                }
             }
         }
 
@@ -799,7 +808,7 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
         ec_pubkey = &local_certificate -> nx_secure_x509_public_key.ec_public_key;
 
         /* Find out which named curve the local certificate is using. */
-        status = _nx_secure_tls_find_curve_method(tls_session, (USHORT)(ec_privkey -> nx_secure_ec_named_curve), &curve_method_cert, NX_NULL);
+        status = _nx_secure_tls_find_curve_method(&tls_session -> nx_secure_tls_ecc, (USHORT)(ec_privkey -> nx_secure_ec_named_curve), &curve_method_cert, NX_NULL);
 
 #ifdef NX_SECURE_KEY_CLEAR
         if(status != NX_SUCCESS || curve_method_cert == NX_NULL)
@@ -913,5 +922,11 @@ NX_CRYPTO_EXTENDED_OUTPUT  extended_output;
     send_packet -> nx_packet_length = send_packet -> nx_packet_length + (USHORT)(length);
 
     return(NX_SECURE_TLS_SUCCESS);
+#else
+    NX_PARAMETER_NOT_USED(tls_session);
+    NX_PARAMETER_NOT_USED(send_packet);
+
+    return(NX_NOT_SUPPORTED);
+#endif
 }
 

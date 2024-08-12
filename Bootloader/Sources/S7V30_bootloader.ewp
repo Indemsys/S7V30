@@ -471,15 +471,41 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>$PROJ_DIR$\..\Keys</state>
+                    <state>$PROJ_DIR$\Keys</state>
+                    <state>$PROJ_DIR$\SDcard_content</state>
+                    <state>$PROJ_DIR$\SDcard_content\www</state>
+                    <state>$PROJ_DIR$\SDcard_content\www\Templates</state>
                     <state>$PROJ_DIR$\src</state>
                     <state>$PROJ_DIR$\src\Compressors</state>
                     <state>$PROJ_DIR$\src\FileSystem</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX\inc</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX\src</state>
-                    <state>$PROJ_DIR$\src\FreeMaster</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\btstack_lib</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual\html</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual\html\search</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource</state>
+                    <state>$PROJ_DIR$\src\Infineon_FW_blobs</state>
+                    <state>$PROJ_DIR$\src\Infineon_RTOS_abstraction</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram\COMPONENT_4373</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\External</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\External\bsp</state>
                     <state>$PROJ_DIR$\src\JSON</state>
+                    <state>$PROJ_DIR$\src\JSON_serializers</state>
                     <state>$PROJ_DIR$\src\Loader</state>
                     <state>$PROJ_DIR$\src\Logger</state>
                     <state>$PROJ_DIR$\src\Net</state>
@@ -493,7 +519,6 @@
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\SDHI</state>
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\SDRAM</state>
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\Watchdog</state>
-                    <state>$PROJ_DIR$\src\Sound_player</state>
                     <state>$PROJ_DIR$\src\synergy</state>
                     <state>$PROJ_DIR$\src\synergy\inc</state>
                     <state>$PROJ_DIR$\src\synergy\inc\bsp</state>
@@ -675,27 +700,7 @@
                     <state>$PROJ_DIR$\src\Utils</state>
                     <state>$PROJ_DIR$\src\VT100</state>
                     <state>$PROJ_DIR$\src\VT100\Periphery_tests</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\firmware</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\firmware\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\resource_imp</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\bsp</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\rtos</state>
+                    <state>$PROJ_DIR$\src\WEB</state>
                 </option>
             </data>
         </settings>
@@ -905,7 +910,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>160</hasPrio>
+                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -1779,14 +1784,41 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
+                    <state>$PROJ_DIR$\Keys</state>
+                    <state>$PROJ_DIR$\SDcard_content</state>
+                    <state>$PROJ_DIR$\SDcard_content\www</state>
+                    <state>$PROJ_DIR$\SDcard_content\www\Templates</state>
                     <state>$PROJ_DIR$\src</state>
                     <state>$PROJ_DIR$\src\Compressors</state>
                     <state>$PROJ_DIR$\src\FileSystem</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX\inc</state>
                     <state>$PROJ_DIR$\src\FileSystem\FileX\src</state>
-                    <state>$PROJ_DIR$\src\FreeMaster</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\btstack_lib</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual\html</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\docs\api_reference_manual\html\search</state>
+                    <state>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource</state>
+                    <state>$PROJ_DIR$\src\Infineon_FW_blobs</state>
+                    <state>$PROJ_DIR$\src\Infineon_RTOS_abstraction</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram\COMPONENT_4373</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\External</state>
+                    <state>$PROJ_DIR$\src\Infineon_WIFI\External\bsp</state>
                     <state>$PROJ_DIR$\src\JSON</state>
+                    <state>$PROJ_DIR$\src\JSON_serializers</state>
                     <state>$PROJ_DIR$\src\Loader</state>
                     <state>$PROJ_DIR$\src\Logger</state>
                     <state>$PROJ_DIR$\src\Net</state>
@@ -1800,7 +1832,6 @@
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\SDHI</state>
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\SDRAM</state>
                     <state>$PROJ_DIR$\src\S7V30\SoC_periphery\Watchdog</state>
-                    <state>$PROJ_DIR$\src\Sound_player</state>
                     <state>$PROJ_DIR$\src\synergy</state>
                     <state>$PROJ_DIR$\src\synergy\inc</state>
                     <state>$PROJ_DIR$\src\synergy\inc\bsp</state>
@@ -1982,27 +2013,7 @@
                     <state>$PROJ_DIR$\src\Utils</state>
                     <state>$PROJ_DIR$\src\VT100</state>
                     <state>$PROJ_DIR$\src\VT100\Periphery_tests</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\clm\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\firmware</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\firmware\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram\COMPONENT_4373</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\resource_imp</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\bsp</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal</state>
-                    <state>$PROJ_DIR$\src\WIFI_Host_Driver\External\rtos</state>
+                    <state>$PROJ_DIR$\src\WEB</state>
                 </option>
             </data>
         </settings>
@@ -2618,7 +2629,16 @@
         </settings>
     </configuration>
     <group>
-        <name>BootLoader_new</name>
+        <name>S7V30_BootLoader</name>
+        <group>
+            <name>Keys</name>
+            <file>
+                <name>$PROJ_DIR$\Keys\Keys.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\Keys\Keys.h</name>
+            </file>
+        </group>
         <group>
             <name>src</name>
             <group>
@@ -3400,9 +3420,6 @@
                         </file>
                     </group>
                     <file>
-                        <name>$PROJ_DIR$\src\FileSystem\FileX\fx_api.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\src\FileSystem\FileX\fx_port.h</name>
                     </file>
                     <file>
@@ -3424,6 +3441,567 @@
                 <file>
                     <name>$PROJ_DIR$\src\FileSystem\FS_utils.h</name>
                 </file>
+            </group>
+            <group>
+                <name>Infineon_BLE</name>
+                <group>
+                    <name>Bluetooth_SSP</name>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP\Bluetooth_local_spp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP\Bluetooth_local_spp.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP\Bluetooth_remote_spp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\Bluetooth_SSP\Bluetooth_remote_spp.h</name>
+                    </file>
+                </group>
+                <group>
+                    <name>btstack_lib</name>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\gattdefs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\hcidefs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\l2cdefs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\libbtstack.a</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_a2d.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_a2d_m12.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_a2d_m24.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_a2d_sbc.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_a2dp_defs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_avdt.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_avrc.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_avrc_defs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_ble.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_cfg.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_constants.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_dev.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_dev_utils.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_gatt.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_hidd.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_hidd_ble.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_isoc.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_l2c.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_rfcomm.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_sco.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_sdp.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_sdp_defs.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_serialize.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_stack.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_stack_platform.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_trace.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_types.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_uuid.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_bt_version.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_data_types.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_memory.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_result.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\btstack_lib\wiced_timer.h</name>
+                    </file>
+                </group>
+                <group>
+                    <name>GeneratedSource</name>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_bt_settings.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_bt_settings.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_gap.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_gap.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_gatt_db.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_gatt_db.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_sdp_db.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\Infineon_BLE\GeneratedSource\cycfg_sdp_db.h</name>
+                    </file>
+                </group>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_app_GATT.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_app_GATT.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_app_WiFi_control.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_app_WiFi_control.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_config.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_main.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_strings.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\BLE_strings.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_hci_rx_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_hci_tx_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_host_stack_platform_interface.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_patchram_download.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_HAL.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_hci.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_interface.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_task.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_trace.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_trace.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_platform_util.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_prm.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_BLE\cybt_prm.h</name>
+                </file>
+            </group>
+            <group>
+                <name>Infineon_FW_blobs</name>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_FW_blobs\Infineon_BLOBs.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_FW_blobs\Infineon_BLOBs.h</name>
+                </file>
+            </group>
+            <group>
+                <name>Infineon_RTOS_abstraction</name>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cy_result.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyabs_rtos.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyabs_rtos_impl.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyabs_rtos_threadx.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_dma.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_gpio.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_hw_types.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_modules.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_sdio.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\cyhal_spi.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_buffer_man.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_buffer_man.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_periphery.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_periphery.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_resource_man.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Infineon_RTOS_abstraction\WHD_resource_man.h</name>
+                </file>
+            </group>
+            <group>
+                <name>Infineon_WIFI</name>
+                <group>
+                    <name>Driver</name>
+                    <group>
+                        <name>inc</name>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_events.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_network_types.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_resource_api.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_types.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_version.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\inc\whd_wifi_api.h</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>resources</name>
+                        <group>
+                            <name>nvram</name>
+                            <group>
+                                <name>COMPONENT_4373</name>
+                                <group>
+                                    <name>COMPONENT_STERLING-LWB5plus</name>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus\wifi_nvram_image.h</name>
+                                    </file>
+                                </group>
+                            </group>
+                        </group>
+                    </group>
+                    <group>
+                        <name>src</name>
+                        <group>
+                            <name>bus_protocols</name>
+                            <group>
+                                <name>COMPONENT_WIFI_INTERFACE_OCI</name>
+                                <file>
+                                    <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_bus_oci_protocol.c</name>
+                                </file>
+                                <file>
+                                    <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_bus_oci_protocol.h</name>
+                                </file>
+                                <file>
+                                    <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_oci.h</name>
+                                </file>
+                            </group>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_common.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_common.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_m2m_protocol.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_m2m_protocol.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_protocol_interface.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_sdio_protocol.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_sdio_protocol.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_spi_protocol.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_bus_spi_protocol.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_chip_reg.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_m2m.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_sdio.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_spi.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\bus_protocols\whd_trxhdr.h</name>
+                            </file>
+                        </group>
+                        <group>
+                            <name>include</name>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_ap.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_buffer_api.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_cdc_bdc.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_chip.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_chip_constants.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_clm.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_commonring.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_debug.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_endian.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_events_int.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_flowring.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_int.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_msgbuf.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_network_if.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_poll.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_proto.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_resource_if.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_ring.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_sdpcm.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_thread.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_thread_internal.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_types_int.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_utils.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_wifi_p2p.h</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\include\whd_wlioctl.h</name>
+                            </file>
+                        </group>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_ap.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_buffer_api.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_cdc_bdc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_chip.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_chip_constants.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_clm.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_commonring.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_debug.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_events.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_flowring.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_logging.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_management.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_msgbuf_txrx.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_network_if.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_proto.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_resource_if.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_ring.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_sdpcm.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_thread.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_utils.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_wifi.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_wifi_api.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\Driver\src\whd_wifi_p2p.c</name>
+                        </file>
+                    </group>
+                </group>
+                <group>
+                    <name>External</name>
+                    <group>
+                        <name>bsp</name>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\External\bsp\cybsp.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\Infineon_WIFI\External\bsp\cybsp_types.h</name>
+                        </file>
+                    </group>
+                </group>
             </group>
             <group>
                 <name>JSON</name>
@@ -3486,6 +4064,39 @@
                 </file>
             </group>
             <group>
+                <name>JSON_serializers</name>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\DeviceInfo_serializer.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\DeviceInfo_serializer.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\JSON_deserializer.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\JSON_deserializer.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\JSON_serializer.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\JSON_serializer.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\ParamsSchema_serializer.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\ParamsSchema_serializer.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\WiFi_scan_res_serializer.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\JSON_serializers\WiFi_scan_res_serializer.h</name>
+                </file>
+            </group>
+            <group>
                 <name>Loader</name>
                 <file>
                     <name>$PROJ_DIR$\src\Loader\Loader.c</name>
@@ -3521,10 +4132,19 @@
             <group>
                 <name>Net</name>
                 <file>
+                    <name>$PROJ_DIR$\src\Net\Net.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\src\Net\Net_common.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_common.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Net\Net_DHCP_factory.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Net\Net_DHCP_factory.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_DNS.c</name>
@@ -3533,10 +4153,22 @@
                     <name>$PROJ_DIR$\src\Net\Net_DNS.h</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\src\Net\Net_FreeMaster.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Net\Net_FreeMaster.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\src\Net\Net_FTP_server_man.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_FTP_server_man.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Net\Net_MATLAB_connection.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\Net\Net_MATLAB_connection.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_mDNS.c</name>
@@ -3567,12 +4199,6 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_TCP_server.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\Net\Net_Telnet_serv_driver.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\Net\Net_Telnet_serv_driver.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\Net\Net_thread.c</name>
@@ -3617,12 +4243,6 @@
                     <name>$PROJ_DIR$\src\Net\WiFi_debug.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\Net\WiFi_Host_Driver_Port.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\Net\WiFi_Host_Driver_Port.h</name>
-                </file>
-                <file>
                     <name>$PROJ_DIR$\src\Net\WiFi_network.c</name>
                 </file>
                 <file>
@@ -3643,18 +4263,6 @@
             </group>
             <group>
                 <name>NV_store</name>
-                <file>
-                    <name>$PROJ_DIR$\src\NV_store\JSON_deserializer.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\NV_store\JSON_deserializer.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\NV_store\JSON_serializer.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\NV_store\JSON_serializer.h</name>
-                </file>
                 <file>
                     <name>$PROJ_DIR$\src\NV_store\NV_store.c</name>
                 </file>
@@ -3762,6 +4370,18 @@
                     <file>
                         <name>$PROJ_DIR$\src\S7V30\Board_periphery\SX1262.h</name>
                     </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\S7V30\Board_periphery\UART_BLE.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\S7V30\Board_periphery\UART_BLE.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\S7V30\Board_periphery\WiFi_module_control.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\src\S7V30\Board_periphery\WiFi_module_control.h</name>
+                    </file>
                 </group>
                 <group>
                     <name>Parameters</name>
@@ -3802,6 +4422,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\src\S7V30\SoC_periphery\SDRAM\SDRAM.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\S7V30\SoC_periphery\SDRAM\SDRAM_mem_pool.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\src\S7V30\SoC_periphery\SDRAM\SDRAM_mem_pool.h</name>
                         </file>
                     </group>
                     <group>
@@ -3845,6 +4471,9 @@
                     </file>
                 </group>
                 <file>
+                    <name>$PROJ_DIR$\src\S7V30\App.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\src\S7V30\Background_Task.c</name>
                 </file>
                 <file>
@@ -3855,6 +4484,12 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\S7V30\Build_date_time.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\S7V30\Charger_task.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\S7V30\Charger_task.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\S7V30\Main_thread.c</name>
@@ -3873,6 +4508,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\S7V30\S7V30.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\S7V30\thread_priorities.h</name>
                 </file>
             </group>
             <group>
@@ -7116,7 +7754,34 @@
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_dtls_verify_mac.c</name>
                                     </file>
                                     <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_generate_client_key_exchange.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_generate_master_secret.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_generate_premaster_secret.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_generate_server_key_exchange.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_generate_session_keys.c</name>
+                                    </file>
+                                    <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_module_hash_compute.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_process_client_key_exchange.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_process_server_key_exchange.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_remote_certificate_verify.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_session_keys_set.c</name>
                                     </file>
                                     <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_tls.h</name>
@@ -7416,6 +8081,9 @@
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_tls_session_packet_buffer_set.c</name>
                                     </file>
                                     <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_tls_session_packet_pool_set.c</name>
+                                    </file>
+                                    <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_tls_session_protocol_version_override.c</name>
                                     </file>
                                     <file>
@@ -7465,6 +8133,12 @@
                                     </file>
                                     <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_tls_verify_mac.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_trusted_certificate_add.c</name>
+                                    </file>
+                                    <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_verify_mac.c</name>
                                     </file>
                                     <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nx_secure_x509.c</name>
@@ -7740,6 +8414,9 @@
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nxe_secure_tls_session_packet_buffer_set.c</name>
                                     </file>
                                     <file>
+                                        <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nxe_secure_tls_session_packet_pool_set.c</name>
+                                    </file>
+                                    <file>
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_tls_secure\nxe_secure_tls_session_protocol_version_override.c</name>
                                     </file>
                                     <file>
@@ -7818,6 +8495,12 @@
                                         <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_application_layer\nxd_web_http_server\nx_web_http_server.c</name>
                                     </file>
                                 </group>
+                            </group>
+                            <group>
+                                <name>nxd_bsd</name>
+                                <file>
+                                    <name>$PROJ_DIR$\src\synergy\src\framework\el\nxd_bsd\nxd_bsd.c</name>
+                                </file>
                             </group>
                             <group>
                                 <name>tx</name>
@@ -12398,40 +13081,58 @@
                     </file>
                 </group>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Chip_monitor.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Bluetooth_monitor.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Chip_monitor.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Bluetooth_monitor.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Flash_monitor.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Flash_control_monitor.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Flash_monitor.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Flash_control_monitor.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Main_monitor.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Main_menu_monitor.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Main_monitor.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Main_menu_monitor.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Monitor_rtt_drv.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_access_control.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Monitor_rtt_drv.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_access_control.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Monitor_USB_FS_drv.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_Bluetooth_drv.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Monitor_USB_FS_drv.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_Bluetooth_drv.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Params_editor.c</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_Telnet_driver.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\VT100\Params_editor.h</name>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_Telnet_driver.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_USB_drv.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_USB_drv.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_utilites.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Monitor_utilites.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Params_editor_monitor.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\Params_editor_monitor.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\src\VT100\SD_card_monitor.c</name>
@@ -12445,325 +13146,52 @@
                 <file>
                     <name>$PROJ_DIR$\src\VT100\System_info_monitor.h</name>
                 </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\VT100_monitor.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\VT100\VT100_monitor.h</name>
+                </file>
             </group>
             <group>
-                <name>WIFI_Host_Driver</name>
-                <group>
-                    <name>Driver</name>
-                    <group>
-                        <name>inc</name>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_events.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_network_types.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_resource_api.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_types.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_version.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\inc\whd_wifi_api.h</name>
-                        </file>
-                    </group>
-                    <group>
-                        <name>resources</name>
-                        <group>
-                            <name>nvram</name>
-                            <group>
-                                <name>COMPONENT_4373</name>
-                                <group>
-                                    <name>COMPONENT_STERLING-LWB5plus</name>
-                                    <file>
-                                        <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\nvram\COMPONENT_4373\COMPONENT_STERLING-LWB5plus\wifi_nvram_image.h</name>
-                                    </file>
-                                </group>
-                            </group>
-                        </group>
-                        <group>
-                            <name>resource_imp</name>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\resources\resource_imp\wiced_resource.h</name>
-                            </file>
-                        </group>
-                    </group>
-                    <group>
-                        <name>src</name>
-                        <group>
-                            <name>bus_protocols</name>
-                            <group>
-                                <name>COMPONENT_WIFI_INTERFACE_OCI</name>
-                                <file>
-                                    <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_bus_oci_protocol.c</name>
-                                </file>
-                                <file>
-                                    <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_bus_oci_protocol.h</name>
-                                </file>
-                                <file>
-                                    <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\COMPONENT_WIFI_INTERFACE_OCI\whd_oci.h</name>
-                                </file>
-                            </group>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_common.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_common.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_m2m_protocol.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_m2m_protocol.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_protocol_interface.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_sdio_protocol.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_sdio_protocol.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_spi_protocol.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_bus_spi_protocol.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_chip_reg.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_m2m.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_sdio.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_spi.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\bus_protocols\whd_trxhdr.h</name>
-                            </file>
-                        </group>
-                        <group>
-                            <name>include</name>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_ap.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_buffer_api.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_cdc_bdc.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_chip.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_chip_constants.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_clm.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_commonring.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_debug.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_endian.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_events_int.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_flowring.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_int.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_msgbuf.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_network_if.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_poll.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_proto.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_resource_if.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_ring.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_sdpcm.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_thread.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_thread_internal.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_types_int.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_utils.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_wifi_p2p.h</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\include\whd_wlioctl.h</name>
-                            </file>
-                        </group>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_ap.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_buffer_api.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_cdc_bdc.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_chip.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_chip_constants.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_clm.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_commonring.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_debug.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_events.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_flowring.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_logging.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_management.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_msgbuf_txrx.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_network_if.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_proto.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_resource_if.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_ring.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_sdpcm.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_thread.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_utils.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_wifi.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_wifi_api.c</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\Driver\src\whd_wifi_p2p.c</name>
-                        </file>
-                    </group>
-                </group>
-                <group>
-                    <name>External</name>
-                    <group>
-                        <name>bsp</name>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\bsp\cybsp.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\bsp\cybsp_types.h</name>
-                        </file>
-                    </group>
-                    <group>
-                        <name>hal</name>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cy_result.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_dma.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_gpio.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_hw_types.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_modules.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_sdio.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\hal\cyhal_spi.h</name>
-                        </file>
-                    </group>
-                    <group>
-                        <name>rtos</name>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\rtos\cyabs_rtos.h</name>
-                        </file>
-                        <file>
-                            <name>$PROJ_DIR$\src\WIFI_Host_Driver\External\rtos\cyabs_rtos_impl.h</name>
-                        </file>
-                    </group>
-                </group>
+                <name>WEB</name>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_File_upload.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_File_upload.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_files.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_files.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_module_control.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_module_control.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_sd_card_control.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_sd_card_control.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server_certificate.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\src\WEB\WEB_server_certificate.h</name>
+                </file>
             </group>
         </group>
-    </group>
-    <group>
-        <name>Keys</name>
-        <file>
-            <name>$PROJ_DIR$\..\Keys\Keys.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\Keys\Keys.h</name>
-        </file>
     </group>
 </project>

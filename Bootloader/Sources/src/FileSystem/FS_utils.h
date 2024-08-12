@@ -6,7 +6,7 @@ uint32_t   Scanf_from_file(FX_FILE  *fp, int32_t *scan_res, char *tmp_buf, uint3
 uint32_t   Recreate_file_for_write(FX_FILE  *f, CHAR *filename);
 
 ssp_err_t  Get_SD_card_info(sf_block_media_instance_t *media, uint32_t *sector_size, uint32_t *sector_count);
-ssp_err_t  FS_format(void);
+UINT       FS_format(void);
 uint32_t   Delete_all_files_in_current_dir(void);
 uint32_t   Check_file_extension(char *file_name, const char * const *ext_list);
 void       Get_file_extension(char *file_name, char *ext, uint32_t ext_buf_sz);

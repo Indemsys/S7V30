@@ -1545,7 +1545,7 @@ UINT i;
         } break;
     }
 
-    return(NX_CRYPTO_SUCCESS);
+    //return(NX_CRYPTO_SUCCESS);
 }
 /**************************************************************************/
 /*                                                                        */
@@ -1671,7 +1671,7 @@ UINT  _nx_crypto_method_aes_sce_operation(UINT op, /* Encrypt, Decrypt, Authenti
     }
 
 
-    return(NX_CRYPTO_SUCCESS);
+    //return(NX_CRYPTO_SUCCESS);
 }
 
 /**************************************************************************/
