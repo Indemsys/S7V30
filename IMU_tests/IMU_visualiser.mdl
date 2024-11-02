@@ -45,8 +45,8 @@ __MWOPC_PART_BEGIN__ /metadata/coreProperties.xml
   <dcterms:created xsi:type="dcterms:W3CDTF">2024-10-29T11:59:00Z</dcterms:created>
   <dc:creator>DeveloperY</dc:creator>
   <cp:lastModifiedBy>DeveloperY</cp:lastModifiedBy>
-  <dcterms:modified xsi:type="dcterms:W3CDTF">2024-11-02T21:26:29Z</dcterms:modified>
-  <cp:revision>1.35</cp:revision>
+  <dcterms:modified xsi:type="dcterms:W3CDTF">2024-11-02T22:07:23Z</dcterms:modified>
+  <cp:revision>1.36</cp:revision>
   <cp:version>R2024a</cp:version>
 </cp:coreProperties>
 
@@ -129,7 +129,7 @@ __MWOPC_PART_BEGIN__ /simulink/blockdiagram.xml
     <ConfigManagerSettings>
       <P Name="ModifiedByFormat">%&lt;Auto&gt;</P>
       <P Name="ModifiedDateFormat">%&lt;Auto&gt;</P>
-      <P Name="ModelVersionFormat">%&lt;AutoIncrement:1.35&gt;</P>
+      <P Name="ModelVersionFormat">%&lt;AutoIncrement:1.36&gt;</P>
     </ConfigManagerSettings>
     <EditorSettings>
       <P Name="SampleTimeColors">on</P>
@@ -1045,8 +1045,8 @@ __MWOPC_PART_BEGIN__ /simulink/hdlParams.xml
 __MWOPC_PART_BEGIN__ /simulink/modelDictionary.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <MF0 version="1.1" defaultPackage="slid" packageUris="http://schema.mathworks.com/mf0/slid/R2023a_20220628">
-  <System type="System" uuid="f9e5d62b-ea5c-40c5-9f4d-b4e13bf9c3c7">
-    <Interface type="Interface" uuid="34309b8f-73e6-4e6a-b06c-4ee47b802202"/>
+  <System type="System" uuid="c408cbf2-6d4c-4a7c-8397-2ca2915d7497">
+    <Interface type="Interface" uuid="f71ce535-e789-46f9-afe7-96d705674f96"/>
   </System>
 </MF0>
 __MWOPC_PART_BEGIN__ /simulink/plugins/DiagnosticSuppressor.xml
@@ -1575,7 +1575,7 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_74.xml
       <P Name="ActorName">Sim3dActor1</P>
       <P Name="ParentName">Scene Origin</P>
       <P Name="Operation">Create at setup</P>
-      <P Name="SourceFile">D:\Embedded\Projects\Barduva\SB200M22_firmware\S7V30_Projects_Hub\Proj_TEST\MATLAB\Assembly.STL</P>
+      <P Name="SourceFile">.\Assembly.STL</P>
       <P Name="InitScriptText">% Reserved keywords:
 % - Actor : handle to this actor object
 % - World : handle to the world object
@@ -2297,7 +2297,7 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="SceneRectInView" Class="double">[-45.768550177177815, 19.372830068482244, 860.57142857142856, 528.57142857142856]</P>
         </Object>
       </Array>
-      <Array PropName="DockComponentsInfo" Type="Simulink.DockComponentInfo" Dimension="1*3">
+      <Array PropName="DockComponentsInfo" Type="Simulink.DockComponentInfo" Dimension="1*2">
         <Object ObjectID="10">
           <P Name="Type" Class="char">GLUE2:PropertyInspector</P>
           <P Name="ID" Class="char">Property Inspector</P>
@@ -2323,20 +2323,8 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="Height" Class="int32">480</P>
           <P Name="Minimized" Class="char">Unset</P>
         </Object>
-        <Object ObjectID="12">
-          <P Name="Type" Class="char">LibraryBrowser2 LibraryBrowserStudioComponent</P>
-          <P Name="ID" Class="char">IMU_visualiser</P>
-          <P Name="Visible" Class="logical">0</P>
-          <P Name="CreateCallback" Class="char"/>
-          <P Name="UserData" Class="char"/>
-          <P Name="Floating" Class="logical">0</P>
-          <P Name="DockPosition" Class="char">Left</P>
-          <P Name="Width" Class="int32">304</P>
-          <P Name="Height" Class="int32">958</P>
-          <P Name="Minimized" Class="char">Unset</P>
-        </Object>
       </Array>
-      <P Name="WindowState" Class="char">AAAA/wAAAAD9AAAAAwAAAAAAAAE0AAAD2vwCAAAABPsAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAAAAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD8AAAAeQAAA9oAAAAAAP////oAAAABAgAAAAP7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAABjAP////sAAABsAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgAyACAATABpAGIAcgBhAHIAeQBCAHIAbwB3AHMAZQByAFMAdAB1AGQAaQBvAEMAbwBtAHAAbwBuAGUAbgB0AC8AdQBuAHQAaQB0AGwAZQBkAQAAAAD/////AAAAAAAAAAD7AAAAeABMAGkAYgByAGEAcgB5AEIAcgBvAHcAcwBlAHIAMgAgAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgBTAHQAdQBkAGkAbwBDAG8AbQBwAG8AbgBlAG4AdAAvAEkATQBVAF8AdgBpAHMAdQBhAGwAaQBzAGUAcgAAAAAA/////wAAAK8A/////AAAAHkAAAPaAAAAAAD////6AAAAAQIAAAAC+wAAAGAAUwBpAG0AdQBsAGkAbgBrADoARQBkAGkAdABvAHIAOgBSAGUAZgBlAHIAZQBuAGMAZQBkAEYAaQBsAGUAcwAvAFIAZQBmAGUAcgBlAG4AYwBlAGQAIABGAGkAbABlAHMAAAAAAP////8AAACMAP////sAAABmAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgAyACAATABpAGIAcgBhAHIAeQBCAHIAbwB3AHMAZQByAFMAdAB1AGQAaQBvAEMAbwBtAHAAbwBuAGUAbgB0AC8ATQBvAGQAZQBsAAAAAAD/////AAAAAAAAAAAAAAABAAABNAAAA9r8AgAAAAH7AAAAVABHAEwAVQBFADIAOgBQAHIAbwBwAGUAcgB0AHkASQBuAHMAcABlAGMAdABvAHIALwBQAHIAbwBwAGUAcgB0AHkAIABJAG4AcwBwAGUAYwB0AG8AcgAAAAAA/////wAAAawA////AAAAAwAAB0AAAADQ/AEAAAAB+/////8AAAAAHwAAB0AAAAJ5AP///wAAB0AAAAPaAAAAAQAAAAIAAAABAAAAAvwAAAADAAAAAAAAAAEAAAA2AGMAbwBsAGwAYQBwAHMAaQBiAGwAZQBQAGEAbgBlAGwAVABvAG8AbABCAGEAcgBMAGUAZgB0AwAAAAD/////AAAAAAAAAAAAAAABAAAAAQAAADgAYwBvAGwAbABhAHAAcwBpAGIAbABlAFAAYQBuAGUAbABUAG8AbwBsAEIAYQByAFIAaQBnAGgAdAMAAAAA/////wAAAAAAAAAAAAAAAwAAAAEAAAA6AGMAbwBsAGwAYQBwAHMAaQBiAGwAZQBQAGEAbgBlAGwAVABvAG8AbABCAGEAcgBCAG8AdAB0AG8AbQAAAAAA/////wAAAAAAAAAA</P>
+      <P Name="WindowState" Class="char">AAAA/wAAAAD9AAAAAwAAAAAAAAE0AAAD2vwCAAAABPsAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAAAAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD8AAAAeQAAA9oAAAAAAP////oAAAABAgAAAAP7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAABjAP////sAAABsAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgAyACAATABpAGIAcgBhAHIAeQBCAHIAbwB3AHMAZQByAFMAdAB1AGQAaQBvAEMAbwBtAHAAbwBuAGUAbgB0AC8AdQBuAHQAaQB0AGwAZQBkAQAAAAD/////AAAAAAAAAAD7AAAAeABMAGkAYgByAGEAcgB5AEIAcgBvAHcAcwBlAHIAMgAgAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgBTAHQAdQBkAGkAbwBDAG8AbQBwAG8AbgBlAG4AdAAvAEkATQBVAF8AdgBpAHMAdQBhAGwAaQBzAGUAcgAAAAAA/////wAAAAAAAAAA/AAAAHkAAAPaAAAAAAD////6AAAAAQIAAAAC+wAAAGAAUwBpAG0AdQBsAGkAbgBrADoARQBkAGkAdABvAHIAOgBSAGUAZgBlAHIAZQBuAGMAZQBkAEYAaQBsAGUAcwAvAFIAZQBmAGUAcgBlAG4AYwBlAGQAIABGAGkAbABlAHMAAAAAAP////8AAACMAP////sAAABmAEwAaQBiAHIAYQByAHkAQgByAG8AdwBzAGUAcgAyACAATABpAGIAcgBhAHIAeQBCAHIAbwB3AHMAZQByAFMAdAB1AGQAaQBvAEMAbwBtAHAAbwBuAGUAbgB0AC8ATQBvAGQAZQBsAAAAAAD/////AAAAAAAAAAAAAAABAAABNAAAA9r8AgAAAAH7AAAAVABHAEwAVQBFADIAOgBQAHIAbwBwAGUAcgB0AHkASQBuAHMAcABlAGMAdABvAHIALwBQAHIAbwBwAGUAcgB0AHkAIABJAG4AcwBwAGUAYwB0AG8AcgAAAAAA/////wAAAawA////AAAAAwAAB0AAAADQ/AEAAAAB+/////8AAAAAAP////8AAAJ5AP///wAAB0AAAAPaAAAAAQAAAAIAAAABAAAAAvwAAAADAAAAAAAAAAEAAAA2AGMAbwBsAGwAYQBwAHMAaQBiAGwAZQBQAGEAbgBlAGwAVABvAG8AbABCAGEAcgBMAGUAZgB0AwAAAAD/////AAAAAAAAAAAAAAABAAAAAQAAADgAYwBvAGwAbABhAHAAcwBpAGIAbABlAFAAYQBuAGUAbABUAG8AbwBsAEIAYQByAFIAaQBnAGgAdAMAAAAA/////wAAAAAAAAAAAAAAAwAAAAEAAAA6AGMAbwBsAGwAYQBwAHMAaQBiAGwAZQBQAGEAbgBlAGwAVABvAG8AbABCAGEAcgBCAG8AdAB0AG8AbQAAAAAA/////wAAAAAAAAAA</P>
       <Array PropName="PersistedApps" Type="Cell" Dimension="0*1"/>
       <P Name="WindowUuid" Class="char">3c5fb59d-0775-49d9-86b7-082471d35e44</P>
     </Object>
